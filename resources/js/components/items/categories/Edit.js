@@ -60,6 +60,12 @@ class Edit extends Component {
         }).then(() => {
             toast.success('Saved!');
         }).catch((err) => {
+            if (err.response.data.errors) {
+                return toast.error(err.response.data.errors[
+                    Object.keys(err.response.data.errors)[0]
+                ][0]);
+            };
+
             toast.error('An error occurred, please try again later.');
         });
     };

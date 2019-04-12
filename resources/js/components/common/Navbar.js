@@ -27,11 +27,11 @@ class Navbar extends Component {
                             </a>
 
                             <div className='dropdown-menu dropdown-menu-small'>
-                                <a className='dropdown-item' href='user-profile-lite.html'>
+                                <Link className='dropdown-item' to={ `/app/users/${ document.head.querySelector('meta[name="user-id"]').content }` }>
                                     <i className='material-icons'>person</i> Profile
-                                </a>
+                                </Link>
 
-                                <a className='dropdown-item' href='components-blog-posts.html'>
+                                <a className='dropdown-item' href='/support'>
                                     <i className='material-icons'>live_help</i> Support
                                 </a>
 

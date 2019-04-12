@@ -56,9 +56,9 @@ class SearchResults extends Component {
                                 <div key={ item.id } className='col-12 mb-4'>
                                     <div className='card'>
                                         <div className='card-body'>
-                                            <h6 className='card-title'>Client: <Link to={ `/app/clients/${ item.client.id }` }>{ item.client.name }</Link></h6>
-                                            <h4 className='card-title'><Link to={ `/app/packages/${ item.id }` }>{ item.title }</Link></h4>
-                                            <p className='card-text'><strong>Event:</strong> <Link to={ `/app/events/${ item.event.id }` }>{ item.event.name }</Link></p>
+                                            <h6 className='card-title'>Client: <Link to={ `/app/clients/${ item.client.id }` } onClick='this.props.results = null'>{ item.client.name }</Link></h6>
+                                            <h4 className='card-title'><Link to={ `/app/packages/${ item.id }` } onClick='this.props.results = null'>{ item.title }</Link></h4>
+                                            <p className='card-text'><strong>Event:</strong> <Link to={ `/app/events/${ item.event.id }` } onClick='this.props.results = null'>{ item.event.name }</Link></p>
                                             <p className='card-text'><strong>Arrive:</strong> { item.event.starts } | <strong>Depart:</strong> { item.event.ends }</p>
                                         </div>
                                     </div>
@@ -89,7 +89,7 @@ class SearchResults extends Component {
                                         }
 
                                         <div className='card-body'>
-                                            <h4 className='card-title'><Link to={ `/app/clients/${ item.id }` }>{ item.name }</Link></h4>
+                                            <h4 className='card-title'><Link to={ `/app/clients/${ item.id }` } onClick='this.props.results = null'>{ item.name }</Link></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@ class SearchResults extends Component {
                                         }
 
                                         <div className='card-body'>
-                                            <h4 className='card-title'><Link to={ `/app/events/${ item.id }` }>{ item.name }</Link></h4>
+                                            <h4 className='card-title'><Link to={ `/app/events/${ item.id }` } onClick='this.props.results = null'>{ item.name }</Link></h4>
                                             <p className='card-text'><strong>Starts:</strong> { item.starts } | <strong>Ends:</strong> { item.ends }</p>
                                         </div>
                                     </div>

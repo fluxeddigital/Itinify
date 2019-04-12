@@ -41,7 +41,7 @@ class Sidebar extends Component {
                 {document.head.querySelector('meta[name="company-logo"]').content &&
                     <div className='main-navbar'>
                         <nav className='navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0'>
-                            <Link className='navbar-brand w-100 mr-0' to={ `/app/companies/${ document.head.querySelector('meta[name="company-id"]') }` }>
+                            <Link className='navbar-brand w-100 mr-0' to={ `/app/companies/${ document.head.querySelector('meta[name="company-id"]').content }` }>
                                 <div className='text-center w-100'>
                                     <img style={ { height: '100%' } } src={ document.head.querySelector('meta[name="company-logo"]').content.startsWith('http') ? document.head.querySelector('meta[name="company-logo"]').content : `/storage/${ document.head.querySelector('meta[name="company-logo"]').content }` }/>
                                 </div>

@@ -4,6 +4,7 @@ import Table from 'react-bootstrap-table-next';
 import TableProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import PaginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from 'react-router-dom';
+import { SyncLoader } from 'react-spinners';
 
 const { SearchBar } = Search;
 
@@ -13,13 +14,15 @@ class Index extends Component {
 
         this.state = {
             categories: [],
+            loading: true,
         };
     };
 
     componentDidMount () {
         axios.get('/api/items/categories').then(res => {
             this.setState({
-                categories: res.data.data
+                categories: res.data.data,
+                loading: false,
             });
         });
     };
@@ -89,6 +92,12 @@ class Index extends Component {
                             )
                         }
                     </TableProvider>
+                                        
+                    <div className='text-center'>
+                        <SyncLoader
+                            loading={this.state.loading}
+                        />
+                    </div>
                 </div>
             </div>
         );

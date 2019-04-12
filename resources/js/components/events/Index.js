@@ -4,6 +4,7 @@ import Table from 'react-bootstrap-table-next';
 import TableProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import PaginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from 'react-router-dom';
+import { SyncLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 
 const { SearchBar } = Search;
@@ -14,13 +15,15 @@ class Index extends Component {
 
         this.state = {
             events: [],
+            loading: true,
         };
     };
 
     componentDidMount () {
         axios.get('/api/events').then(res => {
             this.setState({
-                events: res.data.data
+                events: res.data.data,
+                loading: false,
             });
         }).catch((err) => {
             toast.error('An error occurred, please try again later.');
@@ -99,6 +102,12 @@ class Index extends Component {
                             )
                         }
                     </TableProvider>
+                                        
+                    <div className='text-center'>
+                        <SyncLoader
+                            loading={this.state.loading}
+                        />
+                    </div>
                 </div>
             </div>
         );

@@ -4,6 +4,7 @@ import Table from 'react-bootstrap-table-next';
 import TableProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import PaginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from 'react-router-dom';
+import { SyncLoader } from 'react-spinners';
 
 const { SearchBar } = Search;
 
@@ -12,6 +13,7 @@ class Index extends Component {
         super(props);
 
         this.state = {
+            loading: true,
             users: [],
         };
     };
@@ -19,7 +21,8 @@ class Index extends Component {
     componentDidMount () {
         axios.get('/api/users').then(res => {
             this.setState({
-                users: res.data.data
+                loading: false,
+                users: res.data.data,
             });
         });
     };
@@ -86,11 +89,17 @@ class Index extends Component {
                                             striped
                                             wrapperClasses='card card-small rounded p-0 mb-3'
                                         />
-                                    </div>
+                                        </div>
                                 </div>
                             )
                         }
                     </TableProvider>
+                                        
+                    <div className='text-center'>
+                        <SyncLoader
+                            loading={this.state.loading}
+                        />
+                    </div>
                 </div>
             </div>
         );

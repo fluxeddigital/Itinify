@@ -198,7 +198,7 @@ class Edit extends Component {
                                                         <span onClick={ this.pickBanner } className='btn btn-primary'>Upload</span>
                                                     </div>
                                                     { this.state.item.banner &&
-                                                        <img src={ this.state.item.banner.startsWith('http') ? this.state.item.banner : `/${ this.state.item.banner }` } id='banner' className='w-100 d-block' />
+                                                        <img src={ this.state.item.banner.startsWith('http') ? this.state.item.banner : `/storage/${ this.state.item.banner }` } id='banner' className='w-100 d-block' />
                                                     }
                                                 </div>
 
@@ -210,7 +210,7 @@ class Edit extends Component {
                                                     </div>
 
                                                     { this.state.item.logo &&
-                                                        <img src={ this.state.item.logo.startsWith('http') ? this.state.item.logo : `/${ this.state.item.logo }` } id='logo' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
+                                                        <img src={ this.state.item.logo.startsWith('http') ? this.state.item.logo : `/storage/${ this.state.item.logo }` } id='logo' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
                                                     }
                                                 </div>
                                             </div>

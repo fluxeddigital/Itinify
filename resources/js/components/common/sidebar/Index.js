@@ -43,7 +43,8 @@ class Sidebar extends Component {
                         <nav className='navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0'>
                             <a className='navbar-brand w-100 mr-0' href='#'>
                                 <div className='text-center w-100'>
-                                    <img style={ { height: '100%' } } src={`/${document.head.querySelector('meta[name="company-logo"]').content}`} />
+                                    <img style={ { height: '100%' } } src={ `${ document.head.querySelector('meta[name="company-logo"]').content }` }
+                                    src={ document.head.querySelector('meta[name="company-logo"]').content.startsWith('http') ? document.head.querySelector('meta[name="company-logo"]').content : `/storage/${ document.head.querySelector('meta[name="company-logo"]').content }` }/>
                                 </div>
                             </a>
                         </nav>

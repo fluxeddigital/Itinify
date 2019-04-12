@@ -11,6 +11,7 @@
     <meta name="filestack-key" content="{{ env('FILESTACK_KEY') }}">
 
     <!-- Authenticated Company & User Information -->
+    <meta name="company-id" content="{{ Auth::user()->company_id }}">
     <meta name="company-logo" content="{{ Auth::user()->company->logo }}">
     <meta name="user-name" content="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
 

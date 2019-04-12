@@ -14,6 +14,9 @@ import EventsCreate from './events/Create';
 import EventsShow from './events/Show';
 import EventsEdit from './events/Edit';
 import ItemsIndex from './items/Index';
+import ItemsCreate from './items/Create';
+import ItemsShow from './items/Show';
+import ItemsEdit from './items/Edit';
 import ItemCategoriesIndex from './items/categories/Index';
 import ItemCategoriesCreate from './items/categories/Create';
 import ItemCategoriesShow from './items/categories/Show';
@@ -65,12 +68,15 @@ class App extends Component {
                             <Route exact path='/app/events/:id' component={ EventsShow } />
                             <Route exact path='/app/events/:id/edit' component={ EventsEdit } />
 
-                            <Route exact path='/app/items' component={ ItemsIndex } />
-
                             <Route exact path='/app/items/categories' component={ ItemCategoriesIndex } />
                             <Route exact path='/app/items/categories/create' component={ ItemCategoriesCreate } />
                             <Route exact path='/app/items/categories/:id' component={ ItemCategoriesShow } />
                             <Route exact path='/app/items/categories/:id/edit' component={ ItemCategoriesEdit } />
+
+                            <Route exact path='/app/items' component={ ItemsIndex } />
+                            <Route exact path='/app/items/create' component={ ItemsCreate } />
+                            <Route exact path='/app/items/:id' component={ ItemsShow } />
+                            <Route exact path='/app/items/:id/edit' component={ ItemsEdit } />
 
                             <Route exact path='/app/packages' component={ PackagesIndex } />
 

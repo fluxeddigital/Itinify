@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Select from 'react-select'
 import { toast } from 'react-toastify';
 import set from 'lodash.set';
 
@@ -51,6 +52,20 @@ class Edit extends Component {
 
         this.setState({ item: prep });
     };
+    
+    onSelectChangeHandler = (valueName, labelName = null) => {
+        return (selected) => {
+            let prep = this.state.item;
+
+            set(prep, valueName, selected.value)
+
+            if (labelName) {
+                set(prep, labelName, selected.label);
+            };
+
+            this.setState({ item: prep });
+        };
+    };
 
     save = async () => {
         await axios.patch(`/api/items/categories/${ this.state.item.id }`, this.state.item, {
@@ -96,11 +111,11 @@ class Edit extends Component {
 
                                         <div className='form-group col-md-6'>
                                             <label htmlFor='section'>Section</label>
-                                            <select name='section' value={ this.state.item.section } onChange={ e => this.onChangeHandler(e) } className='form-control' id='section'>
-                                                <option value='Itinerary'>Itinerary</option>
-                                                <option value='Transfers'>Transfers</option>
-                                                <option value='Restaurants'>Restaurants</option>
-                                            </select>
+                                            <Select name='section' value={ { value: this.state.item.section, label: this.state.item.section } } options={ [
+                                                { label: 'Itinerary', value: 'Itinerary' },
+                                                { label: 'Restaurants', value: 'Restaurants' },
+                                                { label: 'Transfers', value: 'Transfers' },
+                                            ] } onChange={ this.onSelectChangeHandler('section') } className='form-control p-0' id='section' />
                                         </div>
                                     </div>
 

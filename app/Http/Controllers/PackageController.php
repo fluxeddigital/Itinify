@@ -47,20 +47,16 @@ class PackageController extends Controller
             'title' => 'required',
         ]);
 
-        if ($request->input('client')) {
-            $client = Client::findOrFail($request->input('client'));
+        $client = Event::find($request->input('client_id'));
 
-            if (! $client->company->id == Auth::user()->company->id) {
-                return null;
-            }
+        if ($client && ! $client->company_id == Auth::user()->company_id) {
+            return null;
         }
 
-        if ($request->input('event')) {
-            $event = Event::findOrFail($request->input('event'));
+        $event = Event::find($request->input('event_id'));
 
-            if (! $event->company->id == Auth::user()->company->id) {
-                return null;
-            }
+        if ($event && ! $event->company_id == Auth::user()->company_id) {
+            return null;
         }
 
         if (Auth::user()->company->mailchimp->apiKey && $event->newsletter->mailchimp->list && $client->email) {

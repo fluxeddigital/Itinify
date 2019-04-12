@@ -46,21 +46,25 @@ class ItemController extends Controller
         $event = Event::find($request->input('event_id'));
 
         if ($event && ! $event->company_id == Auth::user()->company_id) {
-            $category = Category::find($request->input('category_id'));
+            return null;
+        };
 
-            if ($category && ! $category->company_id == Auth::user()->company_id) {
-                $item = Item::create([
-                    'company_id' => Auth::user()->company->id,
-                    'category_id' => $request->input('category_id'),
-                    'event_id' => $request->input('event_id'),
-                    'name' => $request->input('name'),
-                    'long_description' => $request->input('long_description'),
-                    'short_description' => $request->input('short_description'),
-                ]);
-    
-                return new ItemResource($item);
-            }
-        }
+        $category = Category::find($request->input('category_id'));
+
+        if ($category && ! $category->company_id == Auth::user()->company_id) {
+            return null;
+        };
+        
+        $item = Item::create([
+            'company_id' => Auth::user()->company->id,
+            'category_id' => $request->input('category_id'),
+            'event_id' => $request->input('event_id'),
+            'name' => $request->input('name'),
+            'long_description' => $request->input('long_description'),
+            'short_description' => $request->input('short_description'),
+        ]);
+
+        return new ItemResource($item);
     }
 
     /**
@@ -94,24 +98,28 @@ class ItemController extends Controller
         $event = Event::find($request->input('event_id'));
 
         if ($event && ! $event->company_id == Auth::user()->company_id) {
-            $category = Category::find($request->input('category_id'));
+            return null;
+        };
 
-            if ($category && ! $category->company_id == Auth::user()->company_id) {
-                $item = Item::findOrFail($id);
+        $category = Category::find($request->input('category_id'));
 
-                if ($item->company->id == Auth::user()->company->id) {
-                    $item->category_id = $request->input('category_id');
-                    $item->event_id = $request->input('event_id');
-                    $item->name = $request->input('name');
-                    $item->long_description = $request->input('long_description');
-                    $item->short_description = $request->input('short_description');
+        if ($category && ! $category->company_id == Auth::user()->company_id) {
+            return null;
+        };
 
-                    $item->save();
+        $item = Item::findOrFail($id);
 
-                    return new ItemResource($item);
-                }
-            }
-        }
+        if ($item->company->id == Auth::user()->company->id) {
+            $item->category_id = $request->input('category_id');
+            $item->event_id = $request->input('event_id');
+            $item->name = $request->input('name');
+            $item->long_description = $request->input('long_description');
+            $item->short_description = $request->input('short_description');
+
+            $item->save();
+
+            return new ItemResource($item);
+        };
     }
 
     /**

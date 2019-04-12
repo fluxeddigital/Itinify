@@ -24,6 +24,10 @@ class Index extends Component {
                 categories: res.data.data,
                 loading: false,
             });
+        }).catch((err) => {
+            toast.error('An error occurred, please try again later.');
+
+            this.props.history.push('/app');
         });
     };
 

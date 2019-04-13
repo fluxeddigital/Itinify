@@ -178,6 +178,8 @@ class ClientController extends Controller
         $client = Client::findOrFail($id);
 
         if ($client->company->id == Auth::user()->company->id) {
+            $client->contacts->delete();
+
             $client->delete();
         }
     }

@@ -86,19 +86,17 @@ Route::get('/format', function () {
         //     ]);
         // }
 
-        // if ($client->contact_name) {
-        //     $contact = new App\Contact;
-
-        //     $contact->company_id = $client->company_id;
-        //     $contact->client_id = $client->id;
-        //     $contact->name = $client->contact_name;
-        //     $contact->phone = $client->contact_phone;
-        //     $contact->mobile = $client->contact_mobile;
-        //     $contact->email = $client->contact_email;
-        //     $contact->birth = $client->date_of_birth;
-            
-        //     $contact->save();
-        // }
+        if ($client->contact_name) {
+            $client->contacts = [
+                [
+                    'name' => $client->contact_name,
+                    'birth' => $client->date_of_birth,
+                    'email' => $client->contact_email,
+                    'mobile' => $client->contact_mobile,
+                    'phone' => $client->contact_phone,
+                ],
+            ];
+        }
 
         $client->save();
     };

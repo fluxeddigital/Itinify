@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 
 import Main from './Main';
+import Client from './Client.js';
 import Event from './Event.js';
 import Package from './Package.js';
 
@@ -53,6 +54,8 @@ class Sidebar extends Component {
                 <div className='nav-wrapper'>
                     <ul className='nav flex-column'>
                         <Switch>
+                            <Route path='/app/clients/:id' component={ Client } />
+
                             <Route path='/app/events/:id' component={ Event } />
 
                             <Route path='/app/packages/:id' component={ Package } />

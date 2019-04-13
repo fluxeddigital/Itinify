@@ -18,6 +18,7 @@ class CreateClientsTable extends Migration
             $table->integer('company_id')->unsigned();
             $table->string('name');
             $table->text('address')->nullable();
+            $table->text('contacts')->nullable();
             $table->string('email')->nullable();
             $table->text('interests')->nullable();
             $table->string('logo')->nullable();

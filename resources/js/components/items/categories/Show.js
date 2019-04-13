@@ -16,7 +16,7 @@ class Show extends Component {
     };
 
     componentDidMount () {
-        axios.get(`/api/items/categories/${this.props.match.params.id}`).then(res => {
+        axios.get(`/api/items/categories/${ this.props.match.params.id }`).then(res => {
             Object.keys(res.data.data).forEach((key) => {
                 if (res.data.data[key] === null) {
                     res.data.data[key] = '';
@@ -24,7 +24,7 @@ class Show extends Component {
             });
 
             this.setState({
-                item: { ...this.state, ...res.data.data },
+                item: res.data.data,
             });
         }).catch((err) => {
             toast.error('An error occurred, please try again later.');

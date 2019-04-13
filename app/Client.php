@@ -31,16 +31,9 @@ class Client extends Model
      */
     protected $casts = [
         'address' => 'array',
+        'contacts' => 'array',
         'interests' => 'array',
     ];
-
-    /**
-     * The contacts that the client has
-     */
-    public function contacts()
-    {
-        return $this->hasMany('App\Contact');
-    }
 
     /**
      * The notes that belong to the client.

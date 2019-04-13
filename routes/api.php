@@ -24,7 +24,6 @@ Route::patch('/users/attach', 'UserController@attach')->name('users.attach');
 Route::resources([
     'clients' => 'ClientController',
     'companies' => 'CompanyController',
-    'contacts' => 'ContactController',
     'events' => 'EventController',
     'items/categories' => 'ItemCategoryController',
     'items' => 'ItemController',

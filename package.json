@@ -29,6 +29,7 @@
         "react-bootstrap-table2-paginator": "^2.0.4",
         "react-bootstrap-table2-toolkit": "^1.4.0",
         "react-dom": "^16.2.0",
+        "react-places-autocomplete": "^7.2.1",
         "react-router-dom": "^5.0.0",
         "react-select": "^2.4.2",
         "react-spinners": "^0.5.4",

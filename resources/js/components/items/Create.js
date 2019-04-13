@@ -38,10 +38,10 @@ class Create extends Component {
         axios.get('/api/items/categories').then(res => {
             let prep = this.state;
 
-            for (event in res.data.data) {
+            for (let i in res.data.data) {
                 prep.categories.push({
-                    label: res.data.data[event].name,
-                    value: res.data.data[event].id,
+                    label: res.data.data[i].name,
+                    value: res.data.data[i].id,
                 });
             };
 
@@ -55,10 +55,10 @@ class Create extends Component {
         axios.get('/api/events').then(res => {
             let prep = this.state;
 
-            for (event in res.data.data) {
+            for (let i in res.data.data) {
                 prep.events.push({
-                    label: res.data.data[event].name,
-                    value: res.data.data[event].id,
+                    label: res.data.data[i].name,
+                    value: res.data.data[i].id,
                 });
             };
 

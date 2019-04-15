@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import PlacesAutocomplete from 'react-places-autocomplete';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -12,7 +11,15 @@ class Show extends Component {
             events: [],
             item: {
                 name: '',
-                address: [],
+                address: {
+                    line1: '',
+                    line2: '',
+                    line3: '',
+                    city: '',
+                    county: '',
+                    postcode: '',
+                    country: '',
+                },
                 contacts: [],
                 email: '',
                 interests: [],
@@ -25,15 +32,11 @@ class Show extends Component {
 
     componentDidMount () {
         axios.get(`/api/clients/${ this.props.match.params.id }`).then(res => {
-            Object.keys(res.data.data).forEach((key) => {
-                if (res.data.data[key] === null) {
-                    res.data.data[key] = '';
-                };
-            });
+            res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
 
             this.setState({
                 events: this.state.events,
-                item: res.data.data,
+                item: {...this.state.item, ...res.data.data},
             });
 
             for (let i in this.state.item.interests) {
@@ -116,9 +119,29 @@ class Show extends Component {
 
                                             <div className='form-group'>
                                                 <label>Address</label>
-                                                { this.state.item.address.map((item) => 
-                                                    <input key={ item } value={ item } type='text' className='form-control my-1' disabled />
-                                                )}
+                                                <div className='border rounded'>
+                                                    { this.state.item.address.line1 &&
+                                                        <input value={ this.state.item.address.line1 } type='text' className='form-control border-0 rounded-0' disabled />
+                                                    }
+                                                    { this.state.item.address.line2 &&
+                                                        <input value={ this.state.item.address.line2 } type='text' className='form-control border-0 rounded-0' disabled />
+                                                    }
+                                                    { this.state.item.address.line3 &&
+                                                        <input value={ this.state.item.address.line3 } type='text' className='form-control border-0 rounded-0' disabled />
+                                                    }
+                                                    { this.state.item.address.city &&
+                                                        <input value={ this.state.item.address.city } type='text' className='form-control border-0 rounded-0' disabled />
+                                                    }
+                                                    { this.state.item.address.county &&
+                                                        <input value={ this.state.item.address.county } type='text' className='form-control border-0 rounded-0' disabled />
+                                                    }
+                                                    { this.state.item.address.postcode &&
+                                                        <input value={ this.state.item.address.postcode } type='text' className='form-control border-0 rounded-0' disabled />
+                                                    }
+                                                    { this.state.item.address.country &&
+                                                        <input value={ this.state.item.address.country } type='text' className='form-control border-0 rounded-0' disabled />
+                                                    }
+                                                </div>
                                             </div>
 
                                             { this.state.item.logo &&

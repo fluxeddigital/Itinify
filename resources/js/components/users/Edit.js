@@ -20,14 +20,10 @@ class Edit extends Component {
 
     componentDidMount () {
         axios.get(`/api/users/${ this.props.match.params.id }`).then(res => {
-            Object.keys(res.data.data).forEach((key) => {
-                if (res.data.data[key] === null) {
-                    res.data.data[key] = '';
-                };
-            });
+            res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
 
             this.setState({
-                item: res.data.data,
+                item: {...this.state.item, ...res.data.data},
             });
         }).catch((err) => {
             toast.error('An error occurred, please try again later.');

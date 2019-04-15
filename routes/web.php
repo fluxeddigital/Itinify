@@ -34,30 +34,34 @@ Route::get('/format', function () {
         $address = [];
 
         if ($client->business_address_line_1) {
-            $address[] = $client->business_address_line_1;
+            $address['line1'] = $client->business_address_line_1;
         }
 
         if ($client->business_address_line_2) {
-            $address[] = $client->business_address_line_2;
+            $address['line2'] = $client->business_address_line_2;
         }
         
         if ($client->business_address_line_3) {
-            $address[] = $client->business_address_line_3;
+            $address['line3'] = $client->business_address_line_3;
         }
         
         if ($client->business_address_town) {
-            $address[] = $client->business_address_town;
+            $address['city'] = $client->business_address_town;
         }
         
         if ($client->business_address_county) {
-            $address[] = $client->business_address_county;
+            $address['county'] = $client->business_address_county;
         }
         
         if ($client->business_address_postcode) {
-            $address[] = $client->business_address_postcode;
+            $address['postcode'] = $client->business_address_postcode;
         }
 
-        $client->address = $address;
+        if (sizeof($address)) {
+            $client->address = $address;
+        } else {
+            $client->address = null;
+        }
         
         // if ($client->interests) {
         //     $client->interests = [
@@ -86,30 +90,34 @@ Route::get('/format', function () {
         $address = [];
 
         if ($company->address_line_1) {
-            $address[] = $company->address_line_1;
+            $address['line1'] = $company->address_line_1;
         }
 
         if ($company->address_line_2) {
-            $address[] = $company->address_line_2;
+            $address['line2'] = $company->address_line_2;
         }
         
         if ($company->address_line_3) {
-            $address[] = $company->address_line_3;
+            $address['line3'] = $company->address_line_3;
         }
         
         if ($company->address_town) {
-            $address[] = $company->address_town;
+            $address['city'] = $company->address_town;
         }
         
         if ($company->address_county) {
-            $address[] = $company->address_county;
+            $address['county'] = $company->address_county;
         }
         
         if ($company->address_postcode) {
-            $address[] = $company->address_postcode;
+            $address['postcode'] = $company->address_postcode;
         }
 
-        $company->address = $address;
+        if (sizeof($address)) {
+            $company->address = $address;
+        } else {
+            $company->address = null;
+        }
 
         if ($company->custom_css) {
             $custom_css = $company->custom_css;
@@ -306,6 +314,89 @@ Route::get('/format', function () {
             'dietary' => $dietary_requirements,
             'other' => $special_requirements,
         ];
+
+        // if ($package->car_hire) {
+        //     $car_hire = [];
+
+        //     foreach ($package->car_hire['carHire'] as $hire) {
+        //         $car_hire[] = [
+        //             'car' => $hire['carType'],
+        //             'confirmationNumber' => $hire['confirmationNumber'],
+        //             'description' => $hire['whats_included'],
+        //             'dropoff' => [
+        //                 'date' => $hire['dropoffDate'],
+        //                 'location' => $hire['dropoffLocation'],
+        //                 'time' => $hire['dropoffTime'],
+        //             ],
+        //             'pickup' => [
+        //                 'date' => $hire['pickupDate'],
+        //                 'location' => $hire['pickupLocation'],
+        //                 'time' => $hire['pickupTime'],
+        //             ],
+        //             'provider' => $hire['provider'],
+        //         ];
+        //     };
+
+        //     $package->car_hire = $car_hire;
+        // };
+
+        // if ($package->flights) {
+        //     $flights = [];
+
+        //     foreach ($package->flights['flights'] as $flight) {
+        //         $flights[] = [
+        //             'airline' => $flight['airline'],
+        //             'arrival' => [
+        //                 'airport' => $flight['arrivalAirport'],
+        //                 'date' => $flight['date'],
+        //                 'time' => $flight['arrivalTime'],
+        //             ],
+        //             'class' => $flight['class'],
+        //             'departure' => [
+        //                 'airport' => $flight['departureAirport'],
+        //                 'date' => $flight['date'],
+        //                 'time' => $flight['departureTime'],
+        //             ],
+        //             'number' => $flight['number'],
+        //         ];
+        //     };
+
+        //     $package->flights = $flights;
+        // };
+
+        // if ($package->itinerary) {
+        //     $itinerary = [];
+
+        //     foreach ($package->itinerary['itinerary'] as $item) {
+        //         $itinerary[] = [
+        //             'date' => $item['date'],
+        //             'day' => $item['day'],
+        //             'description' => [
+        //                 'long' => $item['long_description'],
+        //                 'short' => $item['short_description'],
+        //             ],
+        //             'name' => $item['name'],
+        //         ];
+        //     };
+
+        //     $package->itinerary = $itinerary;
+        // };
+
+        // if ($package->transfers) {
+        //     $transfers = [];
+
+        //     foreach ($package->transfers['transfers'] as $transfer) {
+        //         $transfers[] = [
+        //             'description' => [
+        //                 'long' => $transfer['long_description'],
+        //                 'short' => $transfer['short_description'],
+        //             ],
+        //             'name' => $transfer['name'],
+        //         ];
+        //     };
+
+        //     $package->transfers = $transfers;
+        // };
 
         $package->save();
     };

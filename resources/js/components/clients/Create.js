@@ -1,7 +1,9 @@
 import axios from 'axios';
 import * as filestack from 'filestack-js';
 import React, { Component } from 'react';
+import PlacesAutocomplete from 'react-places-autocomplete';
 import Select from 'react-select'
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { toast } from 'react-toastify';
 import set from 'lodash.set';
 
@@ -10,16 +12,26 @@ class Create extends Component {
         super(props);
 
         this.state = {
+            address: '',
             events: {},
             item: {
                 name: '',
-                address: [
-                    '',
-                    '',
-                    '',
-                    '',
-                ],
-                contacts: [],
+                address: {
+                    line1: '',
+                    line2: '',
+                    line3: '',
+                    city: '',
+                    county: '',
+                    postcode: '',
+                    country: '',
+                },
+                contacts: [{
+                    birth: '',
+                    email: '',
+                    mobile: '',
+                    name: '',
+                    phone: '',
+                }],
                 email: '',
                 interests: [],
                 logo: '',
@@ -30,17 +42,71 @@ class Create extends Component {
     };
 
     componentDidMount () {
-        $('.date').datepicker().on('changeDate', (element) => {
-            this.onChangeHandler(element);
+        axios.get('/api/events').then(res => {
+            this.setState({
+                address: this.state.address,
+                events: res.data.data,
+                item: this.state.item,
+            });
         });
     };
+
+    Contact = SortableElement(({ item, index }) => {
+        return (
+            <div className='border rounded p-3 mb-3'>
+                <div className='form-row'>
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `contact-name-${ index }` }>Name</label>
+                        <input name='name' value={ item.name } onChange={ e => this.onContactChangeHandler(e, index) } type='text' className='form-control' id={ `contact-name-${ index }` } />
+                    </div>
     
-    onAddressChangeHandler = (element, i) => {
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `contact-email-${ index }` }>Email</label>
+                        <input name='email' value={ item.email } onChange={ e => this.onContactChangeHandler(e, index) } type='text' className='form-control' id={ `contact-email-${ index }` } />
+                    </div>
+                </div>
+    
+                <div className='form-row'>
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `contact-mobile-${ index }` }>Mobile</label>
+                        <input name='mobile' value={ item.mobile } onChange={ e => this.onContactChangeHandler(e, index) } type='text' className='form-control' id={ `contact-mobile-${ index }` } />
+                    </div>
+    
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `contact-phone-${ index }` }>Phone</label>
+                        <input name='phone' value={ item.phone } onChange={ e => this.onContactChangeHandler(e, index) } type='text' className='form-control' id={ `contact-phone-${ index }` } />
+                    </div>
+                </div>
+    
+                <div className='form-group'>
+                    <label htmlFor={ `contact-birth-${ index }` }>Date of Birth</label>
+                    <input name='birth' value={ item.birth } onChange={ e => this.onContactChangeHandler(e, index) } type='text' className='form-control date' id={ `contact-birth-${ index }` } />
+                </div>
+
+                <div>
+                    <span onClick={ this.onDeleteContact(index, this) } className='btn btn-danger'>Delete</span>
+                </div>
+            </div>
+        );
+    });
+
+    Contacts = SortableContainer(({ contacts }) => {
+        return (
+            <div>
+                { contacts.map((item, i) =>
+                    <this.Contact key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
+    
+    onAddressChangeHandler = (element) => {
         let prep = this.state.item;
 
-        prep.address[i] = element.target.value;
+        set(prep, element.target.name, element.target.value);
 
         this.setState({
+            address: this.state.address,
             events: this.state.events,
             item: prep,
         });
@@ -52,6 +118,7 @@ class Create extends Component {
         set(prep, element.target.name, element.target.value);
 
         this.setState({
+            address: this.state.address,
             events: this.state.events,
             item: prep,
         });
@@ -63,9 +130,40 @@ class Create extends Component {
         prep.contacts[i][element.target.name] = element.target.value;
 
         this.setState({
+            address: this.state.address,
             events: this.state.events,
             item: prep,
         });
+    };
+
+    onContactsSortEnd = ({ oldIndex, newIndex }) => {
+        let prep = this.state.item;
+
+        // move item oldIndex to newIndex in prep.contacts
+
+        this.setState({
+            address: this.state.address,
+            events: this.state.events,
+            item: prep,
+        });
+    };
+
+    onDeleteContact (i, component) {
+        return () => {
+            let prep = component.state.item;
+
+            // remove item i from prep.contacts
+
+            component.setState({
+                address: this.state.address,
+                events: this.state.events,
+                item: prep,
+            });
+
+            $(`#contact-birth-${ prep.contacts.length }`).datepicker().on('changeDate', (element) => {
+                this.onChangeHandler(element);
+            });
+        };
     };
 
     onLogoChangeHandler = (result) => {
@@ -74,22 +172,10 @@ class Create extends Component {
         prep.logo = result.filesUploaded[0].url;
 
         this.setState({
+            address: this.state.address,
             events: this.state.events,
             item: prep,
         });
-    };
-
-    onNewAddressLine (component) {
-        return () => {
-            let prep = component.state.item;
-
-            prep.address.push('');
-
-            component.setState({
-                events: this.state.events,
-                item: prep,
-            });
-        };
     };
 
     onNewContact (component) {
@@ -105,8 +191,13 @@ class Create extends Component {
             });
 
             component.setState({
+                address: this.state.address,
                 events: this.state.events,
                 item: prep,
+            });
+
+            $(`#contact-birth-${ prep.contacts.length }`).datepicker().on('changeDate', (element) => {
+                this.onChangeHandler(element);
             });
         };
     };
@@ -122,6 +213,7 @@ class Create extends Component {
             };
 
             this.setState({
+                address: this.state.address,
                 events: this.state.events,
                 item: prep,
             });
@@ -199,11 +291,11 @@ class Create extends Component {
                                                     ] } onChange={ this.onSelectChangeHandler('status') } className='form-control p-0' id='status' />
                                                 </div>
 
-                                                { this.state.item.interests &&
+                                                {/* { this.state.events &&
                                                     <div className='form-group col-md-6'>
                                                         <label htmlFor='interests'>Interests</label>
                                                         <div id='interests'>
-                                                            { this.state.item.interests.map((item, i) => 
+                                                            { this.state.events.map((item, i) => 
                                                                 <p key={ i }>
                                                                     { this.state.events[i] &&
                                                                         <Link to={ `/app/events/${ item }` }>{ this.state.events[i].name }</Link>
@@ -212,17 +304,52 @@ class Create extends Component {
                                                             )}
                                                         </div>
                                                     </div>
-                                                }
+                                                } */}
                                             </div>
 
                                             <div className='form-group'>
-                                                <label>Address</label>
-                                                { this.state.item.address.map((item, i) => 
-                                                    <input key={ i } value={ item } onChange={ e => this.onAddressChangeHandler(e, i) } type='text' className='form-control my-1' />
-                                                )}
+                                                <label htmlFor='address'>Address</label>
+                                                <div className='pl-3' id='address'>
+                                                    <div className='row'>
+                                                        <div className='col-6'>
+                                                            <div className='form-group'>
+                                                                <label htmlFor='line1'>Line 1</label>
+                                                                <input name='address.line1' value={ this.state.item.address.line1 } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='line1' />
+                                                            </div>
 
-                                                <div>
-                                                    <span onClick={ this.onNewAddressLine(this) } className='btn btn-primary'>New Line</span>
+                                                            <div className='form-group'>
+                                                                <label htmlFor='line2'>Line 2</label>
+                                                                <input name='address.line2' value={ this.state.item.address.line2 } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='line2' />
+                                                            </div>
+
+                                                            <div className='form-group'>
+                                                                <label htmlFor='line3'>Line 3</label>
+                                                                <input name='address.line3' value={ this.state.item.address.line3 } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='line3' />
+                                                            </div>
+                                                        </div>
+
+                                                        <div className='col-6'>
+                                                            <div className='form-group'>
+                                                                <label htmlFor='city'>City</label>
+                                                                <input name='address.city' value={ this.state.item.address.city } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='city' />
+                                                            </div>
+
+                                                            <div className='form-group'>
+                                                                <label htmlFor='county'>County</label>
+                                                                <input name='address.county' value={ this.state.item.address.county } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='county' />
+                                                            </div>
+
+                                                            <div className='form-group'>
+                                                                <label htmlFor='postcode'>Postcode</label>
+                                                                <input name='address.postcode' value={ this.state.item.address.postcode } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='postcode' />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className='form-group'>
+                                                        <label htmlFor='country'>Country</label>
+                                                        <input name='address.country' value={ this.state.item.address.country } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='country' />
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -245,42 +372,7 @@ class Create extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.contacts.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `contact-name-${ i }` }>Name</label>
-                                                                        <input name='name' value={ item.name } onChange={ e => this.onContactChangeHandler(e, i) } type='text' className='form-control' id={ `contact-name-${ i }` } />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `contact-email-${ i }` }>Email</label>
-                                                                        <input name='email' value={ item.email } onChange={ e => this.onContactChangeHandler(e, i) } type='text' className='form-control' id={ `contact-email-${ i }` } />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `contact-mobile-${ i }` }>Mobile</label>
-                                                                        <input name='mobile' value={ item.mobile } onChange={ e => this.onContactChangeHandler(e, i) } type='text' className='form-control' id={ `contact-mobile-${ i }` } />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `contact-phone-${ i }` }>Phone</label>
-                                                                        <input name='phone' value={ item.phone } onChange={ e => this.onContactChangeHandler(e, i) } type='text' className='form-control' id={ `contact-phone-${ i }` } />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-group'>
-                                                                    <label htmlFor={ `contact-birth-${ i }` }>Date of Birth</label>
-                                                                    <input name='birth' value={ item.birth } onChange={ e => this.onContactChangeHandler(e, i) } type='text' className='form-control date' id={ `contact-birth-${ i }` } />
-                                                                </div>
-                                                            </div>
-
-                                                            <hr />
-                                                        </div>
-                                                    )}
+                                                    <this.Contacts contacts={ this.state.item.contacts } onSortEnd={ this.onContactsSortEnd } />
 
                                                     <div>
                                                         <span onClick={ this.onNewContact(this) } className='btn btn-primary'>New Contact</span>

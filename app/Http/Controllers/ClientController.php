@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\Http\Resources\Client as ClientResource;
-use App\Contact;
 use App\Event;
 use App\Mail\ClientWelcome;
 use App\Notifications\SMS;
@@ -52,6 +51,7 @@ class ClientController extends Controller
             'company_id' => Auth::user()->company->id,
             'name' => $request->input('name'),
             'address' => $request->input('address'),
+            'contacts' => $request->input('contacts'),
             'email' => $request->input('email'),
             'interests' => $request->input('interests'),
             'logo' => $request->input('logo'),
@@ -59,7 +59,7 @@ class ClientController extends Controller
             'status' => $request->input('status'),
         ]);
 
-        Mail::to($client->contact_email)->send(new ClientWelcome($client));
+        // Mail::to($client->email)->send(new ClientWelcome($client));
 
         return new ClientResource($client);
     }
@@ -155,6 +155,7 @@ class ClientController extends Controller
         if ($client->company->id == Auth::user()->company->id) {
             $client->name = $request->input('name');
             $client->address = $request->input('address');
+            $client->contacts = $request->input('contacts');
             $client->email = $request->input('email');
             $client->interests = $request->input('interests');
             $client->logo = $request->input('logo');
@@ -178,8 +179,6 @@ class ClientController extends Controller
         $client = Client::findOrFail($id);
 
         if ($client->company->id == Auth::user()->company->id) {
-            $client->contacts->delete();
-
             $client->delete();
         }
     }

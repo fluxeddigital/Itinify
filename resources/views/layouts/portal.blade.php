@@ -28,7 +28,7 @@
     <link href="{{ asset('css/portal/vendor.min.css') }}" rel="stylesheet" type="text/css" media="all">
     <link href="{{ asset('css/portal/main.css') }}" rel="stylesheet" type="text/css" media="all">
     <link href="{{ asset('css/portal/color-settings.css') }}" rel="stylesheet" type="text/css" media="all" data-role="color-settings">
-    <link href="{{ asset('css/lportal/ogin-register.css') }}" rel="stylesheet" type="text/css" media="all">
+    <link href="{{ asset('css/portal/login-register.css') }}" rel="stylesheet" type="text/css" media="all">
     <link href="{{ asset('css/portal/frontend/itinify.css') }}" rel="stylesheet" type="text/css" media="all">
 
     @laravelPWA

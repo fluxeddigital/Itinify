@@ -9,19 +9,10 @@ class Show extends Component {
         super(props);
 
         this.state = {
-            events: {},
+            events: [],
             item: {
                 name: '',
-                address: {
-                    administrativeAreaLevel1: '', // 5
-                    administrativeAreaLevel2: '', // 6
-                    country: '', // 8
-                    locality: '', // 3
-                    postalTown: '', // 4
-                    postalCode: '', // 7
-                    route: '', // 2
-                    streetNumber: '', // 1
-                },
+                address: [],
                 contacts: [],
                 email: '',
                 interests: [],
@@ -39,8 +30,6 @@ class Show extends Component {
                     res.data.data[key] = '';
                 };
             });
-
-            res.data.data.address = JSON.parse(res.data.data.address);
 
             this.setState({
                 events: this.state.events,
@@ -127,30 +116,9 @@ class Show extends Component {
 
                                             <div className='form-group'>
                                                 <label>Address</label>
-                                                { this.state.item.address.streetNumber &&
-                                                    <input value={ this.state.item.address.streetNumber } type='text' className='form-control my-1' disabled />
-                                                }
-                                                { this.state.item.address.route &&
-                                                    <input value={ this.state.item.address.route } type='text' className='form-control my-1' disabled />
-                                                }
-                                                { this.state.item.address.locality &&
-                                                    <input value={ this.state.item.address.locality } type='text' className='form-control my-1' disabled />
-                                                }
-                                                { this.state.item.address.postalTown &&
-                                                    <input value={ this.state.item.address.postalTown } type='text' className='form-control my-1' disabled />
-                                                }
-                                                { this.state.item.address.administrativeAreaLevel1 &&
-                                                    <input value={ this.state.item.address.administrativeAreaLevel1 } type='text' className='form-control my-1' disabled />
-                                                }
-                                                { this.state.item.address.administrativeAreaLevel2 &&
-                                                    <input value={ this.state.item.address.administrativeAreaLevel2 } type='text' className='form-control my-1' disabled />
-                                                }
-                                                { this.state.item.address.postalCode &&
-                                                    <input value={ this.state.item.address.postalCode } type='text' className='form-control my-1' disabled />
-                                                }
-                                                { this.state.item.address.country &&
-                                                    <input value={ this.state.item.address.country } type='text' className='form-control my-1' disabled />
-                                                }
+                                                { this.state.item.address.map((item) => 
+                                                    <input key={ item } value={ item } type='text' className='form-control my-1' disabled />
+                                                )}
                                             </div>
 
                                             { this.state.item.logo &&
@@ -168,38 +136,40 @@ class Show extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div className='row'>
-                                                    { this.state.item.contacts.map((item) => 
-                                                        <div key={ item.name } className='col'>
+                                                    { this.state.item.contacts.map((item, i) => 
+                                                        <div key={ i } className='col'>
                                                             <div>
                                                                 <div className='form-row'>
                                                                     <div className='form-group col-md-6'>
-                                                                        <label htmlFor='name'>Name</label>
-                                                                        <input value={ item.name } type='text' className='form-control' id='name' disabled />
+                                                                        <label htmlFor={ `contact-name-${ i }` }>Name</label>
+                                                                        <input value={ item.name } type='text' className='form-control' id={ `contact-name-${ i }` } disabled />
                                                                     </div>
 
                                                                     <div className='form-group col-md-6'>
-                                                                        <label htmlFor='email'>Email</label>
-                                                                        <input value={ item.email } type='text' className='form-control' id='email' disabled />
+                                                                        <label htmlFor={ `contact-email-${ i }` }>Email</label>
+                                                                        <input value={ item.email } type='text' className='form-control' id={ `contact-email-${ i }` } disabled />
                                                                     </div>
                                                                 </div>
 
                                                                 <div className='form-row'>
                                                                     <div className='form-group col-md-6'>
-                                                                        <label htmlFor='mobile'>Mobile</label>
-                                                                        <input value={ item.mobile } type='text' className='form-control' id='mobile' disabled />
+                                                                        <label htmlFor={ `contact-mobile-${ i }` }>Mobile</label>
+                                                                        <input value={ item.mobile } type='text' className='form-control' id={ `contact-mobile-${ i }` } disabled />
                                                                     </div>
 
                                                                     <div className='form-group col-md-6'>
-                                                                        <label htmlFor='phone'>Phone</label>
-                                                                        <input value={ item.phone } type='text' className='form-control' id='phone' disabled />
+                                                                        <label htmlFor={ `contact-phone-${ i }` }>Phone</label>
+                                                                        <input value={ item.phone } type='text' className='form-control' id={ `contact-phone-${ i }` } disabled />
                                                                     </div>
                                                                 </div>
 
                                                                 <div className='form-group'>
-                                                                    <label htmlFor='birth'>Date of Birth</label>
-                                                                    <input value={ item.birth } type='text' className='form-control' id='birth' disabled />
+                                                                    <label htmlFor={ `contact-birth-${ i }` }>Date of Birth</label>
+                                                                    <input value={ item.birth } type='text' className='form-control' id={ `contact-birth-${ i }` } disabled />
                                                                 </div>
                                                             </div>
+
+                                                            <hr />
                                                         </div>
                                                     )}
                                                 </div>

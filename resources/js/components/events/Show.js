@@ -31,10 +31,22 @@ class Show extends Component {
 
     componentDidMount () {
         axios.get(`/api/events/${ this.props.match.params.id }`).then(res => {
-            Object.keys(res.data.data).forEach((key) => {
-                if (res.data.data[key] === null) {
-                    res.data.data[key] = '';
+            Object.keys(res.data.data).forEach((key1) => {
+                if (res.data.data[key1] === null) {
+                    res.data.data[key1] = '';
                 };
+
+                Object.keys(res.data.data[key1]).forEach((key2) => {
+                    if (res.data.data[key1][key2] === null) {
+                        res.data.data[key1][key2] = '';
+                    };
+
+                    Object.keys(res.data.data[key1][key2]).forEach((key3) => {
+                        if (res.data.data[key1][key2][key3] === null) {
+                            res.data.data[key1][key2][key3] = '';
+                        };
+                    });
+                });
             });
 
             this.setState({

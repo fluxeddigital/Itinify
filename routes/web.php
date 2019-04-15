@@ -31,59 +31,38 @@ Route::get('/format', function () {
     $clients = App\Client::all();
 
     foreach ($clients as $client) {
+        $address = [];
+
         if ($client->business_address_line_1) {
-            $line_1 = $client->business_address_line_1;
-        } else {
-            $line_1 = null;
+            $address[] = $client->business_address_line_1;
         }
 
         if ($client->business_address_line_2) {
-            $line_2 = $client->business_address_line_2;
-        } else {
-            $line_2 = null;
+            $address[] = $client->business_address_line_2;
         }
         
         if ($client->business_address_line_3) {
-            $line_3 = $client->business_address_line_3;
-        } else {
-            $line_3 = null;
+            $address[] = $client->business_address_line_3;
         }
         
         if ($client->business_address_town) {
-            $town = $client->business_address_town;
-        } else {
-            $town = null;
+            $address[] = $client->business_address_town;
         }
         
         if ($client->business_address_county) {
-            $county = $client->business_address_county;
-        } else {
-            $county = null;
+            $address[] = $client->business_address_county;
         }
         
         if ($client->business_address_postcode) {
-            $postcode = $client->business_address_postcode;
-        } else {
-            $postcode = null;
+            $address[] = $client->business_address_postcode;
         }
-        
-        $address = [
-            'administrativeAreaLevel1' => null,
-            'administrativeAreaLevel2' => $county,
-            'country' => null,
-            'locality' => $line_3,
-            'postalTown' => $town,
-            'postalCode' => $postcode,
-            'route' => $line_2,
-            'streetNumber' => $line_1,
-        ];
 
-        $client->address = json_encode($address);
+        $client->address = $address;
         
         // if ($client->interests) {
-        //     $client->interests = json_encode([
+        //     $client->interests = [
         //         $client->interests
-        //     ]);
+        //     ];
         // }
 
         if ($client->contact_name) {
@@ -104,54 +83,33 @@ Route::get('/format', function () {
     $companies = App\Company::all();
 
     foreach ($companies as $company) {
+        $address = [];
+
         if ($company->address_line_1) {
-            $line_1 = $company->address_line_1;
-        } else {
-            $line_1 = null;
+            $address[] = $company->address_line_1;
         }
 
         if ($company->address_line_2) {
-            $line_2 = $company->address_line_2;
-        } else {
-            $line_2 = null;
+            $address[] = $company->address_line_2;
         }
         
         if ($company->address_line_3) {
-            $line_3 = $company->address_line_3;
-        } else {
-            $line_3 = null;
+            $address[] = $company->address_line_3;
         }
         
         if ($company->address_town) {
-            $town = $company->address_town;
-        } else {
-            $town = null;
+            $address[] = $company->address_town;
         }
         
         if ($company->address_county) {
-            $county = $company->address_county;
-        } else {
-            $county = null;
+            $address[] = $company->address_county;
         }
         
         if ($company->address_postcode) {
-            $postcode = $company->address_postcode;
-        } else {
-            $postcode = null;
+            $address[] = $company->address_postcode;
         }
-        
-        $address = [
-            'administrativeAreaLevel1' => null,
-            'administrativeAreaLevel2' => $county,
-            'country' => null,
-            'locality' => $line_3,
-            'postalTown' => $town,
-            'postalCode' => $postcode,
-            'route' => $line_2,
-            'streetNumber' => $line_1,
-        ];
 
-        $company->address = json_encode($address);
+        $company->address = $address;
 
         if ($company->custom_css) {
             $custom_css = $company->custom_css;
@@ -165,10 +123,10 @@ Route::get('/format', function () {
             $tracking_code = null;
         }
 
-        $company->customisation = json_encode([
+        $company->customisation = [
             'css' => $custom_css,
             'tracking' => $tracking_code,
-        ]);
+        ];
 
         if ($company->feefo_merchant_identifier) {
             $feefo_merchant_identifier = $company->feefo_merchant_identifier;
@@ -194,17 +152,17 @@ Route::get('/format', function () {
             $feefo_api_key = null;
         }
 
-        $company->feefo = json_encode([
+        $company->feefo = [
             'apiKey' => $feefo_api_key,
             'merchantIdentifier' => $feefo_merchant_identifier,
             'password' => $feefo_password,
             'username' => $feefo_username,
-        ]);
+        ];
 
         // if ($company->mailchimp) {
-        //     $company->mailchimp = json_encode([
+        //     $company->mailchimp = [
         //         'apiKey' => $company->mailchimp,
-        //     ]);
+        //     ];
         // }
 
         if ($company->nexmo_key) {
@@ -225,11 +183,11 @@ Route::get('/format', function () {
             $nexmo_sms_from = null;
         }
 
-        $company->nexmo = json_encode([
+        $company->nexmo = [
             'key' => $nexmo_key,
             'secret' => $nexmo_secret,
             'smsFrom' => $nexmo_sms_from,
-        ]);
+        ];
 
         $company->save();
     };
@@ -249,17 +207,17 @@ Route::get('/format', function () {
             $end_date = null;
         }
 
-        $event->dates = json_encode([
+        $event->dates = [
             'ends' => $end_date,
             'starts' => $start_date,
-        ]);
+        ];
 
         // if ($event->newsletter) {
-        //     $event->newsletter = json_encode([
+        //     $event->newsletter = [
         //         'mailchimp' => [
         //             'list' => $event->newsletter,
         //         ],
-        //     ]);
+        //     ];
         // }
 
         $event->save();
@@ -302,11 +260,11 @@ Route::get('/format', function () {
             $welcome_text = null;
         }
 
-        $package->customisation = json_encode([
+        $package->customisation = [
             'banner' => $banner_image,
             'description' => $description,
             'welcome' => $welcome_text,
-        ]);
+        ];
         
         if ($package->price_per_person) {
             $price_per_person = $package->price_per_person;
@@ -326,11 +284,11 @@ Route::get('/format', function () {
             $vat = null;
         }
 
-        $package->pricing = json_encode([
+        $package->pricing = [
             'person' => $price_per_person,
             'total' => $total_price,
             'vat' => $vat,
-        ]);
+        ];
 
         if ($package->special_requirements) {
             $special_requirements = $package->special_requirements;
@@ -344,10 +302,10 @@ Route::get('/format', function () {
             $dietary_requirements = null;
         }
 
-        $package->requirements = json_encode([
+        $package->requirements = [
             'dietary' => $dietary_requirements,
             'other' => $special_requirements,
-        ]);
+        ];
 
         $package->save();
     };

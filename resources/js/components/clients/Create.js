@@ -2,7 +2,8 @@ import move from 'array-move';
 import axios from 'axios';
 import * as filestack from 'filestack-js';
 import React, { Component } from 'react';
-import PlacesAutocomplete, { geocodeByPlaceId } from 'react-places-autocomplete';
+import Datetime from 'react-datetime'
+import PlacesAutocomplete from 'react-places-autocomplete';
 import Select from 'react-select'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { toast } from 'react-toastify';
@@ -90,7 +91,7 @@ class Create extends Component {
     
                 <div className='form-group'>
                     <label htmlFor={ `contact-birth-${ index }` }>Date of Birth</label>
-                    <input name='birth' value={ item.birth } onChange={ e => this.onContactChangeHandler(e, index) } type='text' className='form-control date' id={ `contact-birth-${ index }` } />
+                    <Datetime name='birth' value={ item.birth } onChange={ this.onContactDateChangeHandler('birth', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `contact-birth-${ index }` } />
                 </div>
 
                 <div>
@@ -140,6 +141,24 @@ class Create extends Component {
             events: this.state.events,
             item: prep,
         });
+    };
+    
+    onContactDateChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.contacts[i][name] = value.format("DD/MM/YYYY");
+            } else {
+                prep.contacts[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                item: prep,
+            });
+        };
     };
 
     onContactsSortEnd = ({ oldIndex, newIndex }) => {

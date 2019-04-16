@@ -106,7 +106,7 @@ class Show extends Component {
                                                         <label htmlFor='interests'>Interests</label>
                                                         <div id='interests'>
                                                             { this.state.item.interests.map((item) => 
-                                                                <p key={ item }>
+                                                                <p key={ item } className='mb-0'>
                                                                     { this.state.events[item] &&
                                                                         <Link to={ `/app/events/${ item }` }>{ this.state.events[item].name }</Link>
                                                                     }

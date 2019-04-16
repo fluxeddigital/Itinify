@@ -109,6 +109,8 @@ class Edit extends Component {
                                             <label htmlFor='section'>Section</label>
                                             <Select name='section' value={ { value: this.state.item.section, label: this.state.item.section } } options={ [
                                                 { label: 'Itinerary', value: 'Itinerary' },
+                                                { label: 'Car Hire', value: 'Car Hire' },
+                                                { label: 'Flights', value: 'Flights' },
                                                 { label: 'Restaurants', value: 'Restaurants' },
                                                 { label: 'Transfers', value: 'Transfers' },
                                             ] } onChange={ this.onSelectChangeHandler('section') } className='form-control p-0' id='section' />

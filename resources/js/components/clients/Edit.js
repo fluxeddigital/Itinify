@@ -241,8 +241,6 @@ class Edit extends Component {
 
                                     <span onClick={ this.save } className='btn btn-primary mr-2'>Save</span>
                                     <span onClick={ this.delete } className='btn btn-danger'>Delete</span>
-
-                                    <script src={ `https://maps.googleapis.com/maps/api/js?key=${ document.head.querySelector('meta[name="maps-key"]').content }&libraries=places&callback=initAutocomplete` }></script>
                                 </form>
                             </div>
                         </div>

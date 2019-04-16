@@ -9,7 +9,6 @@
 
     <!-- App API Keys -->
     <meta name="filestack-key" content="{{ env('FILESTACK_KEY') }}">
-    <meta name="maps-key" content="{{ env('MAPS_KEY') }}">
 
     <!-- Authenticated Company & User Information -->
     <meta name="company-id" content="{{ Auth::user()->company_id }}">
@@ -21,6 +20,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src='https://maps.googleapis.com/maps/api/js?key={{ env('MAPS_KEY') }}&libraries=places'></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">

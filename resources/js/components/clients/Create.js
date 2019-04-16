@@ -2,7 +2,7 @@ import move from 'array-move';
 import axios from 'axios';
 import * as filestack from 'filestack-js';
 import React, { Component } from 'react';
-import PlacesAutocomplete from 'react-places-autocomplete';
+import PlacesAutocomplete, { geocodeByPlaceId } from 'react-places-autocomplete';
 import Select from 'react-select'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { toast } from 'react-toastify';
@@ -63,7 +63,7 @@ class Create extends Component {
 
     Contact = SortableElement(({ item, index }) => {
         return (
-            <div className='border rounded p-3 mb-3'>
+            <div className='bg-white border rounded p-3 mb-3'>
                 <div className='form-row'>
                     <div className='form-group col-md-6'>
                         <label htmlFor={ `contact-name-${ index }` }>Name</label>
@@ -110,15 +110,11 @@ class Create extends Component {
         );
     });
     
-    onAddressChangeHandler = (element) => {
-        let prep = this.state.item;
-
-        set(prep, element.target.name, element.target.value);
-
+    onAddressChangeHandler = (value) => {
         this.setState({
-            address: this.state.address,
+            address: value,
             events: this.state.events,
-            item: prep,
+            item: this.state.item,
         });
     };
     
@@ -165,8 +161,8 @@ class Create extends Component {
             prep.contacts.splice(i, 1);
 
             component.setState({
-                address: this.state.address,
-                events: this.state.events,
+                address: component.state.address,
+                events: component.state.events,
                 item: prep,
             });
 
@@ -221,13 +217,51 @@ class Create extends Component {
             });
 
             component.setState({
-                address: this.state.address,
-                events: this.state.events,
+                address: component.state.address,
+                events: component.state.events,
                 item: prep,
             });
 
             $(`#contact-birth-${ prep.contacts.length }`).datepicker().on('changeDate', (element) => {
                 this.onChangeHandler(element);
+            });
+        };
+    };
+
+    onSelectAddressHandler (component) {
+        return (address, placeId) => {
+            new google.maps.places.PlacesService(new google.maps.Map(
+                document.getElementById('map'))
+            ).getDetails({
+                placeId: placeId,
+                fields: ['address_components']
+            }, function(place, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    let prep = component.state.item;
+
+                    let address = {};
+
+                    for (let i in place.address_components) {
+                        address[place.address_components[i].types[0]] = place.address_components[i].long_name;
+                    };
+
+                    if (address.street_number) {
+                        prep.address.line1 = `${ address.street_number } ${ address.route }`;
+                    } else {
+                        prep.address.line1 = address.route;
+                    };
+                    
+                    prep.address.city = address.postal_town || address.locality;
+                    prep.address.county = address.administrative_area_level_2;
+                    prep.address.postcode = address.postal_code;
+                    prep.address.country = address.country;
+
+                    component.setState({
+                        address: component.state.address,
+                        events: component.state.events,
+                        item: prep,
+                    });
+                };
             });
         };
     };
@@ -336,6 +370,38 @@ class Create extends Component {
                                             <div className='form-group'>
                                                 <label htmlFor='address'>Address</label>
                                                 <div className='pl-3' id='address'>
+                                                    <PlacesAutocomplete
+                                                        value={ this.state.address }
+                                                        onChange={ this.onAddressChangeHandler }
+                                                        onSelect={ this.onSelectAddressHandler(this) }
+                                                    >
+                                                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                                            <div className='mb-3'>
+                                                                <div className='form-group mb-0'>
+                                                                    <label htmlFor='address'>Address Lookup</label>
+                                                                    <input {...getInputProps({
+                                                                        placeholder: 'Search Places...',
+                                                                        className: `form-control rounded-0 rounded-top ${ loading || suggestions.length ? '' : 'rounded-bottom' }`,
+                                                                    })} id='address' />
+                                                                </div>
+                                                                
+                                                                <ul className='list-group'>
+                                                                    {loading && <li className='list-group-item border rounded-0 disabled'>Loading...</li> }
+
+                                                                    {suggestions.map(suggestion => {
+                                                                        return (
+                                                                            <li {...getSuggestionItemProps(suggestion)} className={ `list-group-item border rounded-0 cursor-pointer${ suggestion.active ? ' active' : '' }` }>
+                                                                                { suggestion.description }
+                                                                            </li>  
+                                                                        );
+                                                                    })}
+                                                                </ul>
+
+                                                                <span className='d-none' id='map'></span>
+                                                            </div>
+                                                        )}
+                                                    </PlacesAutocomplete>
+
                                                     <div className='row'>
                                                         <div className='col-6'>
                                                             <div className='form-group'>
@@ -398,7 +464,7 @@ class Create extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    <this.Contacts contacts={ this.state.item.contacts } onSortEnd={ this.onContactsSortEnd } />
+                                                    <this.Contacts contacts={ this.state.item.contacts } onSortEnd={ this.onContactsSortEnd } lockAxis='y' pressDelay='200' />
 
                                                     <div>
                                                         <span onClick={ this.onNewContact(this) } className='btn btn-primary'>New Contact</span>
@@ -409,8 +475,6 @@ class Create extends Component {
                                     }
 
                                     <span onClick={ this.create } className='btn btn-primary mr-2'>Create</span>
-
-                                    <script src={ `https://maps.googleapis.com/maps/api/js?key=${ document.head.querySelector('meta[name="maps-key"]').content }&libraries=places&callback=initAutocomplete` }></script>
                                 </form>
                             </div>
                         </div>

@@ -1,3 +1,4 @@
+import move from 'array-move';
 import axios from 'axios';
 import * as filestack from 'filestack-js';
 import React, { Component } from 'react';
@@ -13,7 +14,7 @@ class Create extends Component {
 
         this.state = {
             address: '',
-            events: {},
+            events: [],
             item: {
                 name: '',
                 address: {
@@ -43,9 +44,18 @@ class Create extends Component {
 
     componentDidMount () {
         axios.get('/api/events').then(res => {
+            let events = res.data.data;
+
+            for (let i in events) {
+                events[i] = {
+                    label: events[i].name,
+                    value: events[i].id,
+                };
+            };
+
             this.setState({
                 address: this.state.address,
-                events: res.data.data,
+                events: events,
                 item: this.state.item,
             });
         });
@@ -139,7 +149,7 @@ class Create extends Component {
     onContactsSortEnd = ({ oldIndex, newIndex }) => {
         let prep = this.state.item;
 
-        // move item oldIndex to newIndex in prep.contacts
+        move.mutate(prep.contacts, oldIndex, newIndex);
 
         this.setState({
             address: this.state.address,
@@ -152,7 +162,7 @@ class Create extends Component {
         return () => {
             let prep = component.state.item;
 
-            // remove item i from prep.contacts
+            prep.contacts.splice(i, 1);
 
             component.setState({
                 address: this.state.address,
@@ -176,6 +186,26 @@ class Create extends Component {
             events: this.state.events,
             item: prep,
         });
+    };
+    
+    onMultiSelectChangeHandler = (name) => {
+        return (selected) => {
+            let arr = [];
+
+            for (let i in selected) {
+                arr.push(selected[i].value);
+            };
+
+            let prep = this.state.item;
+
+            set(prep, name, arr)
+
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                item: prep,
+            });
+        };
     };
 
     onNewContact (component) {
@@ -212,11 +242,7 @@ class Create extends Component {
                 set(prep, labelName, selected.label);
             };
 
-            this.setState({
-                address: this.state.address,
-                events: this.state.events,
-                item: prep,
-            });
+            this.setState({ item: prep });
         };
     };
 
@@ -291,20 +317,20 @@ class Create extends Component {
                                                     ] } onChange={ this.onSelectChangeHandler('status') } className='form-control p-0' id='status' />
                                                 </div>
 
-                                                {/* { this.state.events &&
+                                                { this.state.events &&
                                                     <div className='form-group col-md-6'>
                                                         <label htmlFor='interests'>Interests</label>
                                                         <div id='interests'>
-                                                            { this.state.events.map((item, i) => 
-                                                                <p key={ i }>
-                                                                    { this.state.events[i] &&
-                                                                        <Link to={ `/app/events/${ item }` }>{ this.state.events[i].name }</Link>
-                                                                    }
-                                                                </p>
-                                                            )}
+                                                            <Select
+                                                                name='interests'
+                                                                options={ this.state.events }
+                                                                onChange={ this.onMultiSelectChangeHandler('interests') }
+                                                                isMulti
+                                                                className='form-control p-0' id='interests'
+                                                            />
                                                         </div>
                                                     </div>
-                                                } */}
+                                                }
                                             </div>
 
                                             <div className='form-group'>

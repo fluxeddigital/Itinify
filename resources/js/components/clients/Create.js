@@ -184,10 +184,6 @@ class Create extends Component {
                 events: component.state.events,
                 item: prep,
             });
-
-            $(`#contact-birth-${ prep.contacts.length }`).datepicker().on('changeDate', (element) => {
-                this.onChangeHandler(element);
-            });
         };
     };
 
@@ -240,10 +236,6 @@ class Create extends Component {
                 events: component.state.events,
                 item: prep,
             });
-
-            $(`#contact-birth-${ prep.contacts.length }`).datepicker().on('changeDate', (element) => {
-                this.onChangeHandler(element);
-            });
         };
     };
 
@@ -295,7 +287,12 @@ class Create extends Component {
                 set(prep, labelName, selected.label);
             };
 
-            this.setState({ item: prep });
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
         };
     };
 

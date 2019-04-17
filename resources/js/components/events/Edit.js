@@ -133,7 +133,7 @@ class Edit extends Component {
                     </div>
 
                     <div className='col-2 text-right mb-0'>
-                        <Link to={ `/app/events/${ this.state.item.id }` } className='btn btn-primary'>View</Link>
+                        <Link to={ `/app/events/${ this.state.item.id + location.hash }` } className='btn btn-primary'>View</Link>
                     </div>
                 </div>
 

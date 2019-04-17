@@ -43,7 +43,7 @@ class Show extends Component {
                     </div>
 
                     <div className='col-2 text-right mb-0'>
-                        <Link to={ `/app/items/${ this.state.item.id }/edit` } className='btn btn-primary'>Edit</Link>
+                        <Link to={ `/app/items/${ this.state.item.id }/edit${ location.hash }` } className='btn btn-primary'>Edit</Link>
                     </div>
                 </div>
 

@@ -18,10 +18,6 @@ class AppServiceProvider extends ServiceProvider
         Cashier::useCurrency('gbp', '£');
         
         Schema::defaultStringLength(191);
-
-        if(config('app.env') === 'production') {
-            \URL::forceScheme('https');
-        };
     }
 
     /**

@@ -33,6 +33,7 @@ class Package extends Model
         'customisation' => 'array',
         'flights' => 'array',
         'itinerary' => 'array',
+        'notes' => 'array',
         'passengers' => 'array',
         'pricing' => 'array',
         'requirements' => 'array',
@@ -89,14 +90,6 @@ class Package extends Model
     public function event()
     {
         return $this->belongsTo('App\Event');
-    }
-    
-    /**
-     * The notes that belong to the package.
-     */
-    public function notes()
-    {
-        return $this->morphMany('App\Note', 'notable');
     }
 
     /**

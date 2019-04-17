@@ -28,6 +28,7 @@ class CreatePackagesTable extends Migration
             $table->date('issued')->nullable();
             $table->longText('itinerary')->nullable();
             $table->string('lead_status')->nullable();
+            $table->longText('notes')->nullable();
             $table->longText('passengers')->nullable();
             $table->longText('pricing')->nullable();
             $table->date('reminder')->nullable();

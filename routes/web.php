@@ -229,21 +229,43 @@ Route::get('/format', function () {
         $event->save();
     };
 
-    $notes = App\Note::all();
+    // $notes = App\Note::all();
 
-    foreach ($notes as $note) {
-        if ($note->client_id) {
-            $note->notable_id = $note->client_id;
-            $note->notable_type = 'App\Client';
-        } else {
-            if ($note->package_id) {
-                $note->notable_id = $note->package_id;
-                $note->notable_type = 'App\Package';
-            }
-        }
+    // foreach ($notes as $note) {
+    //     if ($note->client_id) {
+    //         $client = App\Client::find($note->client_id);
 
-        $note->save();
-    };
+    //         if ($client) {
+    //             $client->notes = [
+    //                 [
+    //                     'title' => $note->title,
+    //                     'content' => $note->content,
+    //                     'visibility' => $note->visibility,
+    //                 ],
+    //             ];
+
+    //             $client->save();
+    //         };
+    //     } else {
+    //         if ($note->package_id) {
+    //             $package = App\Package::find($note->package_id);
+
+    //             if ($package) {
+    //                 $package->notes = [
+    //                     [
+    //                         'title' => $note->title,
+    //                         'content' => $note->content,
+    //                         'visibility' => $note->visibility,
+    //                     ],
+    //                 ];
+
+    //                 $package->save();
+    //             };
+    //         }
+    //     }
+
+    //     $note->save();
+    // };
 
     $packages = App\Package::all();
 

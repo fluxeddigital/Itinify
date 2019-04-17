@@ -22,6 +22,7 @@ class CreateClientsTable extends Migration
             $table->string('email')->nullable();
             $table->longText('interests')->nullable();
             $table->string('logo')->nullable();
+            $table->longText('notes')->nullable();
             $table->string('phone')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();

@@ -33,15 +33,8 @@ class Client extends Model
         'address' => 'array',
         'contacts' => 'array',
         'interests' => 'array',
+        'notes' => 'array',
     ];
-
-    /**
-     * The notes that belong to the client.
-     */
-    public function notes()
-    {
-        return $this->morphMany('App\Note', 'notable');
-    }
 
     /**
      * The packages that the client has

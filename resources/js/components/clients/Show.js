@@ -24,6 +24,7 @@ class Show extends Component {
                 email: '',
                 interests: [],
                 logo: '',
+                notes: [],
                 phone: '',
                 status: '',
             },
@@ -190,6 +191,43 @@ class Show extends Component {
                                                                     <label htmlFor={ `contact-birth-${ i }` }>Date of Birth</label>
                                                                     <input value={ item.birth } type='text' className='form-control' id={ `contact-birth-${ i }` } disabled />
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    }
+
+                                    { location.hash == '#notes' &&
+                                        <ul className='list-group list-group-flush mb-4'>
+                                            <h4 className='page-title'>Notes</h4>
+
+                                            <li className='list-group-item p-3'>
+                                                <div>
+                                                    { this.state.item.notes.map((item, i) => 
+                                                        <div key={ i }>
+                                                            <div className='bg-white border rounded p-3 mb-3'>
+                                                                <div className='form-row'>
+                                                                    <div className='form-group col-md-6'>
+                                                                        <label htmlFor={ `contact-title-${ i }` }>Title</label>
+                                                                        <input value={ item.title } type='text' className='form-control' id={ `contact-title-${ i }` } disabled />
+                                                                    </div>
+
+                                                                    <div className='form-group col-md-6'>
+                                                                        <label htmlFor={ `contact-visibility-${ i }` }>Visibility</label>
+                                                                        <input value={ item.visibility } type='text' className='form-control' id={ `contact-visibility-${ i }` } disabled />
+                                                                    </div>
+                                                                </div>
+
+                                                                { item.content &&
+                                                                    <div className='form-group'>
+                                                                        <label htmlFor={ `contact-content-${ i }` }>Content</label>
+                                                                        <div id='description' className='card mb-5'>
+                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.content } } id={ `contact-content-${ i }` } />
+                                                                        </div>
+                                                                    </div>
+                                                                }
                                                             </div>
                                                         </div>
                                                     )}

@@ -518,7 +518,7 @@ class Edit extends Component {
                                                 </div>
 
                                                 { this.state.item.logo &&
-                                                    <img src={ this.state.item.logo.startsWith('http') ? this.state.item.logo : `/${ this.state.item.logo }` } id='logo' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
+                                                    <img src={ this.state.item.logo } id='logo' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
                                                 }
                                             </div>
                                         </div>

@@ -93,6 +93,14 @@ class Package extends Model
     }
 
     /**
+     * The users that belong to the package.
+     */
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
+
+    /**
      * The company that the package belongs to.
      */
     public function company()

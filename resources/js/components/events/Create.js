@@ -176,7 +176,7 @@ class Create extends Component {
                                                     </div>
 
                                                     { this.state.item.banner &&
-                                                        <img src={ this.state.item.banner.startsWith('http') ? this.state.item.banner : `/${ this.state.item.banner }` } id='banner' className='w-100 d-block' />
+                                                        <img src={ this.state.item.banner } id='banner' className='w-100 d-block' />
                                                     }
                                                 </div>
 
@@ -188,7 +188,7 @@ class Create extends Component {
                                                     </div>
 
                                                     { this.state.item.logo &&
-                                                        <img src={ this.state.item.logo.startsWith('http') ? this.state.item.logo : `/${ this.state.item.logo }` } id='logo' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
+                                                        <img src={ this.state.item.logo } id='logo' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
                                                     }
                                                 </div>
                                             </div>

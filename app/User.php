@@ -57,6 +57,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * The packages that belong to the user.
+     */
+    public function packages()
+    {
+        return $this->belongsToMany('App\Package');
+    }
+
+    /**
      * The company that the user belongs to.
      */
     public function company()

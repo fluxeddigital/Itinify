@@ -98,14 +98,14 @@ class Show extends Component {
                                                 { this.state.item.banner &&
                                                     <div className='form-group col-lg-6'>
                                                         <label htmlFor='banner'>Banner</label>
-                                                        <img src={ this.state.item.banner.startsWith('http') ? this.state.item.banner : `/storage/${ this.state.item.banner }` } id='banner' className='w-100 d-block' />
+                                                        <img src={ this.state.item.banner } id='banner' className='w-100 d-block' />
                                                     </div>
                                                 }
 
                                                 { this.state.item.logo &&
                                                     <div className='form-group col-lg-6'>
                                                         <label htmlFor='logo'>Logo</label>
-                                                        <img src={ this.state.item.logo.startsWith('http') ? this.state.item.logo : `/storage/${ this.state.item.logo }` } id='logo' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
+                                                        <img src={ this.state.item.logo } id='logo' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
                                                     </div>
                                                 }
                                             </div>

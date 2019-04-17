@@ -2,7 +2,8 @@ import move from 'array-move';
 import axios from 'axios';
 import * as filestack from 'filestack-js';
 import React, { Component } from 'react';
-import Datetime from 'react-datetime'
+import Datetime from 'react-datetime';
+import PhoneInput from 'react-telephone-input';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { Link } from 'react-router-dom';
 import Select from 'react-select'
@@ -115,12 +116,12 @@ class Edit extends Component {
                 <div className='form-row'>
                     <div className='form-group col-md-6'>
                         <label htmlFor={ `contact-mobile-${ index }` }>Mobile</label>
-                        <input name='mobile' value={ item.mobile } onChange={ e => this.onContactChangeHandler(e, index) } type='text' className='form-control' id={ `contact-mobile-${ index }` } />
+                        <PhoneInput name='mobile' defaultCountry='gb' autoFormat={ false } flagsImagePath='/images/flags.png' value={ item.mobile } onChange={ this.onContactPhoneChangeHandler('mobile', index) } classNames='w-100' listItemClassName='dropdown-item' id={ `contact-mobile-${ index }` } />
                     </div>
     
                     <div className='form-group col-md-6'>
                         <label htmlFor={ `contact-phone-${ index }` }>Phone</label>
-                        <input name='phone' value={ item.phone } onChange={ e => this.onContactChangeHandler(e, index) } type='text' className='form-control' id={ `contact-phone-${ index }` } />
+                        <PhoneInput name='phone' defaultCountry='gb' autoFormat={ false } flagsImagePath='/images/flags.png' value={ item.phone } onChange={ this.onContactPhoneChangeHandler('phone', index) } classNames='w-100' listItemClassName='dropdown-item' id={ `contact-phone-${ index }` } />
                     </div>
                 </div>
     
@@ -257,6 +258,20 @@ class Edit extends Component {
         };
     };
 
+    onContactPhoneChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            prep.contacts[i][name] = value;
+
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                item: prep,
+            });
+        };
+    };
+
     onContactsSortEnd = ({ oldIndex, newIndex }) => {
         let prep = this.state.item;
 
@@ -306,6 +321,20 @@ class Edit extends Component {
             events: this.state.events,
             item: prep,
         });
+    };
+    
+    onPhoneChangeHandler = (name) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            set(prep, name, value);
+
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                item: prep,
+            });
+        };
     };
 
     onDeleteContact (i, component) {
@@ -521,7 +550,7 @@ class Edit extends Component {
 
                                                 <div className='form-group col-md-6'>
                                                     <label htmlFor='phone'>Phone</label>
-                                                    <input name='phone' value={ this.state.item.phone } onChange={ e => this.onChangeHandler(e) } type='tel' className='form-control' id='phone' />
+                                                    <PhoneInput name='phone' defaultCountry='gb' autoFormat={ false } flagsImagePath='/images/flags.png' value={ this.state.item.phone } onChange={ this.onPhoneChangeHandler('phone') } classNames='w-100' listItemClassName='dropdown-item' id='phone' />
                                                 </div>
                                             </div>
 

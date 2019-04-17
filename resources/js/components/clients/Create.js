@@ -339,7 +339,7 @@ class Create extends Component {
                         <div className='row'>
                             <div className='col'>
                                 <form>
-                                    { location.hash != '#contacts' &&
+                                    { location.hash != '#contacts' && location.hash != '#notes' &&
                                         <div>
                                             <div className='form-group'>
                                                 <label htmlFor='name'>Name</label>

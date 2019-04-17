@@ -69,7 +69,7 @@ class Dashboard extends Component {
                         borderColor: 'rgba(0,123,255,1)',
                     }],
                     labels: Array.from(new Array(29), function(_, i) {
-                        return i === 0 ? 1 : i;
+                        return -28 + i;
                     }),
                 },
                 options: {
@@ -79,7 +79,7 @@ class Dashboard extends Component {
                             gridLines: false,
                             ticks: {
                                 callback: function(tick, index) {
-                                    return index % 7 !== 0 ? '' : -28 + tick;
+                                    return index % 7 !== 0 ? '' : tick;
                                 }
                             }
                         }],

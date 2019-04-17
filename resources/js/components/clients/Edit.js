@@ -388,7 +388,7 @@ class Edit extends Component {
                         <div className='row'>
                             <div className='col'>
                                 <form>
-                                    { location.hash != '#contacts' &&
+                                    { location.hash != '#contacts' && location.hash != '#notes' &&
                                         <div>
                                             <div className='form-group'>
                                                 <label htmlFor='name'>Name</label>
@@ -436,7 +436,7 @@ class Edit extends Component {
                                             <div className='form-group'>
                                                 <label htmlFor='address'>Address</label>
                                                 <div className='pl-3' id='address'>
-                                                    {/* <PlacesAutocomplete
+                                                    <PlacesAutocomplete
                                                         value={ this.state.address }
                                                         onChange={ this.onAddressChangeHandler }
                                                         onSelect={ this.onSelectAddressHandler(this) }
@@ -466,7 +466,7 @@ class Edit extends Component {
                                                                 <span className='d-none' id='map'></span>
                                                             </div>
                                                         )}
-                                                    </PlacesAutocomplete> */}
+                                                    </PlacesAutocomplete>
 
                                                     <div className='row'>
                                                         <div className='col-6'>

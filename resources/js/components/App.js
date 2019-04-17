@@ -8,6 +8,7 @@ import SearchResults from './common/SearchResults';
 import Sidebar from './common/Sidebar/Index';
 
 import Dashboard from './Dashboard';
+import NotFound from './NotFound';
 import ClientsIndex from './clients/Index';
 import ClientsCreate from './clients/Create';
 import ClientsShow from './clients/Show';
@@ -91,6 +92,8 @@ class App extends Component {
                             <Route exact path='/app/users/create' component={ UsersCreate } />
                             <Route exact path='/app/users/:id' component={ UsersShow } />
                             <Route exact path='/app/users/:id/edit' component={ UsersEdit } />
+
+                            <Route component={ NotFound } />
                         </Switch>
                     </div>
 

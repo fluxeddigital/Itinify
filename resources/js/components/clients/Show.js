@@ -76,7 +76,7 @@ class Show extends Component {
                         <div className='row'>
                             <div className='col'>
                                 <form>
-                                    { location.hash != '#contacts' &&
+                                    { location.hash != '#contacts' && location.hash != '#notes' &&
                                         <div>
                                             <div className='form-group'>
                                                 <label htmlFor='name'>Name</label>
@@ -158,10 +158,10 @@ class Show extends Component {
                                             <h4 className='page-title'>Contacts</h4>
 
                                             <li className='list-group-item p-3'>
-                                                <div className='row'>
+                                                <div>
                                                     { this.state.item.contacts.map((item, i) => 
-                                                        <div key={ i } className='col'>
-                                                            <div>
+                                                        <div key={ i }>
+                                                            <div className='bg-white border rounded p-3 mb-3'>
                                                                 <div className='form-row'>
                                                                     <div className='form-group col-md-6'>
                                                                         <label htmlFor={ `contact-name-${ i }` }>Name</label>
@@ -191,8 +191,6 @@ class Show extends Component {
                                                                     <input value={ item.birth } type='text' className='form-control' id={ `contact-birth-${ i }` } disabled />
                                                                 </div>
                                                             </div>
-
-                                                            <hr />
                                                         </div>
                                                     )}
                                                 </div>

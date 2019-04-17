@@ -69,17 +69,15 @@ Route::get('/format', function () {
         //     ];
         // }
 
-        if ($client->contact_name) {
-            $client->contacts = [
-                [
-                    'name' => $client->contact_name,
-                    'birth' => $client->date_of_birth,
-                    'email' => $client->contact_email,
-                    'mobile' => $client->contact_mobile,
-                    'phone' => $client->contact_phone,
-                ],
-            ];
-        }
+        $client->contacts = [
+            [
+                'name' => $client->contact_name,
+                'birth' => $client->date_of_birth,
+                'email' => $client->contact_email,
+                'mobile' => $client->contact_mobile,
+                'phone' => $client->contact_phone,
+            ],
+        ];
 
         $client->save();
     };
@@ -324,12 +322,12 @@ Route::get('/format', function () {
         //             'confirmationNumber' => $hire['confirmationNumber'],
         //             'description' => $hire['whats_included'],
         //             'dropoff' => [
-        //                 'date' => $hire['dropoffDate'],
+        //                 'date' => Carbon\Carbon::parse($hire['dropoffDate'])->format('d/m/Y'),
         //                 'location' => $hire['dropoffLocation'],
         //                 'time' => $hire['dropoffTime'],
         //             ],
         //             'pickup' => [
-        //                 'date' => $hire['pickupDate'],
+        //                 'date' => Carbon\Carbon::parse($hire['pickupDate'])->format('d/m/Y'),
         //                 'location' => $hire['pickupLocation'],
         //                 'time' => $hire['pickupTime'],
         //             ],
@@ -348,13 +346,13 @@ Route::get('/format', function () {
         //             'airline' => $flight['airline'],
         //             'arrival' => [
         //                 'airport' => $flight['arrivalAirport'],
-        //                 'date' => $flight['date'],
+        //                 'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
         //                 'time' => $flight['arrivalTime'],
         //             ],
         //             'class' => $flight['class'],
         //             'departure' => [
         //                 'airport' => $flight['departureAirport'],
-        //                 'date' => $flight['date'],
+        //                 'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
         //                 'time' => $flight['departureTime'],
         //             ],
         //             'number' => $flight['number'],
@@ -369,8 +367,7 @@ Route::get('/format', function () {
 
         //     foreach ($package->itinerary['itinerary'] as $item) {
         //         $itinerary[] = [
-        //             'date' => $item['date'],
-        //             'day' => $item['day'],
+        //             'date' => Carbon\Carbon::parse($item['date'])->format('d/m/Y'),
         //             'description' => [
         //                 'long' => $item['long_description'],
         //                 'short' => $item['short_description'],

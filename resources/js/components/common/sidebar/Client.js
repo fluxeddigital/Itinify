@@ -26,7 +26,7 @@ class Client extends Component {
             <div>
                 <div id='Client'>
                     <li className='nav-item cursor-pointer'>
-                        <a href='#' className={ `nav-link${ location.hash != '#contacts' ? ' active' : '' }` }>
+                        <a href='#' className={ `nav-link${ location.hash != '#contacts' && location.hash != '#notes' ? ' active' : '' }` }>
                             <i className='material-icons'>description</i>
                             <span>Details</span>
                         </a>
@@ -36,6 +36,13 @@ class Client extends Component {
                         <a href='#contacts' className={ `nav-link${ location.hash == '#contacts' ? ' active' : '' }` }>
                             <i className='material-icons'>people</i>
                             <span>Contacts</span>
+                        </a>
+                    </li>
+
+                    <li className='nav-item cursor-pointer'>
+                        <a href='#notes' className={ `nav-link${ location.hash == '#notes' ? ' active' : '' }` }>
+                            <i className='material-icons'>note</i>
+                            <span>Notes</span>
                         </a>
                     </li>
                     

@@ -313,87 +313,87 @@ Route::get('/format', function () {
             'other' => $special_requirements,
         ];
 
-        // if ($package->car_hire) {
-        //     $car_hire = [];
+        if ($package->car_hire) {
+            $car_hire = [];
 
-        //     foreach ($package->car_hire['carHire'] as $hire) {
-        //         $car_hire[] = [
-        //             'car' => $hire['carType'],
-        //             'confirmationNumber' => $hire['confirmationNumber'],
-        //             'description' => $hire['whats_included'],
-        //             'dropoff' => [
-        //                 'date' => Carbon\Carbon::parse($hire['dropoffDate'])->format('d/m/Y'),
-        //                 'location' => $hire['dropoffLocation'],
-        //                 'time' => $hire['dropoffTime'],
-        //             ],
-        //             'pickup' => [
-        //                 'date' => Carbon\Carbon::parse($hire['pickupDate'])->format('d/m/Y'),
-        //                 'location' => $hire['pickupLocation'],
-        //                 'time' => $hire['pickupTime'],
-        //             ],
-        //             'provider' => $hire['provider'],
-        //         ];
-        //     };
+            foreach ($package->car_hire['carHire'] as $hire) {
+                $car_hire[] = [
+                    'car' => $hire['carType'],
+                    'confirmationNumber' => $hire['confirmationNumber'],
+                    'description' => $hire['whats_included'],
+                    'dropoff' => [
+                        'date' => Carbon\Carbon::parse($hire['dropoffDate'])->format('d/m/Y'),
+                        'location' => $hire['dropoffLocation'],
+                        'time' => $hire['dropoffTime'],
+                    ],
+                    'pickup' => [
+                        'date' => Carbon\Carbon::parse($hire['pickupDate'])->format('d/m/Y'),
+                        'location' => $hire['pickupLocation'],
+                        'time' => $hire['pickupTime'],
+                    ],
+                    'provider' => $hire['provider'],
+                ];
+            };
 
-        //     $package->car_hire = $car_hire;
-        // };
+            $package->car_hire = $car_hire;
+        };
 
-        // if ($package->flights) {
-        //     $flights = [];
+        if ($package->flights) {
+            $flights = [];
 
-        //     foreach ($package->flights['flights'] as $flight) {
-        //         $flights[] = [
-        //             'airline' => $flight['airline'],
-        //             'arrival' => [
-        //                 'airport' => $flight['arrivalAirport'],
-        //                 'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
-        //                 'time' => $flight['arrivalTime'],
-        //             ],
-        //             'class' => $flight['class'],
-        //             'departure' => [
-        //                 'airport' => $flight['departureAirport'],
-        //                 'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
-        //                 'time' => $flight['departureTime'],
-        //             ],
-        //             'number' => $flight['number'],
-        //         ];
-        //     };
+            foreach ($package->flights['flights'] as $flight) {
+                $flights[] = [
+                    'airline' => $flight['airline'],
+                    'arrival' => [
+                        'airport' => $flight['arrivalAirport'],
+                        'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
+                        'time' => $flight['arrivalTime'],
+                    ],
+                    'class' => $flight['class'],
+                    'departure' => [
+                        'airport' => $flight['departureAirport'],
+                        'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
+                        'time' => $flight['departureTime'],
+                    ],
+                    'number' => $flight['number'],
+                ];
+            };
 
-        //     $package->flights = $flights;
-        // };
+            $package->flights = $flights;
+        };
 
-        // if ($package->itinerary) {
-        //     $itinerary = [];
+        if ($package->itinerary) {
+            $itinerary = [];
 
-        //     foreach ($package->itinerary['itinerary'] as $item) {
-        //         $itinerary[] = [
-        //             'date' => Carbon\Carbon::parse($item['date'])->format('d/m/Y'),
-        //             'description' => [
-        //                 'long' => $item['long_description'],
-        //                 'short' => $item['short_description'],
-        //             ],
-        //             'name' => $item['name'],
-        //         ];
-        //     };
+            foreach ($package->itinerary['itinerary'] as $item) {
+                $itinerary[] = [
+                    'date' => Carbon\Carbon::parse($item['date'])->format('d/m/Y'),
+                    'description' => [
+                        'long' => $item['long_description'],
+                        'short' => $item['short_description'],
+                    ],
+                    'name' => $item['name'],
+                ];
+            };
 
-        //     $package->itinerary = $itinerary;
-        // };
+            $package->itinerary = $itinerary;
+        };
 
-        // if ($package->transfers) {
-        //     $transfers = [];
+        if ($package->transfers) {
+            $transfers = [];
 
-        //     foreach ($package->transfers['transfers'] as $transfer) {
-        //         $transfers[] = [
-        //             'description' => [
-        //                 'long' => $transfer['long_description'],
-        //                 'short' => $transfer['short_description'],
-        //             ],
-        //             'name' => $transfer['name'],
-        //         ];
-        //     };
+            foreach ($package->transfers['transfers'] as $transfer) {
+                $transfers[] = [
+                    'description' => [
+                        'long' => $transfer['long_description'],
+                        'short' => $transfer['short_description'],
+                    ],
+                    'name' => $transfer['name'],
+                ];
+            };
 
-        //     $package->transfers = $transfers;
-        // };
+            $package->transfers = $transfers;
+        };
 
         $package->save();
     };

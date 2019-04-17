@@ -75,7 +75,11 @@ class Create extends Component {
 
         set(prep, element.target.name, element.target.value);
 
-        this.setState({ item: prep });
+        this.setState({
+            categories: this.state.categories,
+            events: this.state.events,
+            item: prep,
+        });
     };
 
     onEditorChangeHandler = (name) => {
@@ -84,7 +88,11 @@ class Create extends Component {
 
             set(prep, name, value)
 
-            this.setState({ item: prep });
+            this.setState({
+                categories: this.state.categories,
+                events: this.state.events,
+                item: prep,
+            });
         };
     };
     
@@ -98,7 +106,11 @@ class Create extends Component {
                 set(prep, labelName, selected.label);
             };
 
-            this.setState({ item: prep });
+            this.setState({
+                categories: this.state.categories,
+                events: this.state.events,
+                item: prep,
+            });
         };
     };
 

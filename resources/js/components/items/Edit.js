@@ -98,7 +98,11 @@ class Edit extends Component {
 
         set(prep, element.target.name, element.target.value);
 
-        this.setState({ item: prep });
+        this.setState({
+            categories: this.state.categories,
+            events: this.state.events,
+            item: prep,
+        });
     };
 
     onEditorChangeHandler = (name) => {
@@ -107,7 +111,11 @@ class Edit extends Component {
 
             set(prep, name, value)
 
-            this.setState({ item: prep });
+            this.setState({
+                categories: this.state.categories,
+                events: this.state.events,
+                item: prep,
+            });
         };
     };
     

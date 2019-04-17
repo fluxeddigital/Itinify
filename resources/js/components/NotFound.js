@@ -8,8 +8,8 @@ class NotFound extends Component {
 
     render () {
         return (
-            <div class="error">
-                <div class="error__content">
+            <div className="error">
+                <div className="error__content">
                     <h2>404</h2>
 
                     <h3>This page could not be found!</h3>

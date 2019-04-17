@@ -55,6 +55,7 @@ class ClientController extends Controller
             'email' => $request->input('email'),
             'interests' => $request->input('interests'),
             'logo' => $request->input('logo'),
+            'notes' => $request->input('notes'),
             'phone' => $request->input('phone'),
             'status' => $request->input('status'),
         ]);
@@ -159,6 +160,7 @@ class ClientController extends Controller
             $client->email = $request->input('email');
             $client->interests = $request->input('interests');
             $client->logo = $request->input('logo');
+            $client->notes = $request->input('notes');
             $client->phone = $request->input('phone');
             $client->status = $request->input('status');
 

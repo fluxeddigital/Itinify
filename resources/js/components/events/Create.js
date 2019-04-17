@@ -1,8 +1,8 @@
 import axios from 'axios';
 import * as filestack from 'filestack-js';
+import set from 'lodash.set';
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
-import set from 'lodash.set';
 import { Editor } from '@tinymce/tinymce-react';
 
 class Create extends Component {

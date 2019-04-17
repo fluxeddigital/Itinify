@@ -1,13 +1,14 @@
 import move from 'array-move';
 import axios from 'axios';
 import * as filestack from 'filestack-js';
+import set from 'lodash.set';
 import React, { Component } from 'react';
 import Datetime from 'react-datetime'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import Select from 'react-select'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { toast } from 'react-toastify';
-import set from 'lodash.set';
+import { Editor } from '@tinymce/tinymce-react';
 
 class Create extends Component {
     constructor (props) {
@@ -37,6 +38,7 @@ class Create extends Component {
                 email: '',
                 interests: [],
                 logo: '',
+                notes: [],
                 phone: '',
                 status: '',
             },
@@ -110,6 +112,53 @@ class Create extends Component {
             </div>
         );
     });
+
+    Note = SortableElement(({ item, index }) => {
+        return (
+            <div className='bg-white border rounded p-3 mb-3'>
+                <div className='form-row'>
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `note-title-${ index }` }>Title</label>
+                        <input name='title' value={ item.title } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-title-${ index }` } />
+                    </div>
+    
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `note-visibility-${ index }` }>Visibility</label>
+                        <input name='visibility' value={ item.visibility } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-visibility-${ index }` } />
+                    </div>
+                </div>
+
+                <div className='form-group'>
+                    <label htmlFor={ `note-content-${ index }` }>Content</label>
+                    <Editor
+                        // apiKey='API_KEY'
+                        textareaName='content'
+                        value={ item.content }
+                        onEditorChange={ this.onNoteEditorChangeHandler('content', index) }
+                        plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                        toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                        init={ {
+                            height: 300,
+                        } }
+                    />
+                </div>
+
+                <div>
+                    <span onClick={ this.onDeleteNote(index, this) } className='btn btn-danger'>Delete</span>
+                </div>
+            </div>
+        );
+    });
+
+    Notes = SortableContainer(({ notes }) => {
+        return (
+            <div>
+                { notes.map((item, i) =>
+                    <this.Note key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
     
     onAddressChangeHandler = (value) => {
         this.setState({
@@ -172,12 +221,64 @@ class Create extends Component {
             item: prep,
         });
     };
+    
+    onNoteChangeHandler = (element, i) => {
+        let prep = this.state.item;
+
+        prep.notes[i][element.target.name] = element.target.value;
+
+        this.setState({
+            address: this.state.address,
+            events: this.state.events,
+            item: prep,
+        });
+    };
+
+    onNoteEditorChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            prep.notes[i][name] = value;
+
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                item: prep,
+            });
+        };
+    };
+
+    onNotesSortEnd = ({ oldIndex, newIndex }) => {
+        let prep = this.state.item;
+
+        move.mutate(prep.notes, oldIndex, newIndex);
+
+        this.setState({
+            address: this.state.address,
+            events: this.state.events,
+            item: prep,
+        });
+    };
 
     onDeleteContact (i, component) {
         return () => {
             let prep = component.state.item;
 
             prep.contacts.splice(i, 1);
+
+            component.setState({
+                address: component.state.address,
+                events: component.state.events,
+                item: prep,
+            });
+        };
+    };
+
+    onDeleteNote (i, component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.notes.splice(i, 1);
 
             component.setState({
                 address: component.state.address,
@@ -229,6 +330,24 @@ class Create extends Component {
                 email: '',
                 mobile: '',
                 phone: '',
+            });
+
+            component.setState({
+                address: component.state.address,
+                events: component.state.events,
+                item: prep,
+            });
+        };
+    };
+
+    onNewNote (component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.notes.push({
+                title: '',
+                content: '',
+                visibility: false,
             });
 
             component.setState({
@@ -480,10 +599,26 @@ class Create extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    <this.Contacts contacts={ this.state.item.contacts } onSortEnd={ this.onContactsSortEnd } lockAxis='y' pressDelay='200' />
+                                                    <this.Contacts contacts={ this.state.item.contacts } onSortEnd={ this.onContactsSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
                                                         <span onClick={ this.onNewContact(this) } className='btn btn-primary'>New Contact</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    }
+
+                                    { location.hash == '#notes' &&
+                                        <ul className='list-group list-group-flush mb-4'>
+                                            <h4 className='page-title'>Notes</h4>
+
+                                            <li className='list-group-item p-3'>
+                                                <div>
+                                                    <this.Notes notes={ this.state.item.notes } onSortEnd={ this.onNotesSortEnd } lockAxis='y' pressDelay={ 200 } />
+
+                                                    <div>
+                                                        <span onClick={ this.onNewNote(this) } className='btn btn-primary'>New Note</span>
                                                     </div>
                                                 </div>
                                             </li>

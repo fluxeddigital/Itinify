@@ -44,7 +44,7 @@ class Sidebar extends Component {
                         <nav className='navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0'>
                             <Link className='navbar-brand w-100 mr-0' to={ `/app/companies/${ document.head.querySelector('meta[name="company-id"]').content }` }>
                                 <div className='text-center w-100'>
-                                    <img style={ { height: '100%' } } src={ this.state.item.logo }/>
+                                    <img style={ { height: '100%' } } src={ document.head.querySelector('meta[name="company-logo"]').content }/>
                                 </div>
                             </Link>
                         </nav>

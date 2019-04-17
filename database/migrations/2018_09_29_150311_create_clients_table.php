@@ -17,10 +17,10 @@ class CreateClientsTable extends Migration
             $table->increments('id');
             $table->integer('company_id')->unsigned();
             $table->string('name');
-            $table->text('address')->nullable();
-            $table->text('contacts')->nullable();
+            $table->longText('address')->nullable();
+            $table->longText('contacts')->nullable();
             $table->string('email')->nullable();
-            $table->text('interests')->nullable();
+            $table->longText('interests')->nullable();
             $table->string('logo')->nullable();
             $table->string('phone')->nullable();
             $table->string('status')->nullable();

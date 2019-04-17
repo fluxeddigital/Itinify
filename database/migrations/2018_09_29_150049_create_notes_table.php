@@ -19,7 +19,7 @@ class CreateNotesTable extends Migration
             $table->integer('notable_id')->unsigned()->nullable();
             $table->string('notable_type')->nullable();
             $table->string('title');
-            $table->text('content')->nullable();
+            $table->longText('content')->nullable();
             $table->date('reminder')->nullable();
             $table->string('visibility')->nullable();
             $table->timestamps();

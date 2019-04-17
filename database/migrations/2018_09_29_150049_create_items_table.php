@@ -19,8 +19,8 @@ class CreateItemsTable extends Migration
             $table->integer('category_id')->unsigned()->nullable();
             $table->integer('event_id')->unsigned()->nullable();
             $table->string('name');
-            $table->text('long_description')->nullable();
-            $table->text('short_description')->nullable();
+            $table->longText('long_description')->nullable();
+            $table->longText('short_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

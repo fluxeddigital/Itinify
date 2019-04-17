@@ -18,13 +18,13 @@ class CreateEventsTable extends Migration
             $table->integer('company_id')->unsigned();
             $table->string('name');
             $table->string('banner')->nullable();
-            $table->text('conditions')->nullable();
-            $table->text('dates')->nullable();
-            $table->text('description')->nullable();
+            $table->longText('conditions')->nullable();
+            $table->longText('dates')->nullable();
+            $table->longText('description')->nullable();
             $table->string('location')->nullable();
             $table->string('logo')->nullable();
-            $table->text('newsletter')->nullable();
-            $table->text('pack')->nullable();
+            $table->longText('newsletter')->nullable();
+            $table->longText('pack')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -6,6 +6,7 @@ use App\Event;
 use App\Item;
 use App\ItemCategory as Category;
 use App\Http\Resources\Item as ItemResource;
+use App\Http\Resources\Items as ItemsResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return ItemResource::collection(Auth::user()->company->items);
+        return new ItemsResource(Auth::user()->company->items);
     }
 
     /**

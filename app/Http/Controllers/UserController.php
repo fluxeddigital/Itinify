@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Http\Resources\User as UserResource;
+use App\Http\Resources\Users as UsersResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +29,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return UserResource::collection(Auth::user()->company->users);
+        return new UsersResource(Auth::user()->company->users);
     }
 
     /**

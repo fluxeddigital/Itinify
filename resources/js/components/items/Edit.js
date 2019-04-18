@@ -40,6 +40,8 @@ class Edit extends Component {
             res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
 
             this.setState({
+                categories: this.state.categories,
+                events: this.state.events,
                 item: {...this.state.item, ...res.data.data},
             });
         }).catch((err) => {

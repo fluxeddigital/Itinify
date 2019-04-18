@@ -28,6 +28,49 @@ Route::patch('/portal/client/{client}/package/{id}', 'PortalController@update')-
 Route::patch('/portal/client/{client}/package/{id}/accept', 'PortalController@accept')->name('portal.accept');
 
 Route::get('/format', function () {
+    // $notes = App\Note::all();
+
+    // foreach ($notes as $note) {
+    //     if ($note->client_id) {
+    //         $client = App\Client::find($note->client_id);
+
+    //         if ($client) {
+    //             $client->notes = [
+    //                 [
+    //                     'title' => $note->title,
+    //                     'content' => $note->content,
+    //                 ],
+    //             ];
+
+    //             $client->save();
+    //         };
+    //     } else {
+    //         if ($note->package_id) {
+    //             if ($note->visibility) {
+    //                 $note->visibility = true;
+    //             } else {
+    //                 $note->visibility = false;
+    //             };
+
+    //             $package = App\Package::find($note->package_id);
+
+    //             if ($package) {
+    //                 $package->notes = [
+    //                     [
+    //                         'title' => $note->title,
+    //                         'content' => $note->content,
+    //                         'visibility' => $note->visibility,
+    //                     ],
+    //                 ];
+
+    //                 $package->save();
+    //             };
+    //         }
+    //     }
+
+    //     $note->save();
+    // };
+
     $clients = App\Client::all();
 
     foreach ($clients as $client) {
@@ -35,6 +78,8 @@ Route::get('/format', function () {
 
         if ($client->business_address_line_1) {
             $address['line1'] = $client->business_address_line_1;
+        } else {
+            $address['line1'] = null;
         }
 
         if ($client->business_address_line_2) {
@@ -57,17 +102,15 @@ Route::get('/format', function () {
             $address['postcode'] = $client->business_address_postcode;
         }
 
-        if (sizeof($address)) {
-            $client->address = $address;
-        } else {
-            $client->address = null;
-        }
+        $client->address = $address;
         
-        // if ($client->interests) {
-        //     $client->interests = [
-        //         $client->interests
-        //     ];
-        // }
+        if (is_string($client->interests)) {
+            $client->interests = [
+                $client->interests
+            ];
+        } else if (! $client->interests) {
+            $client->interests = [];
+        };
 
         $client->contacts = [
             [
@@ -89,6 +132,8 @@ Route::get('/format', function () {
 
         if ($company->address_line_1) {
             $address['line1'] = $company->address_line_1;
+        } else {
+            $address['line1'] = null;
         }
 
         if ($company->address_line_2) {
@@ -165,11 +210,15 @@ Route::get('/format', function () {
             'username' => $feefo_username,
         ];
 
-        // if ($company->mailchimp) {
-        //     $company->mailchimp = [
-        //         'apiKey' => $company->mailchimp,
-        //     ];
-        // }
+        if (is_string($company->mailchimp)) {
+            $company->mailchimp = [
+                'apiKey' => $company->mailchimp,
+            ];
+        } else {
+            $company->mailchimp = [
+                'apiKey' => null,
+            ];
+        }
 
         if ($company->nexmo_key) {
             $nexmo_key = $company->nexmo_key;
@@ -218,54 +267,22 @@ Route::get('/format', function () {
             'starts' => $start_date,
         ];
 
-        // if ($event->newsletter) {
-        //     $event->newsletter = [
-        //         'mailchimp' => [
-        //             'list' => $event->newsletter,
-        //         ],
-        //     ];
-        // }
+        if (is_string($event->newsletter)) {
+            $event->newsletter = [
+                'mailchimp' => [
+                    'list' => $event->newsletter,
+                ],
+            ];
+        } else {
+            $event->newsletter = [
+                'mailchimp' => [
+                    'list' => null,
+                ],
+            ];
+        }
 
         $event->save();
     };
-
-    // $notes = App\Note::all();
-
-    // foreach ($notes as $note) {
-    //     if ($note->client_id) {
-    //         $client = App\Client::find($note->client_id);
-
-    //         if ($client) {
-    //             $client->notes = [
-    //                 [
-    //                     'title' => $note->title,
-    //                     'content' => $note->content,
-    //                     'visibility' => $note->visibility,
-    //                 ],
-    //             ];
-
-    //             $client->save();
-    //         };
-    //     } else {
-    //         if ($note->package_id) {
-    //             $package = App\Package::find($note->package_id);
-
-    //             if ($package) {
-    //                 $package->notes = [
-    //                     [
-    //                         'title' => $note->title,
-    //                         'content' => $note->content,
-    //                         'visibility' => $note->visibility,
-    //                     ],
-    //                 ];
-
-    //                 $package->save();
-    //             };
-    //         }
-    //     }
-
-    //     $note->save();
-    // };
 
     $packages = App\Package::all();
 
@@ -335,87 +352,129 @@ Route::get('/format', function () {
             'other' => $special_requirements,
         ];
 
-        // if ($package->car_hire) {
-        //     $car_hire = [];
+        $car_hire = [];
 
-        //     foreach ($package->car_hire['carHire'] as $hire) {
-        //         $car_hire[] = [
-        //             'car' => $hire['carType'],
-        //             'confirmationNumber' => $hire['confirmationNumber'],
-        //             'description' => $hire['whats_included'],
-        //             'dropoff' => [
-        //                 'date' => Carbon\Carbon::parse($hire['dropoffDate'])->format('d/m/Y'),
-        //                 'location' => $hire['dropoffLocation'],
-        //                 'time' => $hire['dropoffTime'],
-        //             ],
-        //             'pickup' => [
-        //                 'date' => Carbon\Carbon::parse($hire['pickupDate'])->format('d/m/Y'),
-        //                 'location' => $hire['pickupLocation'],
-        //                 'time' => $hire['pickupTime'],
-        //             ],
-        //             'provider' => $hire['provider'],
-        //         ];
-        //     };
+        if ($package->car_hire) {
+            if (array_key_exists('carHire', $package->car_hire)) {
+                foreach ($package->car_hire['carHire'] as $hire) {
+                    $car_hire[] = [
+                        'car' => $hire['carType'],
+                        'confirmationNumber' => $hire['confirmationNumber'],
+                        'description' => $hire['whats_included'],
+                        'dropoff' => [
+                            'date' => Carbon\Carbon::parse($hire['dropoffDate'])->format('d/m/Y'),
+                            'location' => $hire['dropoffLocation'],
+                            'time' => $hire['dropoffTime'],
+                        ],
+                        'pickup' => [
+                            'date' => Carbon\Carbon::parse($hire['pickupDate'])->format('d/m/Y'),
+                            'location' => $hire['pickupLocation'],
+                            'time' => $hire['pickupTime'],
+                        ],
+                        'provider' => $hire['provider'],
+                    ];
+                };
+            } else {
+                $car_hire = $package->car_hire;
+            };
+        };
 
-        //     $package->car_hire = $car_hire;
-        // };
+        $package->car_hire = $car_hire;
 
-        // if ($package->flights) {
-        //     $flights = [];
+        $flights = [];
 
-        //     foreach ($package->flights['flights'] as $flight) {
-        //         $flights[] = [
-        //             'airline' => $flight['airline'],
-        //             'arrival' => [
-        //                 'airport' => $flight['arrivalAirport'],
-        //                 'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
-        //                 'time' => $flight['arrivalTime'],
-        //             ],
-        //             'class' => $flight['class'],
-        //             'departure' => [
-        //                 'airport' => $flight['departureAirport'],
-        //                 'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
-        //                 'time' => $flight['departureTime'],
-        //             ],
-        //             'number' => $flight['number'],
-        //         ];
-        //     };
+        if ($package->flights) {
+            if (array_key_exists('flights', $package->flights)) {
+                foreach ($package->flights['flights'] as $flight) {
+                    $flights[] = [
+                        'airline' => $flight['airline'],
+                        'arrival' => [
+                            'airport' => $flight['arrivalAirport'],
+                            'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
+                            'time' => $flight['arrivalTime'],
+                        ],
+                        'class' => $flight['class'],
+                        'departure' => [
+                            'airport' => $flight['departureAirport'],
+                            'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
+                            'time' => $flight['departureTime'],
+                        ],
+                        'number' => $flight['number'],
+                    ];
+                };
+            } else {
+                $flights = $package->flights;
+            };
+        };
 
-        //     $package->flights = $flights;
-        // };
+        $package->flights = $flights;
 
-        // if ($package->itinerary) {
-        //     $itinerary = [];
+        $itinerary = [];
 
-        //     foreach ($package->itinerary['itinerary'] as $item) {
-        //         $itinerary[] = [
-        //             'date' => Carbon\Carbon::parse($item['date'])->format('d/m/Y'),
-        //             'description' => [
-        //                 'long' => $item['long_description'],
-        //                 'short' => $item['short_description'],
-        //             ],
-        //             'name' => $item['name'],
-        //         ];
-        //     };
+        if ($package->itinerary) {
+            if (array_key_exists('itinerary', $package->itinerary)) {
+                foreach ($package->itinerary['itinerary'] as $item) {
+                    $itinerary[] = [
+                        'date' => Carbon\Carbon::parse($item['date'])->format('d/m/Y'),
+                        'description' => [
+                            'long' => $item['long_description'],
+                            'short' => $item['short_description'],
+                        ],
+                        'name' => $item['name'],
+                    ];
+                };
+            } else {
+                $itinerary = $package->itinerary;
+            };
+        };
 
-        //     $package->itinerary = $itinerary;
-        // };
+        $package->itinerary = $itinerary;
 
-        // if ($package->transfers) {
-        //     $transfers = [];
+        $transfers = [];
 
-        //     foreach ($package->transfers['transfers'] as $transfer) {
-        //         $transfers[] = [
-        //             'description' => [
-        //                 'long' => $transfer['long_description'],
-        //                 'short' => $transfer['short_description'],
-        //             ],
-        //             'name' => $transfer['name'],
-        //         ];
-        //     };
+        if ($package->transfers) {
+            if (array_key_exists('transfers', $package->transfers)) {
+                foreach ($package->transfers['transfers'] as $transfer) {
+                    $transfers[] = [
+                        'description' => [
+                            'long' => $transfer['long_description'],
+                            'short' => $transfer['short_description'],
+                        ],
+                        'name' => $transfer['name'],
+                    ];
+                };
+            } else {
+                $transfers = $package->transfers;
+            };
+        };
 
-        //     $package->transfers = $transfers;
-        // };
+        $package->transfers = $transfers;
+
+        $passengers = [];
+
+        if ($package->passengers) {
+            if (array_key_exists('passengers', $package->passengers)) {
+                foreach ($package->passengers['passengers'] as $passenger) {
+                    $passengers[] = [
+                        'names' => [
+                            'first' => $passenger['firstName'],
+                            'list' => $passenger['lastName'],
+                        ],
+                        'birth' => '',
+                    ];
+                };
+            } else {
+                $passengers = $package->passengers;
+            };
+        };
+
+        $package->passengers = $passengers;
+
+        $package->restaurants = [];
+
+        if (! $package->notes) {
+            $package->notes = [];
+        };
 
         $package->save();
     };

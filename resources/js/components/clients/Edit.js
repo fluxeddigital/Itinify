@@ -93,7 +93,7 @@ class Edit extends Component {
             }).catch((err) => {
                 toast.error('An error occurred, please try again later.');
     
-                this.props.history.push('/app/events');
+                this.props.history.push('/app/clients');
             });
         });
     };
@@ -150,16 +150,9 @@ class Edit extends Component {
     Note = SortableElement(({ item, index }) => {
         return (
             <div className='bg-white border rounded p-3 mb-3'>
-                <div className='form-row'>
-                    <div className='form-group col-md-6'>
-                        <label htmlFor={ `note-title-${ index }` }>Title</label>
-                        <input name='title' value={ item.title } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-title-${ index }` } />
-                    </div>
-    
-                    <div className='form-group col-md-6'>
-                        <label htmlFor={ `note-visibility-${ index }` }>Visibility</label>
-                        <input name='visibility' value={ item.visibility } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-visibility-${ index }` } />
-                    </div>
+                <div className='form-group'>
+                    <label htmlFor={ `note-title-${ index }` }>Title</label>
+                    <input name='title' value={ item.title } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-title-${ index }` } />
                 </div>
 
                 <div className='form-group'>
@@ -267,6 +260,7 @@ class Edit extends Component {
             this.setState({
                 address: this.state.address,
                 events: this.state.events,
+                interests: this.state.interests,
                 item: prep,
             });
         };
@@ -293,6 +287,7 @@ class Edit extends Component {
         this.setState({
             address: this.state.address,
             events: this.state.events,
+            interests: this.state.interests,
             item: prep,
         });
     };
@@ -306,6 +301,7 @@ class Edit extends Component {
             this.setState({
                 address: this.state.address,
                 events: this.state.events,
+                interests: this.state.interests,
                 item: prep,
             });
         };
@@ -319,6 +315,7 @@ class Edit extends Component {
         this.setState({
             address: this.state.address,
             events: this.state.events,
+            interests: this.state.interests,
             item: prep,
         });
     };
@@ -332,6 +329,7 @@ class Edit extends Component {
             this.setState({
                 address: this.state.address,
                 events: this.state.events,
+                interests: this.state.interests,
                 item: prep,
             });
         };
@@ -361,6 +359,7 @@ class Edit extends Component {
             component.setState({
                 address: component.state.address,
                 events: component.state.events,
+                interests: component.state.interests,
                 item: prep,
             });
         };
@@ -415,6 +414,7 @@ class Edit extends Component {
             component.setState({
                 address: component.state.address,
                 events: component.state.events,
+                interests: component.state.interests,
                 item: prep,
             });
         };
@@ -427,12 +427,12 @@ class Edit extends Component {
             prep.notes.push({
                 title: '',
                 content: '',
-                visibility: false,
             });
 
             component.setState({
                 address: component.state.address,
                 events: component.state.events,
+                interests: component.state.interests,
                 item: prep,
             });
         };

@@ -31,7 +31,6 @@ class CreatePackagesTable extends Migration
             $table->longText('notes')->nullable();
             $table->longText('passengers')->nullable();
             $table->longText('pricing')->nullable();
-            $table->date('reminder')->nullable();
             $table->longText('requirements')->nullable();
             $table->longText('restaurants')->nullable();
             $table->string('status')->nullable();

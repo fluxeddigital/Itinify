@@ -26,6 +26,9 @@ import ItemCategoriesCreate from './items/categories/Create';
 import ItemCategoriesShow from './items/categories/Show';
 import ItemCategoriesEdit from './items/categories/Edit';
 import PackagesIndex from './packages/Index';
+import PackagesCreate from './packages/Create';
+import PackagesShow from './packages/Show';
+import PackagesEdit from './packages/Edit';
 import UsersIndex from './users/Index';
 import UsersAttach from './users/Attach';
 import UsersCreate from './users/Create';
@@ -86,6 +89,9 @@ class App extends Component {
                             <Route exact path='/app/items/:id/edit' component={ ItemsEdit } />
 
                             <Route exact path='/app/packages' component={ PackagesIndex } />
+                            <Route exact path='/app/packages/create' component={ PackagesCreate } />
+                            <Route exact path='/app/packages/:id' component={ PackagesShow } />
+                            <Route exact path='/app/packages/:id/edit' component={ PackagesEdit } />
 
                             <Route exact path='/app/users' component={ UsersIndex } />
                             <Route exact path='/app/users/attach' component={ UsersAttach } />

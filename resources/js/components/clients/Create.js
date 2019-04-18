@@ -117,16 +117,9 @@ class Create extends Component {
     Note = SortableElement(({ item, index }) => {
         return (
             <div className='bg-white border rounded p-3 mb-3'>
-                <div className='form-row'>
-                    <div className='form-group col-md-6'>
-                        <label htmlFor={ `note-title-${ index }` }>Title</label>
-                        <input name='title' value={ item.title } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-title-${ index }` } />
-                    </div>
-    
-                    <div className='form-group col-md-6'>
-                        <label htmlFor={ `note-visibility-${ index }` }>Visibility</label>
-                        <input name='visibility' value={ item.visibility } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-visibility-${ index }` } />
-                    </div>
+                <div className='form-group'>
+                    <label htmlFor={ `note-title-${ index }` }>Title</label>
+                    <input name='title' value={ item.title } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-title-${ index }` } />
                 </div>
 
                 <div className='form-group'>
@@ -376,7 +369,6 @@ class Create extends Component {
             prep.notes.push({
                 title: '',
                 content: '',
-                visibility: false,
             });
 
             component.setState({
@@ -438,7 +430,6 @@ class Create extends Component {
             this.setState({
                 address: this.state.address,
                 events: this.state.events,
-                interests: this.state.interests,
                 item: prep,
             });
         };

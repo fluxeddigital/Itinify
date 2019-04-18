@@ -208,23 +208,16 @@ class Show extends Component {
                                                     { this.state.item.notes.map((item, i) => 
                                                         <div key={ i }>
                                                             <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `contact-title-${ i }` }>Title</label>
-                                                                        <input value={ item.title } type='text' className='form-control' id={ `contact-title-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `contact-visibility-${ i }` }>Visibility</label>
-                                                                        <input value={ item.visibility } type='text' className='form-control' id={ `contact-visibility-${ i }` } disabled />
-                                                                    </div>
+                                                                <div className='form-group'>
+                                                                    <label htmlFor={ `note-title-${ i }` }>Title</label>
+                                                                    <input value={ item.title } type='text' className='form-control' id={ `note-title-${ i }` } disabled />
                                                                 </div>
 
                                                                 { item.content &&
                                                                     <div className='form-group'>
-                                                                        <label htmlFor={ `contact-content-${ i }` }>Content</label>
+                                                                        <label htmlFor={ `note-content-${ i }` }>Content</label>
                                                                         <div id='description' className='card mb-5'>
-                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.content } } id={ `contact-content-${ i }` } />
+                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.content } } id={ `note-content-${ i }` } />
                                                                         </div>
                                                                     </div>
                                                                 }

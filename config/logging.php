@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => 'stack',
 
     /*
     |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['errorlog', 'slack'],
+            'channels' => ['errorlog', env('LOG_CHANNEL')],
         ],
 
         'errorlog' => [
@@ -47,7 +47,7 @@ return [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Itinify',
-            'emoji' => ':boom:',
+            'emoji' => ':itinify:',
             'level' => 'debug',
         ],
     ],

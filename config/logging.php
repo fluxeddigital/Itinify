@@ -2,6 +2,8 @@
 
 use Monolog\Handler\StreamHandler;
 
+dd(env('LOG_SLACK_WEBHOOK_URL'));
+
 return [
 
     /*
@@ -54,7 +56,7 @@ return [
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'Itinify Log',
+            'username' => 'Itinify',
             'emoji' => ':boom:',
             'level' => 'debug',
         ],

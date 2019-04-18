@@ -2,8 +2,6 @@
 
 use Monolog\Handler\StreamHandler;
 
-dd(env('LOG_SLACK_WEBHOOK_URL'));
-
 return [
 
     /*
@@ -37,20 +35,12 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'slack'],
+            'channels' => ['errorlog', 'slack'],
         ],
 
-        'single' => [
-            'driver' => env('LOG_DRIVER', 'single'),
-            'path' => storage_path('logs/laravel.log'),
+        'errorlog' => [
+            'driver' => 'errorlog',
             'level' => 'debug',
-        ],
-
-        'daily' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => 'debug',
-            'days' => 7,
         ],
 
         'slack' => [
@@ -58,24 +48,6 @@ return [
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Itinify',
             'emoji' => ':boom:',
-            'level' => 'debug',
-        ],
-
-        'stderr' => [
-            'driver' => 'monolog',
-            'handler' => StreamHandler::class,
-            'with' => [
-                'stream' => 'php://stderr',
-            ],
-        ],
-
-        'syslog' => [
-            'driver' => 'syslog',
-            'level' => 'debug',
-        ],
-
-        'errorlog' => [
-            'driver' => 'errorlog',
             'level' => 'debug',
         ],
     ],

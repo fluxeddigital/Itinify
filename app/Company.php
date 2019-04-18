@@ -42,7 +42,7 @@ class Company extends Model
      */
     public function clients()
     {
-        return $this->hasMany('App\Client');
+        return $this->hasMany('App\Client')->select('id', 'name', 'email');
     }
 
     /**
@@ -50,7 +50,7 @@ class Company extends Model
      */
     public function events()
     {
-        return $this->hasMany('App\Event');
+        return $this->hasMany('App\Event')->select('id', 'name', 'dates');
     }
 
     /**
@@ -58,7 +58,7 @@ class Company extends Model
      */
     public function items()
     {
-        return $this->hasMany('App\Item');
+        return $this->hasMany('App\Item')->select('id', 'name', 'category_id', 'event_id');
     }
 
     /**
@@ -66,7 +66,7 @@ class Company extends Model
      */
     public function item_categories()
     {
-        return $this->hasMany('App\ItemCategory');
+        return $this->hasMany('App\ItemCategory')->select('id', 'name', 'section');
     }
 
     /**
@@ -74,7 +74,7 @@ class Company extends Model
      */
     public function packages()
     {
-        return $this->hasMany('App\Package');
+        return $this->hasMany('App\Package')->select('id', 'title', 'client_id', 'event_id');
     }
 
     /**
@@ -82,6 +82,6 @@ class Company extends Model
      */
     public function users()
     {
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\User')->select('id', 'first_name', 'last_name', 'email');
     }
 }

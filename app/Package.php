@@ -81,7 +81,7 @@ class Package extends Model
      */
     public function client()
     {
-        return $this->belongsTo('App\Client');
+        return $this->belongsTo('App\Client')->select('id', 'name');
     }
 
     /**
@@ -89,7 +89,7 @@ class Package extends Model
      */
     public function event()
     {
-        return $this->belongsTo('App\Event');
+        return $this->belongsTo('App\Event')->select('id', 'name', 'dates');
     }
 
     /**

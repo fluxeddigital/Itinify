@@ -10,6 +10,7 @@ use App\Http\Resources\Packages as PackagesResource;
 use App\Mail\NewPackage;
 use \DrewM\MailChimp\MailChimp;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 

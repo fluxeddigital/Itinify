@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\Http\Resources\Client as ClientResource;
-use App\Http\Resources\Clients as ClientsResource;
 use App\Event;
 use App\Mail\ClientWelcome;
 use App\Notifications\SMS;
@@ -33,7 +32,7 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
-        return new ClientsResource(Auth::user()->company->clients);
+        return ClientResource::collection(Auth::user()->company->clients);
     }
 
     /**

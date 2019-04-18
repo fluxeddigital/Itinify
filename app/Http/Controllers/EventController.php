@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use App\Http\Resources\Event as EventResource;
-use App\Http\Resources\Events as EventsResource;
 use \DrewM\MailChimp\MailChimp;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -28,7 +27,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return new EventsResource(Auth::user()->company->events);
+        return EventResource::collection(Auth::user()->company->events);
     }
 
     /**

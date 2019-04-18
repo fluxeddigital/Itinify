@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\ItemCategory as Category;
 use App\Http\Resources\ItemCategory as CategoryResource;
-use App\Http\Resources\ItemCategories as CategoriesResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -27,7 +26,7 @@ class ItemCategoryController extends Controller
      */
     public function index()
     {
-        return new CategoriesResource(Auth::user()->company->item_categories);
+        return CategoryResource::collection(Auth::user()->company->item_categories);
     }
 
     /**

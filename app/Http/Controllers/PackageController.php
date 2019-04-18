@@ -6,7 +6,6 @@ use App\Client;
 use App\Event;
 use App\Package;
 use App\Http\Resources\Package as PackageResource;
-use App\Http\Resources\Packages as PackagesResource;
 use App\Mail\NewPackage;
 use \DrewM\MailChimp\MailChimp;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +33,7 @@ class PackageController extends Controller
      */
     public function index(Request $request)
     {
-        return new PackagesResource(Auth::user()->company->packages);
+        return PackageResource::collection(Auth::user()->company->packages);
     }
 
     /**

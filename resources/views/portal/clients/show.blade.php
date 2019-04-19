@@ -1,8 +1,3 @@
-@extends('layouts.portal')
-
-@section('title', 'Your Itineraries')
-
-@section('content')
 <script>
 function setCookie(cname,cvalue,exdays) {
   var d = new Date();
@@ -253,4 +248,3 @@ padding: 1.143rem 1.5rem;
     </div>
   </section>
 </body>
-@endsection

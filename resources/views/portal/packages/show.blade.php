@@ -1,9 +1,3 @@
-@extends('layouts.package')
-
-@section('title', '')
-
-@section('content')
-
 @if ($package->status == 'accepted')
 <style>
 .special-from {
@@ -934,4 +928,3 @@ function resetCookie() {
   </div>
 </div> -->
 </body>
-  @endsection

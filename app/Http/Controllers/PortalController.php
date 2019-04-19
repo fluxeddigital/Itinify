@@ -26,102 +26,92 @@ class PortalController extends Controller
     }
 
     /**
-     * Search a listing of the resource.
+     * Search clients.
      *
      * @return \Illuminate\Http\Response
      */
-    public function search()
+    public function clientsIndex()
     {
-        return view('portal.search');
+        return view('portal.clients.index');
     }
 
     /**
-     * Return a listing of the resource.
+     * Display a client.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function clientShow($id, $email)
     {
-        $request->validate([
-            'client_id' => 'required|integer',
-            'email' => 'required|string|email',
-        ]);
+        $client = Client::where([['id', $id], ['email', urldecode($email)]])->firstOrFail();
 
-        $client = Client::where([['id', $request->client_id], ['contact_email', $request->email]])->firstOrFail();
-
-        return view('portal.index', ['packages' => $client->packages]);
+        return view('portal.clients.show', ['client' => $client]);
     }
 
     /**
-     * Display the specified resource.
+     * Display a package.
      *
-     * @param  int  $client
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($client, $id)
+    public function packageShow($clientId, $clientEmail, $id)
     {
         $package = Package::findOrFail($id);
-		
-		if (! $package->client) {
-			abort(404);
-		}
 
-        if ($package->client->id == $client) {
-            return view('portal.show', ['package' => $package]);
+        $client = Client::where([['id', $clientId], ['email', urldecode($clientEmail)]])->firstOrFail();
+
+        if ($package->client_id == $clientId) {
+            return view('portal.package.show', ['package' => $package]);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $client
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $client, $id)
-    {
-        $package = Package::findOrFail($id);
+    // /**
+    //  * Update the specified resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @param  int  $client
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function update(Request $request, $client, $id)
+    // {
+    //     $package = Package::findOrFail($id);
 
-        if ($package->client->id == $client) {
-            $package->special_requirements = $request->input('special_requirements');
-            $package->dietary_requirements = $request->input('dietary_requirements');
+    //     if ($package->client->id == $client) {
+    //         $package->special_requirements = $request->input('special_requirements');
+    //         $package->dietary_requirements = $request->input('dietary_requirements');
 			
-            $package->save();
+    //         $package->save();
 			
-			return redirect()->route('portal.show', ['client' => $client, 'id' => $id]);
-        }
+	// 		return redirect()->route('portal.show', ['client' => $client, 'id' => $id]);
+    //     }
 
-        abort(404);
-    }
+    //     abort(404);
+    // }
 
-    /**
-     * Accept the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $client
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function accept(Request $request, $client, $id)
-    {
-        $package = Package::findOrFail($id);
+    // /**
+    //  * Accept the specified resource.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @param  int  $client
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function accept(Request $request, $client, $id)
+    // {
+    //     $package = Package::findOrFail($id);
 
-        if ($package->client->id == $client) {
-            $package->accepted_at = Carbon::now();
-            $package->accepted_by = $request->input('accepted_by');
-            $package->status = 'accepted';
+    //     if ($package->client->id == $client) {
+    //         $package->accepted_at = Carbon::now();
+    //         $package->accepted_by = $request->input('accepted_by');
+    //         $package->status = 'accepted';
 			
-            $package->save();
+    //         $package->save();
             
-            Mail::to($package->client->contact_email)->send(new ClientPackageAccepted($package));
-            Mail::to($package->company->email)->send(new CompanyPackageAccepted($package));
+    //         Mail::to($package->client->contact_email)->send(new ClientPackageAccepted($package));
+    //         Mail::to($package->company->email)->send(new CompanyPackageAccepted($package));
 			
-			return redirect()->route('portal.show', ['client' => $client, 'id' => $id]);
-        }
+	// 		return redirect()->route('portal.show', ['client' => $client, 'id' => $id]);
+    //     }
 
-        abort(404);
-    }
+    //     abort(404);
+    // }
 }

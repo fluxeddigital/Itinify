@@ -1,8 +1,3 @@
-@extends('layouts.portal')
-
-@section('title', 'Find Your Itinerary')
-
-@section('content')
 <script>
 function setCookie(cname,cvalue,exdays) {
   var d = new Date();
@@ -88,4 +83,3 @@ function checkCookie() {
     </div>
   </div>
 </body>
-@endsection

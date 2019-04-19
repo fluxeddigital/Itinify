@@ -85,403 +85,224 @@
                 <div class="col-md-9">
                   <div class="tr-single-box">
                     <div class="tr-single-body">
-                        {{ $package->event->description }}
+                      <h3>Welcome {{ $package->client->name }},</h3>
+                      <br> {!! $package->event->description !!}
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="tr-single-box">
-                <div class="tr-single-header">
-                  <div class="tr-single-time">
-                    <h4>{{ $package->event->name }}</h4>
+                <div class="col-md-3">
+                  <div class="tr-single-box">
+                    <div class="tr-single-header">
+                      <div class="tr-single-time">
+                        <h4>{{ $package->event->name }}</h4>
+                      </div>
+                    </div>
+                    <div class="tr-single-body">
+                      <table class="table">
+                        <tbody>
+                          @if ($package->event->logo)
+                          <tr>
+                            <td colspan="2"><img src="{{ $package->event->logo }}" class="img-responsive event-img" /></td>
+                          </tr>
+                          @endif @if ($package->status)
+                          <tr>
+                            <td class="event-info-label">Status</td>
+                            <td>{{ $package->status }}</td>
+                          </tr>
+                          @endif @if ($package->issued)
+                          <tr>
+                            <td class="event-info-label">Issued</td>
+                            <td>{{ $package->issued }}</td>
+                          </tr>
+                          @endif @if ($package->expires)
+                          <tr>
+                            <td class="event-info-label">Expires</td>
+                            <td>{{ $package->expires }}</td>
+                          </tr>
+                          @endif @if ($package->client->pricing['person'])
+                          <tr>
+                            <td class="event-info-label">Price PP</td>
+                            <td>£{{ $package->client->pricing['person'] }}</td>
+                          </tr>
+                          @endif @if ($package->client->pricing['total'])
+                          <tr>
+                            <td class="event-info-label">Total Price</td>
+                            <td>£{{ $package->client->pricing['total'] }}</td>
+                          </tr>
+                          @endif
+                        </tbody>
+                      </table>
+                    </div>
+                    <a class="btn btn-primary btn-block btn-accept" href="javascript:void(0)" data-toggle="modal" data-target="#accept">Accept Proposal</a>
                   </div>
                 </div>
-                <div class="tr-single-body">
-                  <table class="table">
-                    <tbody>
-                      <tr>
-                        <td colspan="2"><img src="{{ $package->event->logo }}" class="img-responsive event-img" /></td>
-                      </tr>
-                      <tr>
-                        <td class="event-info-label">Status</td>
-                        <td>{{ $package->status }}</td>
-                      </tr>
-                      <tr>
-                        <td class="event-info-label">Issued</td>
-                        <td>{{ $package->issued }}</td>
-                      </tr>
-                      <tr>
-                        <td class="event-info-label">Expires</td>
-                        <td>{{ $package->expires }}</td>
-                      </tr>
-                      <tr>
-                        <td class="event-info-label">Price PP</td>
-                        <td>{{ $package->pricing->person }}</td>
-                      </tr>
-                      <tr>
-                        <td class="event-info-label">Total Price</td>
-                        <td>{{ $package->pricing->total }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <a class="btn btn-primary btn-block btn-accept" href="javascript:void(0)" data-toggle="modal" data-target="#accept">Accept Proposal</a>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div role="tabpanel" class="tab-pane fade in" id="About">
-          <div class="row">
-            <div class="col-md-9">
-              <div class="tr-single-box">
-                <div class="tr-single-body">
-                  <h3>About {{ $package->client->name }}</h3>
-                  <p></p>
+            <div role="tabpanel" class="tab-pane fade in" id="About">
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="tr-single-box">
+                    <div class="tr-single-body">
+                      <h3>About {{ $package->company->description }}</h3>
+                      <p></p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="tr-single-box">
-                <div class="tr-single-body testimonials">
+                <div class="col-md-3">
+                  <div class="tr-single-box">
+                    <div class="tr-single-body quotes">
 
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div role="tabpanel" class="tab-pane fade in" id="Event">
-          <div class="row">
-            <div class="tr-single-box">
-              <div class="tr-single-body">
-                <h3>About {{ $package->event->name }}</h3>
-                <p></p>
+            <div role="tabpanel" class="tab-pane fade in" id="Event">
+              <div class="row">
+                <div class="tr-single-box">
+                  <div class="tr-single-body">
+                    <h3>About The US Masters</h3> {!! $package->event->description !!}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div role="tabpanel" class="tab-pane fade in" id="Itinerary">
-          <div class="row mb-3">
-            <div class="col-md-9">
-              <h2>Your Itinerary <span class="status"><p>STATUS</p><br><span class="label label-itinerary">{{ $package->status}}</span></span></h2>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-9">
-              <div class="tr-single-day">
-                <p><strong>Monday, 14/02/20</strong></p>
-                <div class="tr-single-box">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time">
-                      <h4><i class="ti-time"></i>09:00</h4>
-                    </div>
-                    <h3 class="tr-single-activity">Activity Title</h3>
-                    <a href="javascript:void();" class="pull-right" data-toggle="collapse" data-target="#moreInfo"><i class="ti-info-alt pull-right"></i></a>
-                  </div>
-                  <div class="tr-single-body itinerary-short-desc">
-                    <p>Arrive for 6 nights bed and breakfast accommodation on a twin share basis at the Downtown Hyatt Hotel, Columbia.</p>
-                    <div id="moreInfo" class="collapse">
-                      <hr class="tr-item-divider">
-                      <img src="https://sghsportingevents.com/storage/app/media/hyatt-logos/hyatt-place-logo.png" class="img-responsive" width="100px" />
-                      <br>
-                      <p><strong>Address:</strong>The Hyatt Place, The Vista, 819 Gervais St, Columbia, SC 29201, USA.</p>
-                      <br>
-                      <p>The hotel is downtown in the Capital City, located in the heart of Columbia's premier arts and entertainment district. Within minutes of our hotel you will encounter numerous food, art, and entertainment activities in this district,
-                        a hub of activity in downtown Columbia.</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="tr-single-box">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time">
-                      <h4><i class="ti-time"></i>12:00</h4>
-                    </div>
-                    <h3 class="tr-single-activity">Activity Title</h3>
-                    <i class="ti-info-alt pull-right"></i>
-                  </div>
-                  <div class="tr-single-body itinerary-short-desc">
-                    <p>Arrive for 6 nights bed and breakfast accommodation on a twin share basis at the Downtown Hyatt Hotel, Columbia.</p>
-                  </div>
+            <div role="tabpanel" class="tab-pane fade in" id="Itinerary">
+              <div class="row mb-3">
+                <div class="col-md-9">
+                  <h2>Your @if ($package->status !== 'accepted')Proposal @else Itinerary @endif<span class="status"><p>STATUS</p>
+                    <br>
+                    <span class="label @if ($package->status == 'accepted')label-itinerary @else ($package->status == 'open') label-proposal @endif">@if ($package->status == 'accepted') Itinerary @else {{ $package->status }} @endif</span></span></h2>
                 </div>
               </div>
-              <div class="tr-single-day">
-                <p><strong>Tuesday, 15/02/20</strong></p>
-                <div class="tr-single-box">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time">
-                      <h4><i class="ti-time"></i>09:00</h4>
+              <div class="row">
+                <div class="col-md-9">
+                  @foreach ($package->itinerary as $item)
+                  <div class="tr-single-day">
+                    <p><strong>{{ $item ['date'] }}</strong></p>
+                    <div class="tr-single-box">
+                      <div class="tr-single-header">
+                        <div class="tr-single-time">
+                          <h4><i class="ti-time"></i> </h4>
+                        </div>
+                        <h3 class="tr-single-activity">{{ $item['name'] }}</h3>
+                        <a href="javascript:void();" class="pull-right" data-toggle="collapse" data-target="#{{ $loop->index }}"><i class="ti-info-alt pull-right"></i></a>
+                      </div>
+                      <div class="tr-single-body itinerary-short-desc">
+                        <p>{{ $item['description']['short'] }}</p>
+                        <div id="{{ $loop->index }}" class="collapse">
+                          <hr class="tr-item-divider"> {!! $item['description']['long'] !!}
+                        </div>
+                      </div>
                     </div>
-                    <h3 class="tr-single-activity">Activity Title</h3>
-                    <i class="ti-info-alt pull-right"></i>
                   </div>
-                  <div class="tr-single-body itinerary-short-desc">
-                    <p>Arrive for 6 nights bed and breakfast accommodation on a twin share basis at the Downtown Hyatt Hotel, Columbia.</p>
-                  </div>
+                  @endforeach
                 </div>
-                <div class="tr-single-box">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time">
-                      <h4><i class="ti-time"></i>12:00</h4>
+                <div class="col-md-3">
+                  <div class="tr-single-day">
+                    <p><strong>.</strong></p>
+                    <div class="tr-single-box" id="Passengers">
+                      <div class="tr-single-header">
+                        <div class="tr-single-time alt">
+                          <h4><i class="ti-user"></i>Passengers</h4>
+                        </div>
+                      </div>
+                      <div class="tr-single-body">
+                        <table class="table">
+                          <tbody>
+                            @foreach ($package->passengers as $item)
+                            <tr>
+                              <td><i class="ti-user"></i></td>
+                              <td>{{ $item['name'] }}</td>
+                            </tr>
+                            @endforeach
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                    <h3 class="tr-single-activity">Activity Title</h3>
-                    <i class="ti-info-alt pull-right"></i>
-                  </div>
-                  <div class="tr-single-body itinerary-short-desc">
-                    <p>Arrive for 6 nights bed and breakfast accommodation on a twin share basis at the Downtown Hyatt Hotel, Columbia.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="tr-single-day">
-                <p><strong>Wednesday, 16/02/20</strong></p>
-                <div class="tr-single-box">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time">
-                      <h4><i class="ti-time"></i>09:00</h4>
+                    <div class="tr-single-box" id="whatsIncluded">
+                      <div class="tr-single-header">
+                        <div class="tr-single-time alt">
+                          <h4><i class="ti-plus"></i>Whats Included?</h4>
+                        </div>
+                      </div>
+                      <div class="tr-single-body">
+                        <table class="table">
+                          <tbody>
+                            @if ($package->flights)
+                            <tr>
+                              <td><i class="ti-check-box"></i></td>
+                              <td><a href="javascript:void(0)" data-toggle="modal" data-target="#flightModal">Flights</a></td>
+                            </tr>
+                            @endif @if ($package->car_hire)
+                            <tr>
+                              <td><i class="ti-check-box"></i></td>
+                              <td><a href="javascript:void(0)" data-toggle="modal" data-target="#carModal">Car hire</a></td>
+                            </tr>
+                            @endif @if ($package->transfers)
+                            <tr>
+                              <td><i class="ti-check-box"></i></td>
+                              <td><a href="javascript:void(0)" data-toggle="modal" data-target="#transferModal">Transfers</a></td>
+                            </tr>
+                            @endif
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                    <h3 class="tr-single-activity">Activity Title</h3>
-                    <i class="ti-info-alt pull-right"></i>
-                  </div>
-                  <div class="tr-single-body itinerary-short-desc">
-                    <p>Arrive for 6 nights bed and breakfast accommodation on a twin share basis at the Downtown Hyatt Hotel, Columbia.</p>
-                  </div>
-                </div>
-                <div class="tr-single-box">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time">
-                      <h4><i class="ti-time"></i>12:00</h4>
+                    <div class="tr-single-box" id="whatsIncluded">
+                      <div class="tr-single-header">
+                        <div class="tr-single-time alt">
+                          <h4><i class="ti-envelope"></i>Documents</h4>
+                        </div>
+                      </div>
+                      <div class="tr-single-body">
+                        <table class="table">
+                          <tbody>
+                            @foreach ($package->documents as $item)
+                            <tr>
+                              <td>
+                                <a href="{{ $item['url'] }}" target="_blank">{{ $item['title'] }}</a>
+                              </td>
+                            </tr>
+                            @endforeach
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                    <h3 class="tr-single-activity">Activity Title</h3>
-                    <i class="ti-info-alt pull-right"></i>
-                  </div>
-                  <div class="tr-single-body itinerary-short-desc">
-                    <p>Arrive for 6 nights bed and breakfast accommodation on a twin share basis at the Downtown Hyatt Hotel, Columbia.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="tr-single-day">
-                <p><strong>.</strong></p>
-                <div class="tr-single-box" id="Passengers">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time alt">
-                      <h4><i class="ti-user"></i>Passengers</h4>
-                    </div>
-                  </div>
-                  <div class="tr-single-body">
-                    <table class="table">
-                      <tbody>
-                        <tr>
-                          <td><i class="ti-user"></i></td>
-                          <td>John Doe</td>
-                        </tr>
-                        <tr>
-                          <td><i class="ti-user"></i></td>
-                          <td>Jane Doe</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="tr-single-box" id="whatsIncluded">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time alt">
-                      <h4><i class="ti-plus"></i>Whats Included?</h4>
-                    </div>
-                  </div>
-                  <div class="tr-single-body">
-                    <table class="table">
-                      <tbody>
-                        <tr>
-                          <td><i class="ti-check-box"></i></td>
-                          <td><a href="javascript:void(0)" data-toggle="modal" data-target="#flightModal">Flights</a></td>
-                        </tr>
-                        <tr>
-                          <td><i class="ti-check-box"></i></td>
-                          <td><a href="javascript:void(0)" data-toggle="modal" data-target="#carModal">Car hire</a></td>
-                        </tr>
-                        <tr>
-                          <td><i class="ti-check-box"></i></td>
-                          <td><a href="javascript:void(0)" data-toggle="modal" data-target="#transferModal">Transfers</a></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="tr-single-box" id="whatsIncluded">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time alt">
-                      <h4><i class="ti-envelope"></i>Documents</h4>
-                    </div>
-                  </div>
-                  <div class="tr-single-body">
-                    <table class="table">
-                      <tbody>
-                        <tr>
-                          <td>Car Hire Voucher</a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Parking Permit</a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="tr-single-box" id="whatsIncluded">
-                  <div class="tr-single-header">
-                    <div class="tr-single-time alt">
-                      <h4><i class="ti-info-alt"></i>Special Requirements</h4>
-                    </div>
-                  </div>
-                  <div class="tr-single-body">
-                    <p>If you require special dietary or travel requirements, please let us know</p>
-                    <a href="javascript:void(0)" class="btn btn-primary btn-block" data-toggle="modal" data-target="#specialRequirementsModal">
+                    <div class="tr-single-box" id="whatsIncluded">
+                      <div class="tr-single-header">
+                        <div class="tr-single-time alt">
+                          <h4><i class="ti-info-alt"></i>Special Requirements</h4>
+                        </div>
+                      </div>
+                      <div class="tr-single-body">
+                        <p>If you require special dietary or travel requirements, please let us know</p>
+                        <a href="javascript:void(0)" class="btn btn-primary btn-block" data-toggle="modal" data-target="#specialRequirementsModal">
                           Submit details
                         </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div role="tabpanel" class="tab-pane fade in" id="Terms">
-          <div class="row">
-            <div class="tr-single-box">
-              <div class="tr-single-body">
-                <h3>Our Terms & Conditions</h3>
-                <p></p>
+            <div role="tabpanel" class="tab-pane fade in" id="Terms">
+              <div class="row">
+                <div class="tr-single-box">
+                  <div class="tr-single-body">
+                    <h3>Our Terms & Conditions</h3> {!! $package->event->conditions !!}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div role="tabpanel" class="tab-pane fade in" id="">
-          <div class="tr-single-box">
-            <div class="tr-single-header">
-              <h4><i class="ti-write"></i>All Review</h4>
-            </div>
-            <div class="tr-single-body">
-              <div class="review-box">
-                <div class="review-thumb">
-                  <img src="assets/img/user-1.jpg.png" class="img-responsive img-circle" alt="" />
-                </div>
-                <div class="review-box-content">
-                  <div class="reviewer-rate">
-                    <p><i class="fa fa-star cl-warning"></i>4.7/<span>5</span></p>
-                  </div>
-                  <div class="review-user-info">
-                    <h4>Daniel Dicoss</h4>
-                    <p>Et Harum Quidem Rerum Facilis Est Et Expedita Distinctio. Nam Libero Tempore, Cum Soluta Nobis Est Eligendi Optio Cumque Nihil Impedit Quo Minus Id Quod Maxime Placeat Facere Possimus</p>
-                  </div>
-                  <div class="review-lc text-right">
-                    <a href="tour-detail.html#"><i class="ti-heart"></i>87</a>
-                    <a href="tour-detail.html#"><i class="ti-comment"></i>52</a>
-                  </div>
-                </div>
-              </div>
-              <div class="review-box">
-                <div class="review-thumb">
-                  <img src="assets/img/user-2.jpg" class="img-responsive img-circle" alt="" />
-                </div>
-                <div class="review-box-content">
-                  <div class="reviewer-rate">
-                    <p><i class="fa fa-star cl-warning"></i>4.4/<span>5</span></p>
-                  </div>
-                  <div class="review-user-info">
-                    <h4>Archita Singh</h4>
-                    <p>Et Harum Quidem Rerum Facilis Est Et Expedita Distinctio. Nam Libero Tempore, Cum Soluta Nobis Est Eligendi Optio Cumque Nihil Impedit Quo Minus Id Quod Maxime Placeat Facere Possimus</p>
-                  </div>
-                  <div class="review-lc text-right">
-                    <a href="tour-detail.html#"><i class="ti-heart"></i>65</a>
-                    <a href="tour-detail.html#"><i class="ti-comment"></i>78</a>
-                  </div>
-                </div>
-              </div>
-              <div class="review-box">
-                <div class="review-thumb">
-                  <img src="assets/img/user-3.jpg" class="img-responsive img-circle" alt="" />
-                </div>
-                <div class="review-box-content">
-                  <div class="reviewer-rate">
-                    <p><i class="fa fa-star cl-warning"></i>5.0/<span>5</span></p>
-                  </div>
-                  <div class="review-user-info">
-                    <h4>Devesh Patri</h4>
-                    <p>Et Harum Quidem Rerum Facilis Est Et Expedita Distinctio. Nam Libero Tempore, Cum Soluta Nobis Est Eligendi Optio Cumque Nihil Impedit Quo Minus Id Quod Maxime Placeat Facere Possimus</p>
-                  </div>
-                  <div class="review-lc text-right">
-                    <a href="tour-detail.html#"><i class="ti-heart"></i>110</a>
-                    <a href="tour-detail.html#"><i class="ti-comment"></i>47</a>
-                  </div>
-                </div>
-              </div>
-              <div class="review-box">
-                <div class="review-thumb">
-                  <img src="assets/img/user-4.jpg" class="img-responsive img-circle" alt="" />
-                </div>
-                <div class="review-box-content">
-                  <div class="reviewer-rate">
-                    <p><i class="fa fa-star cl-warning"></i>4.9/<span>5</span></p>
-                  </div>
-                  <div class="review-user-info">
-                    <h4>Ruchi Sethi</h4>
-                    <p>Et Harum Quidem Rerum Facilis Est Et Expedita Distinctio. Nam Libero Tempore, Cum Soluta Nobis Est Eligendi Optio Cumque Nihil Impedit Quo Minus Id Quod Maxime Placeat Facere Possimus</p>
-                  </div>
-                  <div class="review-lc text-right">
-                    <a href="tour-detail.html#"><i class="ti-heart"></i>120</a>
-                    <a href="tour-detail.html#"><i class="ti-comment"></i>36</a>
-                  </div>
-                </div>
-              </div>
-              <div class="review-box">
-                <div class="review-thumb">
-                  <img src="assets/img/user-5.jpg" class="img-responsive img-circle" alt="" />
-                </div>
-                <div class="review-box-content">
-                  <div class="reviewer-rate">
-                    <p><i class="fa fa-star cl-warning"></i>4.8/<span>5</span></p>
-                  </div>
-                  <div class="review-user-info">
-                    <h4>Duke Divalkis</h4>
-                    <p>Et Harum Quidem Rerum Facilis Est Et Expedita Distinctio. Nam Libero Tempore, Cum Soluta Nobis Est Eligendi Optio Cumque Nihil Impedit Quo Minus Id Quod Maxime Placeat Facere Possimus</p>
-                  </div>
-                  <div class="review-lc text-right">
-                    <a href="tour-detail.html#"><i class="ti-heart"></i>80</a>
-                    <a href="tour-detail.html#"><i class="ti-comment"></i>70</a>
-                  </div>
-                </div>
-              </div>
-              <div class="review-box">
-                <div class="review-thumb">
-                  <img src="assets/img/user-6.jpg" class="img-responsive img-circle" alt="" />
-                </div>
-                <div class="review-box-content">
-                  <div class="reviewer-rate">
-                    <p><i class="fa fa-star cl-warning"></i>4.7/<span>5</span></p>
-                  </div>
-                  <div class="review-user-info">
-                    <h4>Shilka Rai</h4>
-                    <p>Et Harum Quidem Rerum Facilis Est Et Expedita Distinctio. Nam Libero Tempore, Cum Soluta Nobis Est Eligendi Optio Cumque Nihil Impedit Quo Minus Id Quod Maxime Placeat Facere Possimus</p>
-                  </div>
-                  <div class="review-lc text-right">
-                    <a href="tour-detail.html#"><i class="ti-heart"></i>120</a>
-                    <a href="tour-detail.html#"><i class="ti-comment"></i>140</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
-    </div>
-    </div>
     </div>
   </section>
 
@@ -494,20 +315,37 @@
       </div>
       <div class="col-md-3 col-sm-3 br-1 mbb-1">
         <div class="data-flex text-center">
-          Cookridge Hall Health & Fitness, Leeds, LS16 7NL
+          @if ($package->company->address_line_1)
+            {{ $package->company->address_line_1 }},
+          @endif
+          @if ($package->company->address_line_2)
+            {{ $package->company->address_line_2 }},
+          @endif
+          @if ($package->company->address_line_3)
+            {{ $package->company->address_line_3 }},
+          @endif
+          @if ($package->company->address_town)
+            {{ $package->company->address_town }},
+          @endif
+          @if ($package->company->address_county)
+            {{ $package->company->address_county }},
+          @endif
+          @if ($package->company->address_postcode)
+            {{ $package->company->address_postcode }}
+          @endif
         </div>
       </div>
       <div class="col-md-3 col-sm-3 br-1 mbb-1">
         <div class="data-flex text-center">
-          <span class="d-block mrg-bot-0">0800 170 7077</span>
-          <a href="mailto:enquiries@sgh.events" class="theme-cl"><strong>enquiries@sgh.events</strong></a>
+          <span class="d-block mrg-bot-0"><a href="tel:{{ $package->company->phone }}" class="theme-cl">{{ $package->company->phone }}</a></span>
+          <a href="mailto:{{ $package->company->email }}" class="theme-cl"><strong>{{ $package->company->email }}</strong></a>
         </div>
       </div>
       <div class="col-md-4 col-sm-4 padd-0">
         <div class="data-flex padd-0">
           <ul class="social-share">
             <li><a href=""><i class="fa fa-facebook theme-cl"></i></a></li>
-            <li><a href=""><i class="fa fa-google-plus theme-cl"></i></a></li>
+            <li><a href=""><i class="fa fa-instagram theme-cl"></i></a></li>
             <li><a href=""><i class="fa fa-twitter theme-cl"></i></a></li>
             <li><a href=""><i class="fa fa-linkedin theme-cl"></i></a></li>
           </ul>
@@ -533,7 +371,7 @@
               </div>
             </div>
             <div class="form-group text-center last">
-              <button type="button" class="btn theme-btn full-width btn-m">Accept Proposal </button>
+              <button type="button" class="btn theme-btn full-width btn-m">Accept Proposal</button>
             </div>
           </form>
         </div>
@@ -542,7 +380,7 @@
   </div>
   <!-- End Accept Proposal Modal -->
 
-  <!-- Accept Proposal Modal -->
+  <!-- Special Requirement Modal -->
   <div class="modal fade" id="specialRequirementsModal" tabindex="-1" role="dialog" aria-labelledby="specialRequirementsModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -567,7 +405,7 @@
       </div>
     </div>
   </div>
-  <!-- End Accept Proposal Modal -->
+  <!-- End Special Requirement Modal -->
 
   <!-- Flights Modal -->
   <div class="modal fade" id="flightModal" tabindex="-1" role="dialog" aria-labelledby="flightModal" aria-hidden="true">

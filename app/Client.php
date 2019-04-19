@@ -30,10 +30,10 @@ class Client extends Model
      * @var array
      */
     protected $casts = [
-        'address' => 'array',
-        'contacts' => 'array',
-        'interests' => 'array',
-        'notes' => 'array',
+        'address' => 'object',
+        'contacts' => 'object',
+        'interests' => 'object',
+        'notes' => 'object',
     ];
 
     /**

@@ -58,6 +58,8 @@ class PortalController extends Controller
 
         $client = Client::where([['id', $clientId], ['email', $clientEmail]])->firstOrFail();
 
+        dd($package->event->description);
+
         if ($package->client_id == $clientId) {
             return view('portal.packages.show', ['package' => $package]);
         }

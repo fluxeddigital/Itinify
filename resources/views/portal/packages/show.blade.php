@@ -141,18 +141,11 @@
 
             <div role="tabpanel" class="tab-pane fade in" id="About">
               <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-12">
                   <div class="tr-single-box">
                     <div class="tr-single-body">
                       <h3>About {{ $package->company->description }}</h3>
                       <p></p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="tr-single-box">
-                    <div class="tr-single-body quotes">
-
                     </div>
                   </div>
                 </div>
@@ -344,10 +337,18 @@
       <div class="col-md-4 col-sm-4 padd-0">
         <div class="data-flex padd-0">
           <ul class="social-share">
-            <li><a href=""><i class="fa fa-facebook theme-cl"></i></a></li>
-            <li><a href=""><i class="fa fa-instagram theme-cl"></i></a></li>
-            <li><a href=""><i class="fa fa-twitter theme-cl"></i></a></li>
-            <li><a href=""><i class="fa fa-linkedin theme-cl"></i></a></li>
+            @if ($package->company->about['social']['facebook'])
+              <li><a href="$package->company->about['social']['facebook']"><i class="fa fa-facebook theme-cl"></i></a></li>
+            @endif
+            @if ($package->company->about['social']['instagram'])
+              <li><a href="$package->company->about['social']['instagram']"><i class="fa fa-instagram theme-cl"></i></a></li>
+            @endif
+            @if ($package->company->about['social']['twitter'])
+              <li><a href="$package->company->about['social']['twitter']"><i class="fa fa-twitter theme-cl"></i></a></li>
+            @endif
+            @if ($package->company->about['social']['linkedin'])
+              <li><a href="$package->company->about['social']['facebook']"><i class="fa fa-linkedin theme-cl"></i></a></li>
+            @endif
           </ul>
         </div>
       </div>

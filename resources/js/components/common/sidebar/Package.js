@@ -26,7 +26,7 @@ class Package extends Component {
             <div>
                 <div id='Package'>
                     <li className='nav-item cursor-pointer'>
-                        <a href='#' className={ `nav-link${ location.hash != '#itinerary' && location.hash != '#flights' && location.hash != '#car-hire' && location.hash != '#passengers' && location.hash != '#transfers' && location.hash != '#restaurants' && location.hash != '#customise' && location.hash != '#requirements' && location.hash != '#notes' ? ' active' : '' }` }>
+                        <a href='#' className={ `nav-link${ location.hash != '#itinerary' && location.hash != '#flights' && location.hash != '#car-hire' && location.hash != '#passengers' && location.hash != '#transfers' && location.hash != '#restaurants' && location.hash != '#documents' && location.hash != '#customise' && location.hash != '#requirements' && location.hash != '#notes' ? ' active' : '' }` }>
                             <i className='material-icons'>description</i>
                             <span>Details</span>
                         </a>
@@ -71,6 +71,13 @@ class Package extends Component {
                         <a href='#restaurants' className={ `nav-link${ location.hash == '#restaurants' ? ' active' : '' }` }>
                             <i className='material-icons'>restaurant</i>
                             <span>Restaurants</span>
+                        </a>
+                    </li>
+
+                    <li className='nav-item cursor-pointer'>
+                        <a href='#documents' className={ `nav-link${ location.hash == '#documents' ? ' active' : '' }` }>
+                            <i className='material-icons'>restaurant</i>
+                            <span>Documents</span>
                         </a>
                     </li>
 

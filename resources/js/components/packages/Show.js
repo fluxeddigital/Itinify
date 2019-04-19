@@ -22,6 +22,7 @@ class Show extends Component {
                     description: '',
                     welcome: '',
                 },
+                documents: [],
                 expires: '',
                 flights: [],
                 issued: '',
@@ -77,7 +78,7 @@ class Show extends Component {
                         <div className='row'>
                             <div className='col'>
                                 <form>
-                                    { location.hash != '#itinerary' && location.hash != '#flights' && location.hash != '#car-hire' && location.hash != '#passengers' && location.hash != '#transfers' && location.hash != '#restaurants' && location.hash != '#customise' && location.hash != '#requirements' && location.hash != '#notes' &&
+                                    { location.hash != '#itinerary' && location.hash != '#flights' && location.hash != '#car-hire' && location.hash != '#passengers' && location.hash != '#transfers' && location.hash != '#restaurants' && location.hash != '#documents' && location.hash != '#customise' && location.hash != '#requirements' && location.hash != '#notes' &&
                                         <div>
                                             <div className='form-group'>
                                                 <label htmlFor='name'>Title</label>

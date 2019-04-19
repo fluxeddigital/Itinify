@@ -29,6 +29,7 @@ class Edit extends Component {
                     description: '',
                     welcome: '',
                 },
+                documents: [],
                 expires: '',
                 flights: [],
                 issued: '',

@@ -31,6 +31,7 @@ class Package extends Model
     protected $casts = [
         'car_hire' => 'array',
         'customisation' => 'array',
+        'documents' => 'array',
         'flights' => 'array',
         'itinerary' => 'array',
         'notes' => 'array',

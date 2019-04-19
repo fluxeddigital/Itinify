@@ -328,6 +328,8 @@ Route::get('/format', function () {
             $vat = null;
         }
 
+        $package->documents = [];
+
         $package->pricing = [
             'person' => $price_per_person,
             'total' => $total_price,

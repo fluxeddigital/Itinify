@@ -23,6 +23,7 @@ class CreatePackagesTable extends Migration
             $table->string('accepted_by')->nullable();
             $table->longText('car_hire')->nullable();
             $table->longText('customisation')->nullable();
+            $table->longText('documents')->nullable();
             $table->date('expires')->nullable();
             $table->longText('flights')->nullable();
             $table->date('issued')->nullable();

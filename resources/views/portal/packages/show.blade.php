@@ -6,24 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>{{ $package->title }} - {{ $package->client_id->name }} - Itinify</title>
+  <title>{{ $package->title }} - {{ $package->client->name }} - Itinify</title>
 
-  <link rel="stylesheet" href="assets/plugins/css/plugins.css">
-  <link href="assets/css/style.css" rel="stylesheet">
-  <link href="assets/css/responsiveness.css" rel="stylesheet">
-  <link id="jssDefault" rel="stylesheet" href="assets/css/skins/default.css">
-  <script>
-    $(document).ready(function() {
-      $(".quotes").slick({
-        variableWidth: true,
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        arrows: false
-      });
-    });
-  </script>
+  <link href="{{ asset('plugins/css/plugins.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/portal/style.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/portal/responsiveness.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/portal/skins/default.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -35,8 +23,8 @@
           <i class="fa fa-bars"></i>
         </button>
         <a class="navbar-brand" href="#">
-          <img src="" class="logo logo-display" alt="">
-          <img src="" class="logo logo-scrolled" alt="">
+          <img src="{{ $package->company->logo }}" class="logo logo-display" alt="">
+          <img src="{{ $package->company->logo }}" class="logo logo-scrolled" alt="">
         </a>
       </div>
       <div class="collapse navbar-collapse" id="navbar-menu">
@@ -56,13 +44,13 @@
     </div>
   </nav>
 
-  <section class="page-title-banner" style="background-image:url('{{ $package->event_id->banner }}');">
+  <section class="page-title-banner" style="background-image:url('{{ $package->event->banner }}');">
     <div class="container">
       <div class="row">
         <div class="tr-list-detail">
           <div class="tr-list-info">
             <h4>{{ $package->title }}</h4>
-            <p><strong>Prepared for:</strong> {{ $package->client_id->name}}</p>
+            <p><strong>Prepared for:</strong> {{ $package->client->name }}</p>
           </div>
         </div>
       </div>
@@ -97,7 +85,7 @@
                 <div class="col-md-9">
                   <div class="tr-single-box">
                     <div class="tr-single-body">
-                        {{ $package->event_id->description }}
+                        {{ $package->event->description }}
                     </div>
                   </div>
                 </div>
@@ -107,14 +95,14 @@
               <div class="tr-single-box">
                 <div class="tr-single-header">
                   <div class="tr-single-time">
-                    <h4>{{ $package->event_id->name }}</h4>
+                    <h4>{{ $package->event->name }}</h4>
                   </div>
                 </div>
                 <div class="tr-single-body">
                   <table class="table">
                     <tbody>
                       <tr>
-                        <td colspan="2"><img src="{{ $package->event_id->logo }}" class="img-responsive event-img" /></td>
+                        <td colspan="2"><img src="{{ $package->event->logo }}" class="img-responsive event-img" /></td>
                       </tr>
                       <tr>
                         <td class="event-info-label">Status</td>
@@ -130,11 +118,11 @@
                       </tr>
                       <tr>
                         <td class="event-info-label">Price PP</td>
-                        <td>$package->pricing->person</td>
+                        <td>{{ $package->pricing->person }}</td>
                       </tr>
                       <tr>
                         <td class="event-info-label">Total Price</td>
-                        <td>$package->pricing->total</td>
+                        <td>{{ $package->pricing->total }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -150,7 +138,7 @@
             <div class="col-md-9">
               <div class="tr-single-box">
                 <div class="tr-single-body">
-                  <h3>About {{ $package->client_id->name }}</h3>
+                  <h3>About {{ $package->client->name }}</h3>
                   <p></p>
                 </div>
               </div>
@@ -169,7 +157,7 @@
           <div class="row">
             <div class="tr-single-box">
               <div class="tr-single-body">
-                <h3>About {{ $package->event_id->name }}</h3>
+                <h3>About {{ $package->event->name }}</h3>
                 <p></p>
               </div>
             </div>
@@ -1084,30 +1072,14 @@
   </div>
   <!-- End Transfer Modal -->
 
-  <!-- =================== START JAVASCRIPT ================== -->
-  <script src="assets/plugins/js/jquery.min.js"></script>
-  <script src="assets/plugins/js/bootstrap.min.js"></script>
-  <script src="assets/plugins/js/viewportchecker.js"></script>
-  <script src="assets/plugins/js/bootsnav.js"></script>
-  <script src="assets/plugins/js/slick.min.js"></script>
-  <script src="assets/plugins/js/jquery.nice-select.min.js"></script>
-  <script src="assets/plugins/js/jquery.fancybox.min.js"></script>
-  <script src="assets/plugins/js/jquery.downCount.js"></script>
-  <script src="assets/plugins/js/freshslider.1.0.0.js"></script>
-  <script src="assets/plugins/js/moment.min.js"></script>
-  <script src="assets/plugins/js/wysihtml5-0.3.0.js"></script>
-  <script src="assets/plugins/js/bootstrap-wysihtml5.js"></script>
+  <script src="{{ asset('plugins/js/jquery.min.js') }}" defer></script>
+  <script src="{{ asset('plugins/js/bootstrap.min.js') }}" defer></script>
+  <script src="{{ asset('plugins/js/viewportchecker.js') }}" defer></script>
+  <script src="{{ asset('plugins/js/bootsnav.js') }}" defer></script>
+  <script src="{{ asset('plugins/js/slick.min.js') }}" defer></script>
+  <script src="{{ asset('plugins/js/jquery.nice-select.min.js') }}" defer></script>
   <script src="http://maps.google.com/maps/api/js?key="></script>
-  <script src="assets/plugins/js/markerclusterer.js"></script>
-  <script src="assets/js/map.js"></script>
-
-  <!-- Dashboard Js -->
-  <script src="assets/plugins/js/jquery.slimscroll.min.js"></script>
-  <script src="assets/plugins/js/jquery.metisMenu.js"></script>
-  <script src="assets/plugins/js/jquery.easing.min.js"></script>
-
-  <!-- Custom Js -->
-  <script src="assets/js/custom.js"></script>
+  <script src="{{ asset('js/portal/custom.js') }}" defer></script>
 
   <script>
     function openRightMenu() {

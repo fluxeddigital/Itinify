@@ -172,7 +172,7 @@ class Show extends Component {
                                                                     </div>
                                                                 </div>
 
-                                                                { item.description.short &&
+                                                                { item.description.short.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                                                     <div className='form-group'>
                                                                         <label htmlFor={ `item-description-short-${ i }` }>Short Description</label>
                                                                         <div className='card'>
@@ -181,7 +181,7 @@ class Show extends Component {
                                                                     </div>
                                                                 }
 
-                                                                { item.description.long &&
+                                                                { item.description.long.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                                                     <div className='form-group'>
                                                                         <label htmlFor={ `item-description-long-${ i }` }>Long Description</label>
                                                                         <div className='card'>
@@ -192,6 +192,14 @@ class Show extends Component {
                                                             </div>
                                                         </div>
                                                     )}
+
+                                                    <div>
+                                                        { ! this.state.item.itinerary.length &&
+                                                            <div className='alert alert-danger'>
+                                                                No itinerary items found!
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -261,6 +269,14 @@ class Show extends Component {
                                                             </div>
                                                         </div>
                                                     )}
+
+                                                    <div>
+                                                        { ! this.state.item.flights.length &&
+                                                            <div className='alert alert-danger'>
+                                                                No flights found!
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -328,7 +344,7 @@ class Show extends Component {
                                                                     </div>
                                                                 </div>
 
-                                                                { item.description &&
+                                                                { item.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                                                     <div className='form-group'>
                                                                         <label htmlFor={ `hire-description-${ i }` }>Description</label>
                                                                         <div className='card'>
@@ -339,6 +355,14 @@ class Show extends Component {
                                                             </div>
                                                         </div>
                                                     )}
+
+                                                    <div>
+                                                        { ! this.state.item.car_hire.length &&
+                                                            <div className='alert alert-danger'>
+                                                                No hires found!
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -372,6 +396,14 @@ class Show extends Component {
                                                             </div>
                                                         </div>
                                                     )}
+
+                                                    <div>
+                                                        { ! this.state.item.passengers.length &&
+                                                            <div className='alert alert-danger'>
+                                                                No passengers found!
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -398,7 +430,7 @@ class Show extends Component {
                                                                     </div>
                                                                 </div>
 
-                                                                { item.description.short &&
+                                                                { item.description.short.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                                                     <div className='form-group'>
                                                                         <label htmlFor={ `transfer-description-short-${ i }` }>Short Description</label>
                                                                         <div className='card'>
@@ -407,7 +439,7 @@ class Show extends Component {
                                                                     </div>
                                                                 }
 
-                                                                { item.description.long &&
+                                                                { item.description.long.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                                                     <div className='form-group'>
                                                                         <label htmlFor={ `transfer-description-long-${ i }` }>Long Description</label>
                                                                         <div className='card'>
@@ -418,6 +450,105 @@ class Show extends Component {
                                                             </div>
                                                         </div>
                                                     )}
+
+                                                    <div>
+                                                        { ! this.state.item.transfers.length &&
+                                                            <div className='alert alert-danger'>
+                                                                No transfers found!
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    }
+
+                                    { location.hash == '#restaurants' &&
+                                        <ul className='list-group list-group-flush'>
+                                            <h4 className='page-title'>Restaurants</h4>
+
+                                            <li className='list-group-item p-3'>
+                                                <div>
+                                                    { this.state.item.restaurants.map((item, i) => 
+                                                        <div key={ i }>
+                                                            <div className='bg-white border rounded p-3 mb-3'>
+                                                                <div className='form-row'>
+                                                                    <div className='form-group col-md-6'>
+                                                                        <label htmlFor={ `restaurant-name-${ i }` }>Name</label>
+                                                                        <input value={ item.name } type='text' className='form-control' id={ `restaurant-name-${ i }` } disabled />
+                                                                    </div>
+
+                                                                    <div className='form-group col-md-6'>
+                                                                        <label htmlFor={ `restaurant-phone-${ i }` }>Phone</label>
+                                                                        <input value={ item.phone } type='text' className='form-control' id={ `restaurant-phone-${ i }` } disabled />
+                                                                    </div>
+                                                                </div>
+
+                                                                { item.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                                    <div className='form-group'>
+                                                                        <label htmlFor={ `restaurant-description-${ i }` }>Description</label>
+                                                                        <div className='card'>
+                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description } } id={ `restaurant-description-${ i }` } />
+                                                                        </div>
+                                                                    </div>
+                                                                }
+
+                                                                <div className='form-group'>
+                                                                    <label>Address</label>
+                                                                    <div className='border rounded'>
+                                                                        { item.address.line1 &&
+                                                                            <input value={ item.address.line1 } type='text' className='form-control border-0 rounded-0' disabled />
+                                                                        }
+                                                                        { item.address.line2 &&
+                                                                            <input value={ item.address.line2 } type='text' className='form-control border-0 rounded-0' disabled />
+                                                                        }
+                                                                        { item.address.line3 &&
+                                                                            <input value={ item.address.line3 } type='text' className='form-control border-0 rounded-0' disabled />
+                                                                        }
+                                                                        { item.address.city &&
+                                                                            <input value={ item.address.city } type='text' className='form-control border-0 rounded-0' disabled />
+                                                                        }
+                                                                        { item.address.county &&
+                                                                            <input value={ item.address.county } type='text' className='form-control border-0 rounded-0' disabled />
+                                                                        }
+                                                                        { item.address.postcode &&
+                                                                            <input value={ item.address.postcode } type='text' className='form-control border-0 rounded-0' disabled />
+                                                                        }
+                                                                        { item.address.country &&
+                                                                            <input value={ item.address.country } type='text' className='form-control border-0 rounded-0' disabled />
+                                                                        }
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className='form-row'>
+                                                                    <div className='form-group col-md-6'>
+                                                                        <label htmlFor={ `restaurant-links-map-${ i }` }>Map Link</label>
+                                                                        <input value={ item.links.map } type='text' className='form-control' id={ `restaurant-links-map-${ i }` } disabled />
+                                                                    </div>
+
+                                                                    <div className='form-group col-md-6'>
+                                                                        <label htmlFor={ `restaurant-links-reservation-${ i }` }>Reservation Link</label>
+                                                                        <input value={ item.links.reservation } type='text' className='form-control' id={ `restaurant-links-reservation-${ i }` } disabled />
+                                                                    </div>
+                                                                </div>
+
+                                                                { item.logo &&
+                                                                    <div className='form-group'>
+                                                                        <label htmlFor={ `restaurant-logo-${ i }` }>Logo</label>
+                                                                        <img src={ item.logo } id={ `restaurant-logo-${ i }` } className='text-center mx-auto h-100 px-4 pb-4 d-block' />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    <div>
+                                                        { ! this.state.item.restaurants.length &&
+                                                            <div className='alert alert-danger'>
+                                                                No restaurants found!
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -435,20 +566,28 @@ class Show extends Component {
                                                     </div>
 
                                                     { this.state.item.customisation.description &&
-                                                        <div className='form-group'>
-                                                            <label htmlFor='customisation-description'>Description</label>
-                                                            <div className='card'>
-                                                                <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.customisation.description } } id='customisation-description' />
-                                                            </div>
+                                                        <div>
+                                                            { this.state.item.customisation.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                                <div className='form-group'>
+                                                                    <label htmlFor='customisation-description'>Description</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.customisation.description } } id='customisation-description' />
+                                                                    </div>
+                                                                </div>
+                                                            }
                                                         </div>
                                                     }
 
                                                     { this.state.item.customisation.welcome &&
-                                                        <div className='form-group'>
-                                                            <label htmlFor='customisation-welcome'>Welcome</label>
-                                                            <div className='card'>
-                                                                <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.customisation.welcome } } id='customisation-welcome' />
-                                                            </div>
+                                                        <div>
+                                                            { this.state.item.customisation.welcome.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                                <div className='form-group'>
+                                                                    <label htmlFor='customisation-welcome'>Welcome</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.customisation.welcome } } id='customisation-welcome' />
+                                                                    </div>
+                                                                </div>
+                                                            }
                                                         </div>
                                                     }
                                                 </div>
@@ -463,22 +602,60 @@ class Show extends Component {
                                             <li className='list-group-item p-3'>
                                                 <div>
                                                     { this.state.item.requirements.dietary &&
-                                                        <div className='form-group'>
-                                                            <label htmlFor='requirements-dietary'>Dietary</label>
-                                                            <div className='card'>
-                                                                <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.requirements.dietary } } id='requirements-dietary' />
-                                                            </div>
+                                                        <div>
+                                                            { this.state.item.requirements.dietary.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                                <div className='form-group'>
+                                                                    <label htmlFor='requirements-dietary'>Dietary</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.requirements.dietary } } id='requirements-dietary' />
+                                                                    </div>
+                                                                </div>
+                                                            }
                                                         </div>
                                                     }
 
                                                     { this.state.item.requirements.other &&
-                                                        <div className='form-group'>
-                                                            <label htmlFor='requirements-other'>Other</label>
-                                                            <div className='card'>
-                                                                <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.requirements.other } } id='requirements-other' />
+                                                        <div>
+                                                            { this.state.item.requirements.other.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                                <div className='form-group'>
+                                                                    <label htmlFor='requirements-other'>Other</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.requirements.other } } id='requirements-other' />
+                                                                    </div>
+                                                                </div>
+                                                            }
+
+                                                            <div>
+                                                                { ! this.state.item.requirements.other.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                                    <div>
+                                                                        { this.state.item.requirements.dietary &&
+                                                                            <div>
+                                                                                { ! this.state.item.requirements.dietary.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                                                    <div className='alert alert-danger'>
+                                                                                        No requirements found!
+                                                                                    </div>
+                                                                                }
+                                                                            </div>
+                                                                        }
+
+                                                                        { ! this.state.item.requirements.dietary &&
+                                                                            <div className='alert alert-danger'>
+                                                                                No requirements found!
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                }
                                                             </div>
                                                         </div>
                                                     }
+
+                                                    <div>
+                                                        { ! this.state.item.requirements.dietary && ! this.state.item.requirements.other &&
+                                                            <div className='alert alert-danger'>
+                                                                No requirements found!
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -505,7 +682,7 @@ class Show extends Component {
                                                                     </div>
                                                                 </div>
 
-                                                                { item.content &&
+                                                                { item.content.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                                                     <div className='form-group'>
                                                                         <label htmlFor={ `note-content-${ i }` }>Content</label>
                                                                         <div className='card'>
@@ -516,6 +693,14 @@ class Show extends Component {
                                                             </div>
                                                         </div>
                                                     )}
+
+                                                    <div>
+                                                        { ! this.state.item.notes.length &&
+                                                            <div className='alert alert-danger'>
+                                                                No notes found!
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>

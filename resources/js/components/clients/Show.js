@@ -213,7 +213,7 @@ class Show extends Component {
                                                                     <input value={ item.title } type='text' className='form-control' id={ `note-title-${ i }` } disabled />
                                                                 </div>
 
-                                                                { item.content &&
+                                                                { item.content.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                                                     <div className='form-group'>
                                                                         <label htmlFor={ `note-content-${ i }` }>Content</label>
                                                                         <div className='card'>

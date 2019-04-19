@@ -63,7 +63,7 @@ class Show extends Component {
                                 <form>
                                     { location.hash != '#conditions' && location.hash != '#pack' &&
                                         <div>
-                                            { this.state.item.description &&
+                                            { this.state.item.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                                 <div className='form-group'>
                                                     <label htmlFor='description'>Description</label>
                                                     <div id='description' className='card mb-5'>
@@ -122,11 +122,15 @@ class Show extends Component {
                                     }
 
                                     { location.hash == '#conditions' &&
-                                        <div className='form-group'>
-                                            <label htmlFor='conditions'>Conditions</label>
-                                            <div id='conditions' className='card'>
-                                                <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.conditions } } />
-                                            </div>
+                                        <div>
+                                            { this.state.item.conditions.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                <div className='form-group'>
+                                                    <label htmlFor='conditions'>Conditions</label>
+                                                    <div id='conditions' className='card'>
+                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.conditions } } />
+                                                    </div>
+                                                </div>
+                                            }
                                         </div>
                                     }
                                 </form>

@@ -58,7 +58,7 @@ class Show extends Component {
                                             <input value={ this.state.item.name } type='text' className='form-control' id='name' disabled />
                                         </div>
 
-                                        { this.state.item.short_description &&
+                                        { this.state.item.short_description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                             <div className='form-group'>
                                                 <label htmlFor='short_description'>Short Description</label>
                                                 <div id='short_description' className='card'>
@@ -67,7 +67,7 @@ class Show extends Component {
                                             </div>
                                         }
 
-                                        { this.state.item.long_description &&
+                                        { this.state.item.long_description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
                                             <div className='form-group'>
                                                 <label htmlFor='long_description'>Long Description</label>
                                                 <div id='long_description' className='card'>

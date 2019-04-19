@@ -42,7 +42,7 @@ class PortalController extends Controller
      */
     public function clientShow($id, $email)
     {
-        $client = Client::where([['id', $id], ['email', urldecode($email)]])->firstOrFail();
+        $client = Client::where([['id', $id], ['email', $email]])->firstOrFail();
 
         return view('portal.clients.show', ['client' => $client]);
     }
@@ -56,7 +56,7 @@ class PortalController extends Controller
     {
         $package = Package::findOrFail($id);
 
-        $client = Client::where([['id', $clientId], ['email', urldecode($clientEmail)]])->firstOrFail();
+        $client = Client::where([['id', $clientId], ['email', $clientEmail]])->firstOrFail();
 
         if ($package->client_id == $clientId) {
             return view('portal.packages.show', ['package' => $package]);

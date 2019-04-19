@@ -1,1 +1,1 @@
-Go to /portal/clients/{client id}/{client email (url encoded)}
+Go to /portal/clients/{client id}/{client email}

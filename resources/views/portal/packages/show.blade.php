@@ -196,6 +196,7 @@
                 <div class="col-md-3">
                   <div class="tr-single-day">
                     <p><strong>.</strong></p>
+                    @if ($package->passengers)
                     <div class="tr-single-box" id="Passengers">
                       <div class="tr-single-header">
                         <div class="tr-single-time alt">
@@ -215,6 +216,8 @@
                         </table>
                       </div>
                     </div>
+                    @endif
+                    @if ($package->flights && $package->car_hire && $package->transfers)
                     <div class="tr-single-box" id="whatsIncluded">
                       <div class="tr-single-header">
                         <div class="tr-single-time alt">
@@ -244,6 +247,8 @@
                         </table>
                       </div>
                     </div>
+                    @endif
+                    @if ($package->documents)
                     <div class="tr-single-box" id="whatsIncluded">
                       <div class="tr-single-header">
                         <div class="tr-single-time alt">
@@ -264,6 +269,8 @@
                         </table>
                       </div>
                     </div>
+                    @endif
+                    @if ($package->requirements)
                     <div class="tr-single-box" id="whatsIncluded">
                       <div class="tr-single-header">
                         <div class="tr-single-time alt">
@@ -277,6 +284,7 @@
                         </a>
                       </div>
                     </div>
+                    @endif
                   </div>
                 </div>
               </div>

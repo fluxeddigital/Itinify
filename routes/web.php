@@ -436,6 +436,7 @@ Route::get('/format', function () {
             if (array_key_exists('transfers', $package->transfers)) {
                 foreach ($package->transfers['transfers'] as $transfer) {
                     $transfers[] = [
+                        'date' => null,
                         'description' => [
                             'long' => $transfer['long_description'],
                             'short' => $transfer['short_description'],
@@ -458,7 +459,7 @@ Route::get('/format', function () {
                     $passengers[] = [
                         'names' => [
                             'first' => $passenger['firstName'],
-                            'list' => $passenger['lastName'],
+                            'last' => $passenger['lastName'],
                         ],
                         'birth' => '',
                     ];

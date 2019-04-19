@@ -614,7 +614,7 @@ class Create extends Component {
                                     }
 
                                     { location.hash == '#contacts' &&
-                                        <ul className='list-group list-group-flush mb-4'>
+                                        <ul className='list-group list-group-flush'>
                                             <h4 className='page-title'>Contacts</h4>
 
                                             <li className='list-group-item p-3'>
@@ -630,7 +630,7 @@ class Create extends Component {
                                     }
 
                                     { location.hash == '#notes' &&
-                                        <ul className='list-group list-group-flush mb-4'>
+                                        <ul className='list-group list-group-flush'>
                                             <h4 className='page-title'>Notes</h4>
 
                                             <li className='list-group-item p-3'>

@@ -124,7 +124,7 @@ class Show extends Component {
                                     { location.hash == '#conditions' &&
                                         <div className='form-group'>
                                             <label htmlFor='conditions'>Conditions</label>
-                                            <div id='conditions' className='card mb-5'>
+                                            <div id='conditions' className='card'>
                                                 <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.conditions } } />
                                             </div>
                                         </div>

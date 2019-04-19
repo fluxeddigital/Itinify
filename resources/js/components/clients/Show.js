@@ -155,7 +155,7 @@ class Show extends Component {
                                     }
 
                                     { location.hash == '#contacts' &&
-                                        <ul className='list-group list-group-flush mb-4'>
+                                        <ul className='list-group list-group-flush'>
                                             <h4 className='page-title'>Contacts</h4>
 
                                             <li className='list-group-item p-3'>
@@ -200,7 +200,7 @@ class Show extends Component {
                                     }
 
                                     { location.hash == '#notes' &&
-                                        <ul className='list-group list-group-flush mb-4'>
+                                        <ul className='list-group list-group-flush'>
                                             <h4 className='page-title'>Notes</h4>
 
                                             <li className='list-group-item p-3'>
@@ -216,7 +216,7 @@ class Show extends Component {
                                                                 { item.content &&
                                                                     <div className='form-group'>
                                                                         <label htmlFor={ `note-content-${ i }` }>Content</label>
-                                                                        <div id='description' className='card mb-5'>
+                                                                        <div className='card'>
                                                                             <div className='card-body' dangerouslySetInnerHTML={ { __html: item.content } } id={ `note-content-${ i }` } />
                                                                         </div>
                                                                     </div>

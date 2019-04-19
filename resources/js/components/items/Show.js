@@ -61,7 +61,7 @@ class Show extends Component {
                                         { this.state.item.short_description &&
                                             <div className='form-group'>
                                                 <label htmlFor='short_description'>Short Description</label>
-                                                <div id='short_description' className='card mb-5'>
+                                                <div id='short_description' className='card'>
                                                     <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.short_description } } />
                                                 </div>
                                             </div>
@@ -70,7 +70,7 @@ class Show extends Component {
                                         { this.state.item.long_description &&
                                             <div className='form-group'>
                                                 <label htmlFor='long_description'>Long Description</label>
-                                                <div id='long_description' className='card mb-5'>
+                                                <div id='long_description' className='card'>
                                                     <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.long_description } } />
                                                 </div>
                                             </div>

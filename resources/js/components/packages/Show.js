@@ -555,6 +555,41 @@ class Show extends Component {
                                         </ul>
                                     }
 
+                                    { location.hash == '#documents' &&
+                                        <ul className='list-group list-group-flush'>
+                                            <h4 className='page-title'>Documents</h4>
+
+                                            <li className='list-group-item p-3'>
+                                                <div>
+                                                    { this.state.item.documents.map((item, i) => 
+                                                        <div key={ i }>
+                                                            <div className='bg-white border rounded p-3 mb-3'>
+                                                                <div className='form-row'>
+                                                                    <div className='form-group col-md-6'>
+                                                                        <Link to={ item.url } className='d-block'>{ item.title }</Link>
+                                                                    </div>
+
+                                                                    <div className='form-group col-md-6'>
+                                                                        <label htmlFor={ `document-passenger-${ i }` }>Passenger</label>
+                                                                        <input value={ item.passenger } type='text' className='form-control' id={ `document-passenger-${ i }` } disabled />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    <div>
+                                                        { ! this.state.item.passengers.length &&
+                                                            <div className='alert alert-danger'>
+                                                                No documents found!
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    }
+
                                     { location.hash == '#customise' &&
                                         <ul className='list-group list-group-flush'>
                                             <h4 className='page-title'>Customisation</h4>

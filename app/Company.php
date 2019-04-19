@@ -30,6 +30,7 @@ class Company extends Model
      * @var array
      */
     protected $casts = [
+        'about' => 'array',
         'address' => 'array',
         'customisation' => 'array',
         'feefo' => 'array',

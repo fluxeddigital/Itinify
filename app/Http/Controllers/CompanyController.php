@@ -109,6 +109,7 @@ class CompanyController extends Controller
 
         if ($id == Auth::user()->company->id) {
             $company->name = $request->input('name');
+            $company->about = $request->input('about');
             $company->address = $request->input('address');
             $company->customisation = $request->input('customisation');
             $company->email = $request->input('email');

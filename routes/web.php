@@ -23,8 +23,8 @@ Route::get('/invoices/{id}', 'GeneralController@invoice');
 
 Route::get('/portal/clients', 'PortalController@clientsIndex')->name('portal.clients.index');
 Route::get('/portal/clients/{id}/{email}', 'PortalController@clientShow')->name('portal.clients.show');
-Route::get('/portal/client/{clientId}/{clientEmail}/packages/{id}', 'PortalController@packageShow')->name('portal.packages.show');
-Route::patch('/portal/client/{clientId}/{clientEmail}/packages/{id}', 'PortalController@packageUpdate')->name('portal.packages.update');
+Route::get('/portal/clients/{clientId}/{clientEmail}/packages/{id}', 'PortalController@packageShow')->name('portal.packages.show');
+Route::patch('/portal/clients/{clientId}/{clientEmail}/packages/{id}', 'PortalController@packageUpdate')->name('portal.packages.update');
 
 Route::get('/format', function () {
     // $notes = App\Note::all();

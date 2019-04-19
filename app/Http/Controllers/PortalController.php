@@ -59,7 +59,7 @@ class PortalController extends Controller
         $client = Client::where([['id', $clientId], ['email', urldecode($clientEmail)]])->firstOrFail();
 
         if ($package->client_id == $clientId) {
-            return view('portal.package.show', ['package' => $package]);
+            return view('portal.packages.show', ['package' => $package]);
         }
     }
 

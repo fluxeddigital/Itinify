@@ -55,11 +55,15 @@ const property = (value, options) => {
     return value;
 };
 
-const formatter = (data, schema) => {
+const formatter = (data, schema = null) => {
     for (let i in Object.entries(schema)) {
         if (schema[i].type == 'array') {
-            for (let i in Object.entries(data[schema[i].name])) {
-                data[schema[i].name][i] = formatter(data[schema[i].name][i], schema[i].schema);
+            for (let i2 in Object.entries(data[schema[i].name])) {
+                if (schema[i].schema) {
+                    data[schema[i].name][i2] = formatter(data[schema[i].name][i2], schema[i].schema);
+                } else {
+                    data[schema[i].name][i2] = property(data[schema[i].name][i2]);
+                };
             };
         } else if (schema[i].type == 'object') {
             data[schema[i].name] = formatter(data[schema[i].name], schema[i].schema);
@@ -81,7 +85,11 @@ const stateBuilder = (schema) => {
     let state = {};
 
     for (let i in Object.entries(schema)) {
-        if (schema[i].type == 'string') {
+        if (schema[i].type == 'array') {
+            state[schema[i].name] = [];
+        } else if (schema[i].type == 'object') {
+            state[schema[i].name] = stateBuilder(schema[i].schema);
+        } else if (schema[i].type == 'string') {
             if (schema[i].options) {
                 state[schema[i].name] = schema[i].options[0];
             } else {

@@ -11,7 +11,412 @@ import { Editor } from '@tinymce/tinymce-react';
 
 import { buildState, format } from '../../utils';
 
-const schema = [];
+const schema = [
+    {
+        name: 'client_id',
+        type: 'string',
+    },
+    {
+        name: 'client_name',
+        type: 'string',
+    },
+    {
+        name: 'event_id',
+        type: 'string',
+    },
+    {
+        name: 'event_name',
+        type: 'string',
+    },
+    {
+        name: 'title',
+        type: 'string',
+    },
+    {
+        name: 'accepted_at',
+        type: 'string',
+    },
+    {
+        name: 'accepted_by',
+        type: 'string',
+    },
+    {
+        name: 'car_hire',
+        type: 'array',
+        schema: [
+            {
+                name: 'car',
+                type: 'string',
+            },
+            {
+                name: 'confirmationNumber',
+                type: 'string',
+            },
+            {
+                name: 'description',
+                type: 'string',
+            },
+            {
+                name: 'dropoff',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'date',
+                        type: 'string',
+                    },
+                    {
+                        name: 'location',
+                        type: 'string',
+                    },
+                    {
+                        name: 'time',
+                        type: 'string',
+                    },
+                ]
+            },
+            {
+                name: 'pickup',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'date',
+                        type: 'string',
+                    },
+                    {
+                        name: 'location',
+                        type: 'string',
+                    },
+                    {
+                        name: 'time',
+                        type: 'string',
+                    },
+                ]
+            },
+            {
+                name: 'provider',
+                type: 'string',
+                options: [
+                    '',
+                    'ALA',
+                    'AVI',
+                    'BUD',
+                    'DOL',
+                    'ENT',
+                    'EUR',
+                    'HER',
+                    'IBE',
+                    'THR',
+                ],
+            },
+        ],
+    },
+    {
+        name: 'customisation',
+        type: 'object',
+        schema: [
+            {
+                name: 'banner',
+                type: 'string',
+            },
+            {
+                name: 'description',
+                type: 'string',
+            },
+            {
+                name: 'welcome',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'documents',
+        type: 'array',
+        schema: [
+            {
+                name: 'title',
+                type: 'string',
+            },
+            {
+                name: 'url',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'expires',
+        type: 'string',
+    },
+    {
+        name: 'flights',
+        type: 'array',
+        schema: [
+            {
+                name: 'airline',
+                type: 'string',
+            },
+            {
+                name: 'arrival',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'airport',
+                        type: 'string',
+                    },
+                    {
+                        name: 'date',
+                        type: 'string',
+                    },
+                    {
+                        name: 'time',
+                        type: 'string',
+                    },
+                ]
+            },
+            {
+                name: 'class',
+                type: 'string',
+            },
+            {
+                name: 'departure',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'airport',
+                        type: 'string',
+                    },
+                    {
+                        name: 'date',
+                        type: 'string',
+                    },
+                    {
+                        name: 'time',
+                        type: 'string',
+                    },
+                ]
+            },
+            {
+                name: 'number',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'issued',
+        type: 'string',
+    },
+    {
+        name: 'itinerary',
+        type: 'array',
+        schema: [
+            {
+                name: 'date',
+                type: 'string',
+            },
+            {
+                name: 'description',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'long',
+                        type: 'string',
+                    },
+                    {
+                        name: 'short',
+                        type: 'string',
+                    },
+                ],
+            },
+            {
+                name: 'name',
+                type: 'string',
+            },
+            {
+                name: 'time',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'lead_status',
+        type: 'string',
+    },
+    {
+        name: 'notes',
+        type: 'array',
+        schema: [
+            {
+                name: 'title',
+                type: 'string',
+            },
+            {
+                name: 'content',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'passengers',
+        type: 'array',
+        schema: [
+            {
+                name: 'names',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'first',
+                        type: 'string',
+                    },
+                    {
+                        name: 'last',
+                        type: 'string',
+                    },
+                ],
+            },
+            {
+                name: 'birth',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'pricing',
+        type: 'object',
+        schema: [
+            {
+                name: 'person',
+                type: 'string',
+            },
+            {
+                name: 'total',
+                type: 'string',
+            },
+            {
+                name: 'vat',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'requirements',
+        type: 'object',
+        schema: [
+            {
+                name: 'dietary',
+                type: 'string',
+            },
+            {
+                name: 'other',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'restaurants',
+        type: 'array',
+        schema: [
+            {
+                name: 'name',
+                type: 'string',
+            },
+            {
+                name: 'address',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'line1',
+                        type: 'string',
+                    },
+                    {
+                        name: 'line2',
+                        type: 'string',
+                    },
+                    {
+                        name: 'line3',
+                        type: 'string',
+                    },
+                    {
+                        name: 'city',
+                        type: 'string',
+                    },
+                    {
+                        name: 'county',
+                        type: 'string',
+                    },
+                    {
+                        name: 'postcode',
+                        type: 'string',
+                    },
+                    {
+                        name: 'country',
+                        type: 'string',
+                    },
+                ],
+            },
+            {
+                name: 'description',
+                type: 'string',
+            },
+            {
+                name: 'links',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'map',
+                        type: 'string',
+                    },
+                    {
+                        name: 'reservation',
+                        type: 'string',
+                    },
+                ],
+            },
+            {
+                name: 'logo',
+                type: 'string',
+            },
+            {
+                name: 'phone',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'status',
+        type: 'string',
+    },
+    {
+        name: 'transfers',
+        type: 'array',
+        schema: [
+            {
+                name: 'date',
+                type: 'string',
+            },
+            {
+                name: 'description',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'long',
+                        type: 'string',
+                    },
+                    {
+                        name: 'short',
+                        type: 'string',
+                    },
+                ],
+            },
+            {
+                name: 'name',
+                type: 'string',
+            },
+            {
+                name: 'time',
+                type: 'string',
+            },
+        ],
+    },
+];
 
 class Create extends Component {
     constructor (props) {
@@ -20,14 +425,7 @@ class Create extends Component {
         this.state = {
             clients: [],
             events: [],
-            item: {
-                name: '',
-                email: '',
-                logo: '',
-                notes: [],
-                phone: '',
-                status: '',
-            },
+            item: buildState(schema),
             items: [],
         };
     };

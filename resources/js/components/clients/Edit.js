@@ -14,7 +14,111 @@ import set from 'lodash.set';
 
 import { buildState, format } from '../../utils';
 
-const schema = [];
+const schema = [
+    {
+        name: 'name',
+        type: 'string',
+    },
+    {
+        name: 'address',
+        type: 'object',
+        schema: [
+            {
+                name: 'line1',
+                type: 'string',
+            },
+            {
+                name: 'line2',
+                type: 'string',
+            },
+            {
+                name: 'line3',
+                type: 'string',
+            },
+            {
+                name: 'city',
+                type: 'string',
+            },
+            {
+                name: 'county',
+                type: 'string',
+            },
+            {
+                name: 'postcode',
+                type: 'string',
+            },
+            {
+                name: 'country',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'contacts',
+        type: 'array',
+        schema: [
+            {
+                name: 'name',
+                type: 'string',
+            },
+            {
+                name: 'birth',
+                type: 'string',
+            },
+            {
+                name: 'email',
+                type: 'string',
+            },
+            {
+                name: 'mobile',
+                type: 'string',
+            },
+            {
+                name: 'phone',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'email',
+        type: 'string',
+    },
+    {
+        name: 'interests',
+        type: 'array',
+    },
+    {
+        name: 'logo',
+        type: 'string',
+    },
+    {
+        name: 'notes',
+        type: 'array',
+        schema: [
+            {
+                name: 'title',
+                type: 'string',
+            },
+            {
+                name: 'content',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'phone',
+        type: 'string',
+    },
+    {
+        name: 'status',
+        type: 'string',
+        options: [
+            '',
+            'cold',
+            'hot',
+        ],
+    },
+];
 
 class Edit extends Component {
     constructor (props) {
@@ -24,31 +128,7 @@ class Edit extends Component {
             address: '',
             events: [],
             interests: [],
-            item: {
-                name: '',
-                address: {
-                    line1: '',
-                    line2: '',
-                    line3: '',
-                    city: '',
-                    county: '',
-                    postcode: '',
-                    country: '',
-                },
-                contacts: [{
-                    birth: '',
-                    email: '',
-                    mobile: '',
-                    name: '',
-                    phone: '',
-                }],
-                email: '',
-                interests: [],
-                logo: '',
-                notes: [],
-                phone: '',
-                status: '',
-            },
+            item: buildState(schema),
         };
     };
 

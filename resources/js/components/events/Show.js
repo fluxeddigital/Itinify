@@ -5,31 +5,73 @@ import { toast } from 'react-toastify';
 
 import { buildState, format } from '../../utils';
 
-const schema = [];
+const schema = [
+    {
+        name: 'name',
+        type: 'string',
+    },
+    {
+        name: 'banner',
+        type: 'string',
+    },
+    {
+        name: 'conditions',
+        type: 'string',
+    },
+    {
+        name: 'dates',
+        type: 'object',
+        schema: [
+            {
+                name: 'ends',
+                type: 'string',
+            },
+            {
+                name: 'starts',
+                type: 'string',
+            },
+        ],
+    },
+    {
+        name: 'description',
+        type: 'string',
+    },
+    {
+        name: 'location',
+        type: 'string',
+    },
+    {
+        name: 'logo',
+        type: 'string',
+    },
+    {
+        name: 'newsletter',
+        type: 'object',
+        schema: [
+            {
+                name: 'mailchimp',
+                type: 'object',
+                schema: [
+                    {
+                        name: 'list',
+                        type: 'string',
+                    },
+                ],
+            },
+        ],
+    },
+    // {
+    //     name: 'pack',
+    //     type: 'string',
+    // },
+];
 
 class Show extends Component {
     constructor (props) {
         super(props);
 
         this.state = {
-            item: {
-                name: '',
-                banner: '',
-                conditions: '',
-                dates: {
-                    starts: '',
-                    ends: '',
-                },
-                description: '',
-                location: '',
-                logo: '',
-                newsletter: {
-                    mailchimp: {
-                        list: '',
-                    },
-                },
-                pack: [],
-            },
+            item: buildState(schema),
         };
     };
 

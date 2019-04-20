@@ -37,7 +37,7 @@ class Company extends Model
         'mailchimp' => 'object',
         'nexmo' => 'object',
     ];
-    
+
     /**
      * The clients that belong to the company.
      */

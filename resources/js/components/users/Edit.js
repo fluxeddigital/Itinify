@@ -4,23 +4,39 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import set from 'lodash.set';
 
+import { buildState, format } from '../../utils';
+
+const schema = [
+    {
+        name: 'email',
+        type: 'string',
+    },
+    {
+        name: 'first_name',
+        type: 'string',
+    },
+    {
+        name: 'last_name',
+        type: 'string',
+    },
+    {
+        name: 'password',
+        type: 'string',
+    },
+];
+
 class Edit extends Component {
     constructor (props) {
         super(props);
 
         this.state = {
-            item: {
-                email: '',
-                first_name: '',
-                last_name: '',
-                password: '',
-            },
+            item: buildState(schema),
         };
     };
 
     componentDidMount () {
         axios.get(`/api/users/${ this.props.match.params.id }`).then(res => {
-            res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
+            res.data.data = format(res.data.data, schema);
 
             this.setState({
                 item: {...this.state.item, ...res.data.data},
@@ -51,7 +67,7 @@ class Edit extends Component {
     };
 
     save = async () => {
-        await axios.patch(`/api/users/${ this.state.item.id }`, this.state.item, {
+        await axios.patch(`/api/users/${ this.state.item.id }`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },

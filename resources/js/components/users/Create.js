@@ -3,17 +3,33 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import set from 'lodash.set';
 
+import { buildState, format } from '../../utils';
+
+const schema = [
+    {
+        name: 'email',
+        type: 'string',
+    },
+    {
+        name: 'first_name',
+        type: 'string',
+    },
+    {
+        name: 'last_name',
+        type: 'string',
+    },
+    {
+        name: 'password',
+        type: 'string',
+    },
+];
+
 class Create extends Component {
     constructor (props) {
         super(props);
 
         this.state = {
-            item: {
-                email: '',
-                first_name: '',
-                last_name: '',
-                password: '',
-            },
+            item: buildState(schema),
         };
     };
     
@@ -26,7 +42,7 @@ class Create extends Component {
     };
 
     create = async () => {
-        await axios.post(`/api/users`, this.state.item, {
+        await axios.post(`/api/users`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },

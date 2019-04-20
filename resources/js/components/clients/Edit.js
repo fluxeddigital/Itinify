@@ -12,6 +12,10 @@ import { toast } from 'react-toastify';
 import { Editor } from '@tinymce/tinymce-react';
 import set from 'lodash.set';
 
+import { buildState, format } from '../../utils';
+
+const schema = [];
+
 class Edit extends Component {
     constructor (props) {
         super(props);
@@ -67,7 +71,7 @@ class Edit extends Component {
             });
 
             axios.get(`/api/clients/${ this.props.match.params.id }`).then(res => {
-                res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
+                res.data.data = format(res.data.data, schema);
     
                 let events = [];
     
@@ -158,7 +162,7 @@ class Edit extends Component {
                 <div className='form-group'>
                     <label htmlFor={ `note-content-${ index }` }>Content</label>
                     <Editor
-                        // apiKey='API_KEY'
+                        apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                         textareaName='content'
                         value={ item.content }
                         onEditorChange={ this.onNoteEditorChangeHandler('content', index) }
@@ -506,7 +510,7 @@ class Edit extends Component {
     };
 
     save = async () => {
-        await axios.patch(`/api/clients/${ this.state.item.id }`, this.state.item, {
+        await axios.patch(`/api/clients/${ this.state.item.id }`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },

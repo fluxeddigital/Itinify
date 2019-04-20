@@ -3,26 +3,51 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import { buildState, format } from '../../utils';
+
+const schema = [
+    {
+        name: 'category_id',
+        type: 'string',
+    },
+    {
+        name: 'category_name',
+        type: 'string',
+    },
+    {
+        name: 'event_id',
+        type: 'string',
+    },
+    {
+        name: 'event_name',
+        type: 'string',
+    },
+    {
+        name: 'name',
+        type: 'string',
+    },
+    {
+        name: 'long_description',
+        type: 'string',
+    },
+    {
+        name: 'short_description',
+        type: 'string',
+    },
+];
+
 class Show extends Component {
     constructor (props) {
         super(props);
 
         this.state = {
-            item: {
-                category_id: '',
-                category_name: '',
-                event_id: '',
-                event_name: '',
-                name: '',
-                long_description: '',
-                short_description: '',
-            },
+            item: buildState(schema),
         };
     };
 
     componentDidMount () {
         axios.get(`/api/items/${ this.props.match.params.id }`).then(res => {
-            res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
+            res.data.data = format(res.data.data, schema);
 
             this.setState({
                 item: {...this.state.item, ...res.data.data},

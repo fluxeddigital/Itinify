@@ -4,15 +4,32 @@ import Select from 'react-select'
 import { toast } from 'react-toastify';
 import set from 'lodash.set';
 
+import { buildState, format } from '../../../utils';
+
+const schema = [
+    {
+        name: 'name',
+        type: 'string',
+    },
+    {
+        name: 'section',
+        type: 'string',
+        options: [
+            'Car Hire',
+            'Flights',
+            'Itinerary',
+            'Restaurants',
+            'Transfers',
+        ],
+    },
+];
+
 class Create extends Component {
     constructor (props) {
         super(props);
 
         this.state = {
-            item: {
-                name: '',
-                section: '',
-            },
+            item: buildState(schema),
         };
     };
     
@@ -39,7 +56,7 @@ class Create extends Component {
     };
 
     create = async () => {
-        await axios.post(`/api/items/categories`, this.state.item, {
+        await axios.post(`/api/items/categories`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },

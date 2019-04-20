@@ -6,6 +6,10 @@ import { toast } from 'react-toastify';
 import set from 'lodash.set';
 import { Editor } from '@tinymce/tinymce-react';
 
+import { buildState, format } from '../../utils';
+
+const schema = [];
+
 class Edit extends Component {
     constructor (props) {
         super(props);
@@ -34,7 +38,7 @@ class Edit extends Component {
 
     componentDidMount () {
         axios.get(`/api/events/${ this.props.match.params.id }`).then(res => {
-            res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
+            res.data.data = format(res.data.data, schema);
 
             this.setState({
                 item: {...this.state.item, ...res.data.data},
@@ -113,7 +117,7 @@ class Edit extends Component {
     };
 
     save = async () => {
-        await axios.patch(`/api/events/${ this.state.item.id }`, this.state.item, {
+        await axios.patch(`/api/events/${ this.state.item.id }`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -152,7 +156,7 @@ class Edit extends Component {
                                             <div className='form-group'>
                                                 <label htmlFor='description'>Description</label>
                                                 <Editor
-                                                    // apiKey='API_KEY'
+                                                    apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                                                     textareaName='description'
                                                     value={ this.state.item.description }
                                                     onEditorChange={ this.onEditorChangeHandler('description') }
@@ -226,7 +230,7 @@ class Edit extends Component {
                                         <div className='form-group'>
                                             <label htmlFor='conditions'>Conditions</label>
                                             <Editor
-                                                // apiKey='API_KEY'
+                                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                                                 textareaName='conditions'
                                                 value={ this.state.item.conditions }
                                                 onEditorChange={ this.onEditorChangeHandler('conditions') }

@@ -5,6 +5,10 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import { Editor } from '@tinymce/tinymce-react';
 
+import { buildState, format } from '../../utils';
+
+const schema = [];
+
 class Create extends Component {
     constructor (props) {
         super(props);
@@ -90,7 +94,7 @@ class Create extends Component {
     };
 
     create = async () => {
-        await axios.post(`/api/events`, this.state.item, {
+        await axios.post(`/api/events`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -133,7 +137,7 @@ class Create extends Component {
                                             <div className='form-group'>
                                                 <label htmlFor='description'>Description</label>
                                                 <Editor
-                                                    // apiKey='API_KEY'
+                                                    apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                                                     textareaName='description'
                                                     value={ this.state.item.description }
                                                     onEditorChange={ this.onEditorChangeHandler('description') }
@@ -208,7 +212,7 @@ class Create extends Component {
                                         <div className='form-group'>
                                             <label htmlFor='conditions'>Conditions</label>
                                             <Editor
-                                                // apiKey='API_KEY'
+                                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                                                 textareaName='conditions'
                                                 value={ this.state.item.conditions }
                                                 onEditorChange={ this.onEditorChangeHandler('conditions') }

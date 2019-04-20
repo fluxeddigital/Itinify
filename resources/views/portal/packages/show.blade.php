@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>{{ $package->title }} - {{ $package->client->name }} - Itinify</title>
+  <title>{{ $package->title }} prepared for {{ $package->client->name }} - Itinify</title>
 
   <link href="{{ asset('plugins/css/plugins.css') }}" rel="stylesheet">
   <link href="{{ asset('css/portal/style.css') }}" rel="stylesheet">
@@ -217,7 +217,7 @@
                       </div>
                     </div>
                     @endif
-                    @if ($package->flights && $package->car_hire && $package->transfers)
+                    @if ($package->flights and $package->car_hire and $package->transfers)
                     <div class="tr-single-box" id="whatsIncluded">
                       <div class="tr-single-header">
                         <div class="tr-single-time alt">
@@ -294,13 +294,12 @@
               <div class="row">
                 <div class="tr-single-box">
                   <div class="tr-single-body">
-                    <h3>Our Terms & Conditions</h3> {!! $package->event->conditions !!}
+                    <h3>Our Terms & Conditions</h3>
+                    {!! $package->event->conditions !!}
                   </div>
                 </div>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -421,6 +420,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-body">
+          @foreach ($package->flights as $item)
           <div class="row">
             <div class="col-md-12">
               <div class="border bg-white filght-content">
@@ -431,43 +431,43 @@
                         <div class="airline-detail">
                           <img src="https://lh3.googleusercontent.com/LwhyfAgJeoXZp_nYMZWiBEyqWgu7issV9y8t0RQkj2Cy0vmQ8B9BjHXZgc-ved_oXdM" alt="" width="60px">
                           <div class="flight-no">
-                            <div>British Airways</div>
-                            <span>BA117</span>
+                            <div>{{ $item['airline'] }}</div>
+                            <span>{{ $item['number'] }}</span>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="flight-time">
                           <div class="flight-depart">
-                            <h4>9:35</h4>
-                            <span>LHE</span>
+                            <h4>{{ $item['departure']['time'] }}</h4>
+                            <span>{{ $item['departure']['airport'] }}</span>
                           </div>
                           <div class="trip-map">
-                            <h5>3h 30m</h5>
+                            <h5>Add Field</h5>
                             <div class="img-line">
                               <div class="line"></div>
                             </div>
                           </div>
                           <div class="flight-arrival">
-                            <h4>12:35</h4>
-                            <span>DXB</span>
+                            <h4>{{ $item['arrival']['time'] }}</h4>
+                            <span>{{ $item['arrival']['airport'] }}</span>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-3">
                         <div class="flight-details">
-                          <a class="btn btn-primary" role="button" data-toggle="collapse" href="#flight1" aria-expanded="false" aria-controls="collapseExample">More Details</a>
+                          <a class="btn btn-primary" role="button" data-toggle="collapse" href="#" aria-expanded="false" aria-controls="collapseExample">More Details</a>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="collapse border" id="flight1">
+              <div class="collapse border" id="">
                 <div class="total-duration">
                   <div>
                     <span class="arrow-bg"><i class="fa fa-arrow-right"></i></span>
-                    <strong>Flight on Friday 30 November 2018 from Lahore to Dubai</strong>
+                    <strong>Flight on Friday 30 November 2018 from {{ $item['departure']['airport'] }} to {{ $item['arrival']['airport'] }}</strong>
                   </div>
                 </div>
                 <div class="row">
@@ -479,11 +479,11 @@
                           <tbody>
                             <tr>
                               <td><strong>Locator</strong></td>
-                              <td>TJSHDG</td>
+                              <td>Add Field</td>
                             </tr>
                             <tr>
                               <td><strong>Class</strong></td>
-                              <td>Economy</td>
+                              <td>{{ $item['class'] }}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -498,11 +498,11 @@
                           <tbody>
                             <tr>
                               <td><strong> Departure Date</strong></td>
-                              <td>10/02/19</td>
+                              <td>{{ $item['departure']['date'] }}</td>
                             </tr>
                             <tr>
                               <td><strong>Departure Time</strong></td>
-                              <td>19:21</td>
+                              <td>{{ $item['departure']['time'] }}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -517,11 +517,11 @@
                           <tbody>
                             <tr>
                               <td><strong> Arrival Date</strong></td>
-                              <td>10/02/19</td>
+                              <td>{{ $item['arrival']['date'] }}</td>
                             </tr>
                             <tr>
                               <td><strong>Arrival Time</strong></td>
-                              <td>19:21</td>
+                              <td>{{ $item['arrival']['time'] }}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -535,118 +535,7 @@
           </div>
           <!-- End Flight 1 -->
           <hr>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="border bg-white filght-content">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="airline-detail">
-                          <img src="https://lh3.googleusercontent.com/LwhyfAgJeoXZp_nYMZWiBEyqWgu7issV9y8t0RQkj2Cy0vmQ8B9BjHXZgc-ved_oXdM" alt="" width="60px">
-                          <div class="flight-no">
-                            <div>Avis</div>
-                            <span>BA117</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="flight-time">
-                          <div class="flight-depart">
-                            <h4>9:35</h4>
-                            <span>LHE</span>
-                          </div>
-                          <div class="trip-map">
-                            <h5>3h 30m</h5>
-                            <div class="img-line">
-                              <div class="line"></div>
-                            </div>
-                          </div>
-                          <div class="flight-arrival">
-                            <h4>12:35</h4>
-                            <span>DXB</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div class="flight-details">
-                          <a class="btn btn-primary" role="button" data-toggle="collapse" href="#flight2" aria-expanded="false" aria-controls="collapseExample">More Details</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="collapse border" id="flight2">
-                <div class="total-duration">
-                  <div>
-                    <span class="arrow-bg"><i class="fa fa-arrow-right"></i></span>
-                    <strong>Flight on Friday 30 November 2018 from Lahore to Dubai</strong>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-4 col-sm-12 col-xs-12">
-                    <div class="flight border-left">
-                      <div class="aircraft">
-                        <h3>API <a href="#" data-toggle="tooltip" title="You need to fill in your Advanced Passenger Information in before you travel."><i class="ti-info-alt info-tip"></i></a></h3>
-                        <table class="table">
-                          <tbody>
-                            <tr>
-                              <td><strong>Locator</strong></td>
-                              <td>TJSHDG</td>
-                            </tr>
-                            <tr>
-                              <td><strong>Class</strong></td>
-                              <td>Economy</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4 col-sm-12 col-xs-12">
-                    <div class="flight">
-                      <div class="aircraft">
-                        <h3>Departure</h3>
-                        <table class="table">
-                          <tbody>
-                            <tr>
-                              <td><strong> Departure Date</strong></td>
-                              <td>10/02/19</td>
-                            </tr>
-                            <tr>
-                              <td><strong>Departure Time</strong></td>
-                              <td>19:21</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4 col-sm-12 col-xs-12">
-                    <div class="flight">
-                      <div class="aircraft">
-                        <h3>Arrival</h3>
-                        <table class="table">
-                          <tbody>
-                            <tr>
-                              <td><strong> Arrival Date</strong></td>
-                              <td>10/02/19</td>
-                            </tr>
-                            <tr>
-                              <td><strong>Arrival Time</strong></td>
-                              <td>19:21</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr class="bottom-line">
-              </div>
-            </div>
-          </div>
+          @endforeach
         </div>
       </div>
     </div>
@@ -658,6 +547,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-body">
+          @foreach ($package->car_hire as $item)
           <div class="row">
             <div class="col-md-12">
               <div class="border bg-white filght-content" id="carModalContent">
@@ -669,14 +559,14 @@
                           <img src="https://is2-ssl.mzstatic.com/image/thumb/Purple123/v4/9e/7a/bb/9e7abbc9-a08f-29a8-fac5-84f305c9f17f/AppIcon-0-1x_U007emarketing-0-0-GLES2_U002c0-512MB-sRGB-0-0-0-85-220-0-0-0-10.png/246x0w.jpg" alt="" width="60px">
                           <div class="flight-no">
                             <div>Confirmation:</div>
-                            <span>1234567890</span>
+                            <span>{{ $item['confirmationNumber'] }}</span>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="flight-time">
                           <div class="flight-depart">
-                            <h4>9:35</h4>
+                            <h4>{{ $item['pickup']['time'] }}</h4>
                             <span>Pick Up</span>
                           </div>
                           <div class="trip-map">
@@ -686,7 +576,7 @@
                             </div>
                           </div>
                           <div class="flight-arrival">
-                            <h4>12:35</h4>
+                            <h4>{{ $item['dropoff']['time'] }}</h4>
                             <span>Drop Off</span>
                           </div>
                         </div>
@@ -704,7 +594,7 @@
                 <div class="total-duration">
                   <div>
                     <span class="arrow-bg"><i class="fa fa-arrow-right"></i></span>
-                    <strong>Pick up on Friday 30 November 2018 from Lahore</strong>
+                    <strong>Pick up on {{ $item['pickup']['date'] }} from {{ $item['pickup']['location'] }}</strong>
                   </div>
                 </div>
                 <div class="row">
@@ -720,7 +610,7 @@
                             </tr>
                             <tr>
                               <td><strong>Car Type</strong></td>
-                              <td>Economy</td>
+                              <td>{{ $item['car'] }}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -735,11 +625,11 @@
                           <tbody>
                             <tr>
                               <td><strong>Date</strong></td>
-                              <td>10/02/19</td>
+                              <td>{{ $item['pickup']['date'] }}</td>
                             </tr>
                             <tr>
                               <td><strong>Location</strong></td>
-                              <td>In Terminal</td>
+                              <td>{{ $item['pickup']['location'] }}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -754,11 +644,11 @@
                           <tbody>
                             <tr>
                               <td><strong>Date</strong></td>
-                              <td>10/02/19</td>
+                              <td>{{ $item['dropoff']['date'] }}</td>
                             </tr>
                             <tr>
                               <td><strong>Location</strong></td>
-                              <td>In Terminal</td>
+                              <td>{{ $item['dropoff']['location'] }}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -772,14 +662,7 @@
                     <div class="flight border-left">
                       <div class="aircraft">
                         <h3>Whats Included?</h3>
-                        <p>Collision Damage Waiver (CDW)</p>
-                        <p>Third-Party Liability (TPL)</p>
-                        <p>Theft Protection (TP)</p>
-                        <p>Supplemental Liability Insurance (SLI)</p>
-                        <p>Airport Surcharge</p>
-                        <p>Local Taxes</p>
-                        <p>Vehicle Registration Fee</p>
-                        <p>Your rental includes unlimited free kilometres.</p>
+                        {!! $item['description']!!}
                       </div>
                     </div>
                   </div>
@@ -788,6 +671,7 @@
               </div>
             </div>
           </div>
+          @endforeach
           <!-- End Flight 1 -->
         </div>
       </div>

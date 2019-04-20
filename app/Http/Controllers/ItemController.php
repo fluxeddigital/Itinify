@@ -60,8 +60,10 @@ class ItemController extends Controller
             'category_id' => $request->input('category_id'),
             'event_id' => $request->input('event_id'),
             'name' => $request->input('name'),
+            'date' => $request->input('date'),
             'long_description' => $request->input('long_description'),
             'short_description' => $request->input('short_description'),
+            'time' => $request->input('time'),
         ]);
 
         return new ItemResource($item);
@@ -113,8 +115,10 @@ class ItemController extends Controller
             $item->category_id = $request->input('category_id');
             $item->event_id = $request->input('event_id');
             $item->name = $request->input('name');
+            $item->date = $request->input('date');
             $item->long_description = $request->input('long_description');
             $item->short_description = $request->input('short_description');
+            $item->time = $request->input('time');
 
             $item->save();
 

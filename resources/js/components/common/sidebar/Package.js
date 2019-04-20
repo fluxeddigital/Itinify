@@ -76,7 +76,7 @@ class Package extends Component {
 
                     <li className='nav-item cursor-pointer'>
                         <a href='#documents' className={ `nav-link${ location.hash == '#documents' ? ' active' : '' }` }>
-                            <i className='material-icons'>restaurant</i>
+                            <i className='material-icons'>attach_file</i>
                             <span>Documents</span>
                         </a>
                     </li>

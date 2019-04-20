@@ -3,15 +3,25 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import set from 'lodash.set';
 
+import { buildState, format } from '../../utils';
+
+const schema = [
+    {
+        name: 'id',
+        type: 'string',
+    },
+    {
+        name: 'email',
+        type: 'string',
+    },
+];
+
 class Attach extends Component {
     constructor (props) {
         super(props);
 
         this.state = {
-            item: {
-                id: '',
-                email: '',
-            },
+            item: buildState(schema),
         };
     };
     
@@ -24,7 +34,7 @@ class Attach extends Component {
     };
 
     attach = async () => {
-        await axios.patch(`/api/users/attach`, this.state.item, {
+        await axios.patch(`/api/users/attach`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },

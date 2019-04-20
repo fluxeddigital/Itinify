@@ -6,6 +6,39 @@ import { toast } from 'react-toastify';
 import set from 'lodash.set';
 import { Editor } from '@tinymce/tinymce-react';
 
+import { buildState, format } from '../../utils';
+
+const schema = [
+    {
+        name: 'category_id',
+        type: 'string',
+    },
+    {
+        name: 'category_name',
+        type: 'string',
+    },
+    {
+        name: 'event_id',
+        type: 'string',
+    },
+    {
+        name: 'event_name',
+        type: 'string',
+    },
+    {
+        name: 'name',
+        type: 'string',
+    },
+    {
+        name: 'long_description',
+        type: 'string',
+    },
+    {
+        name: 'short_description',
+        type: 'string',
+    },
+];
+
 class Edit extends Component {
     constructor (props) {
         super(props);
@@ -23,21 +56,13 @@ class Edit extends Component {
                     value: null,
                 },
             ],
-            item: {
-                category_id: '',
-                category_name: '',
-                event_id: '',
-                event_name: '',
-                name: '',
-                long_description: '',
-                short_description: '',
-            },
+            item: buildState(schema),
         };
     };
 
     componentDidMount () {
         axios.get(`/api/items/${ this.props.match.params.id }`).then(res => {
-            res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
+            res.data.data = format(res.data.data, schema);
 
             this.setState({
                 categories: this.state.categories,
@@ -136,7 +161,7 @@ class Edit extends Component {
     };
 
     save = async () => {
-        await axios.patch(`/api/items/${ this.state.item.id }`, this.state.item, {
+        await axios.patch(`/api/items/${ this.state.item.id }`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -174,7 +199,7 @@ class Edit extends Component {
                                         <div className='form-group'>
                                             <label htmlFor='short_description'>Short Description</label>
                                             <Editor
-                                                // apiKey='API_KEY'
+                                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                                                 textareaName='short_description'
                                                 value={ this.state.item.short_description }
                                                 onEditorChange={ this.onEditorChangeHandler('short_description') }
@@ -189,7 +214,7 @@ class Edit extends Component {
                                         <div className='form-group'>
                                             <label htmlFor='long_description'>Long Description</label>
                                             <Editor
-                                                // apiKey='API_KEY'
+                                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                                                 textareaName='long_description'
                                                 value={ this.state.item.long_description }
                                                 onEditorChange={ this.onEditorChangeHandler('long_description') }

@@ -3,6 +3,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import { buildState, format } from '../../utils';
+
+const schema = [];
+
 class Show extends Component {
     constructor (props) {
         super(props);
@@ -33,7 +37,7 @@ class Show extends Component {
 
     componentDidMount () {
         axios.get(`/api/clients/${ this.props.match.params.id }`).then(res => {
-            res.data.data = JSON.parse(JSON.stringify(res.data.data).replace('null', '""'));
+            res.data.data = format(res.data.data, schema);
 
             this.setState({
                 events: this.state.events,

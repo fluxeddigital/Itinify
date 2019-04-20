@@ -168,6 +168,7 @@ class PackageController extends Controller
             $package->title = $request->input('title');
             $package->car_hire = $request->input('car_hire');
             $package->customisation = $request->input('customisation');
+            $package->documents = $request->input('documents');
             $package->expires = $request->input('expires');
             $package->flights = $request->input('flights');
             $package->issued = $request->input('issued');

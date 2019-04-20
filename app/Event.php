@@ -29,9 +29,9 @@ class Event extends Model
      * @var array
      */
     protected $casts = [
-        'dates' => 'array',
-        'newsletter' => 'array',
-        'pack' => 'array',
+        'dates' => 'object',
+        'newsletter' => 'object',
+        'pack' => 'object',
     ];
     
     /**

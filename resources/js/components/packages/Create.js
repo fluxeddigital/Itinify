@@ -9,6 +9,10 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { toast } from 'react-toastify';
 import { Editor } from '@tinymce/tinymce-react';
 
+import { buildState, format } from '../../utils';
+
+const schema = [];
+
 class Create extends Component {
     constructor (props) {
         super(props);
@@ -64,7 +68,7 @@ class Create extends Component {
                 <div className='form-group'>
                     <label htmlFor={ `note-content-${ index }` }>Content</label>
                     <Editor
-                        // apiKey='API_KEY'
+                        apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                         textareaName='content'
                         value={ item.content }
                         onEditorChange={ this.onNoteEditorChangeHandler('content', index) }
@@ -223,7 +227,7 @@ class Create extends Component {
     };
 
     create = async () => {
-        await axios.post(`/api/packages`, this.state.item, {
+        await axios.post(`/api/packages`, format(this.state.item, schema), {
             headers: {
                 'Content-Type': 'application/json',
             },

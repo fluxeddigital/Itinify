@@ -9,6 +9,7 @@
 
     <!-- App API Keys -->
     <meta name="filestack-key" content="{{ env('FILESTACK_KEY') }}">
+    <meta name="tinymce-key" content="{{ env('TINYMCE_KEY') }}">
 
     <!-- Authenticated Company & User Information -->
     <meta name="company-id" content="{{ Auth::user()->company_id }}">

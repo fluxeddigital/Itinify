@@ -29,17 +29,17 @@ class Package extends Model
      * @var array
      */
     protected $casts = [
-        'car_hire' => 'array',
-        'customisation' => 'array',
-        'documents' => 'array',
-        'flights' => 'array',
-        'itinerary' => 'array',
-        'notes' => 'array',
-        'passengers' => 'array',
-        'pricing' => 'array',
-        'requirements' => 'array',
-        'restaurants' => 'array',
-        'transfers' => 'array',
+        'car_hire' => 'object',
+        'customisation' => 'object',
+        'documents' => 'object',
+        'flights' => 'object',
+        'itinerary' => 'object',
+        'notes' => 'object',
+        'passengers' => 'object',
+        'pricing' => 'object',
+        'requirements' => 'object',
+        'restaurants' => 'object',
+        'transfers' => 'object',
     ];
     
     /**

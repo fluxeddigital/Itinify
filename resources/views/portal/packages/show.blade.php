@@ -434,14 +434,14 @@
                       </div>
                       <div class="col-md-3">
                         <div class="flight-details">
-                          <a class="btn btn-primary" role="button" data-toggle="collapse" href="#" aria-expanded="false" aria-controls="collapseExample">More Details</a>
+                          <a class="btn btn-primary" role="button" data-toggle="collapse" href="#flight{{ $loop->index }}" aria-expanded="false" aria-controls="collapseExample">More Details</a>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="collapse border" id="">
+              <div class="collapse border" id="flight{{ $loop->index }}">
                 <div class="total-duration">
                   <div>
                     <span class="arrow-bg"><i class="fa fa-arrow-right"></i></span>

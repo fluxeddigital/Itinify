@@ -30,9 +30,9 @@
       <div class="collapse navbar-collapse" id="navbar-menu">
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown dash-link">
-            <a href="javascript:void()" class="dropdown-toggle">Hi, Name</a>
+            <a href="" class="dropdown-toggle">Hi, {{ $package->client->name }}</a>
             <ul class="dropdown-menu left-nav">
-              <li><a href="">All Packages</a></li>
+              <li><a href="/portal/clients/{{ $package->client->id }}/{{ $package->client->email }}/">All Packages</a></li>
               <li><a href="">Contact Us</a></li>
               <li class="sign-up">
                 <a class="btn-signup red-btn" href="javascript:void(0)" data-toggle="modal" data-target="#accept">Accept Proposal</a>

@@ -20,14 +20,14 @@
       <div class="container">
         <div class="col-md-5 col-md-push-7">
           <h3 class="log-title">Client Login</h3>
-          <form class="form">
+          <form class="form" method="POST" action="">
             <div class="form-group">
-              <label for="inputEmail">User Name</label>
-              <input type="email" class="form-control" id="inputEmail" placeholder="User Name" required="">
+              <label for="inputEmail">Email</label>
+              <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" required="">
             </div>
             <div class="form-group">
               <label for="inputEmail">Password</label>
-              <input type="password" class="form-control" id="inputEmail" placeholder="*******" required="">
+              <input type="password" class="form-control" id="inputPassword" placeholder="*******" required="">
             </div>
             <div class="form-group">
               <div class="row">
@@ -35,7 +35,7 @@
                   <button type="submit" class="btn btn-dark">Login</button>
                 </div>
                 <div class="col-md-6 col-sm-6">
-                  <p>Foreget Password? <a href="login.html#">Click Here</a></p>
+                  <p>Forgot Password? <a href="/portal/client/reset">Click Here</a></p>
                 </div>
               </div>
             </div>

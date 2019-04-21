@@ -175,6 +175,12 @@ const schema = [
             {
                 name: 'class',
                 type: 'string',
+                options: [
+                    'Business',
+                    'Economy',
+                    'Economy Plus',
+                    'First Class',
+                ],
             },
             {
                 name: 'departure',

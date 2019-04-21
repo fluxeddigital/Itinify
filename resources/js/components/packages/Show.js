@@ -5,6 +5,10 @@ import { toast } from 'react-toastify';
 
 import { buildState, format } from '../../utils';
 
+import { airlines, airlinesOptions, airlinesSet } from '../../data/airlines';
+import { airports, airportsOptions, airportsSet } from '../../data/airports';
+import { carHireProviders, carHireProvidersOptions, carHireProvidersSet } from '../../data/car-hire-providers';
+
 const schema = [
     {
         name: 'client_id',
@@ -89,18 +93,7 @@ const schema = [
             {
                 name: 'provider',
                 type: 'string',
-                options: [
-                    '',
-                    'ALA',
-                    'AVI',
-                    'BUD',
-                    'DOL',
-                    'ENT',
-                    'EUR',
-                    'HER',
-                    'IBE',
-                    'THR',
-                ],
+                options: carHireProvidersSet,
             },
         ],
     },
@@ -147,6 +140,7 @@ const schema = [
             {
                 name: 'airline',
                 type: 'string',
+                options: airlinesSet,
             },
             {
                 name: 'arrival',
@@ -155,6 +149,7 @@ const schema = [
                     {
                         name: 'airport',
                         type: 'string',
+                        options: airportsSet,
                     },
                     {
                         name: 'date',
@@ -169,6 +164,12 @@ const schema = [
             {
                 name: 'class',
                 type: 'string',
+                options: [
+                    'Business',
+                    'Economy',
+                    'Economy Plus',
+                    'First Class',
+                ],
             },
             {
                 name: 'departure',
@@ -177,6 +178,7 @@ const schema = [
                     {
                         name: 'airport',
                         type: 'string',
+                        options: airportsSet,
                     },
                     {
                         name: 'date',
@@ -598,7 +600,7 @@ class Show extends Component {
 
                                                                     <div className='form-group col-md-4'>
                                                                         <label htmlFor={ `flight-airline-${ i }` }>Airline</label>
-                                                                        <input value={ item.airline } type='text' className='form-control' id={ `flight-airline-${ i }` } disabled />
+                                                                        <input value={ airlines[item.airline] } type='text' className='form-control' id={ `flight-airline-${ i }` } disabled />
                                                                     </div>
 
                                                                     <div className='form-group col-md-4'>
@@ -611,7 +613,7 @@ class Show extends Component {
                                                                 <div className='form-row pl-3' id={ `flight-departure-${ i }` }>
                                                                     <div className='form-group col-md-4'>
                                                                         <label htmlFor={ `flight-departure-location-${ i }` }>Location</label>
-                                                                        <input value={ item.departure.location } type='text' className='form-control' id={ `flight-departure-location-${ i }` } disabled />
+                                                                        <input value={ airports[item.departure.location] } type='text' className='form-control' id={ `flight-departure-location-${ i }` } disabled />
                                                                     </div>
 
                                                                     <div className='form-group col-md-4'>
@@ -629,7 +631,7 @@ class Show extends Component {
                                                                 <div className='form-row pl-3' id={ `flight-arrival-${ i }` }>
                                                                     <div className='form-group col-md-4'>
                                                                         <label htmlFor={ `flight-arrival-location-${ i }` }>Location</label>
-                                                                        <input value={ item.arrival.location } type='text' className='form-control' id={ `flight-arrival-location-${ i }` } disabled />
+                                                                        <input value={ airports[item.arrival.location] } type='text' className='form-control' id={ `flight-arrival-location-${ i }` } disabled />
                                                                     </div>
 
                                                                     <div className='form-group col-md-4'>
@@ -680,7 +682,7 @@ class Show extends Component {
 
                                                                     <div className='form-group col-md-4'>
                                                                         <label htmlFor={ `hire-provider-${ i }` }>Provider</label>
-                                                                        <input value={ item.provider } type='text' className='form-control' id={ `hire-provider-${ i }` } disabled />
+                                                                        <input value={ carHireProviders[item.provider] } type='text' className='form-control' id={ `hire-provider-${ i }` } disabled />
                                                                     </div>
                                                                 </div>
 

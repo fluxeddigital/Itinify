@@ -358,6 +358,12 @@ Route::get('/format', function () {
         if ($package->car_hire) {
             if (array_key_exists('carHire', $package->car_hire)) {
                 foreach ($package->car_hire['carHire'] as $hire) {
+                    if ($hire['provider']) {
+                        if (is_string($hire['provider'])) {
+                            $hire['provider'] = strtoupper(substr($hire['provider'], 0, 3));
+                        };
+                    };
+
                     $car_hire[] = [
                         'car' => $hire['carType'],
                         'confirmationNumber' => $hire['confirmationNumber'],

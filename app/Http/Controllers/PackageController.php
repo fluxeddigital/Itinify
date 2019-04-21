@@ -176,7 +176,6 @@ class PackageController extends Controller
             $package->lead_status = $request->input('lead_status');
             $package->passengers = $request->input('passengers');
             $package->pricing = $request->input('pricing');
-            $package->reminder = $request->input('reminder');
             $package->requirements = $request->input('requirements');
             $package->restaurants = $request->input('restaurants');
             $package->status = $request->input('status');

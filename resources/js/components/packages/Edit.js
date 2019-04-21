@@ -242,6 +242,10 @@ const schema = [
     {
         name: 'lead_status',
         type: 'string',
+        options: [
+            'Cold',
+            'Hot',
+        ],
     },
     {
         name: 'notes',
@@ -386,6 +390,11 @@ const schema = [
     {
         name: 'status',
         type: 'string',
+        options: [
+            'Accepted',
+            'Declined',
+            'Open',
+        ],
     },
     {
         name: 'transfers',
@@ -993,10 +1002,10 @@ class Edit extends Component {
         };
     };
 
-    onLogoChangeHandler = (result) => {
+    onCustomisationBannerChangeHandler = (result) => {
         let prep = this.state.item;
 
-        prep.logo = result.filesUploaded[0].url;
+        prep.customisation.banner = result.filesUploaded[0].url;
 
         this.setState({
             clients: this.state.clients,
@@ -1044,9 +1053,23 @@ class Edit extends Component {
         };
     };
 
-    pickLogo = () => {
+    onEditorChangeHandler = (name) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            set(prep, name, value)
+
+            this.setState({
+                categories: this.state.categories,
+                events: this.state.events,
+                item: prep,
+            });
+        };
+    };
+
+    pickCustomisationBanner = () => {
         filestack.init(document.head.querySelector('meta[name="filestack-key"]').content).picker({
-            onUploadDone: this.onLogoChangeHandler,
+            onUploadDone: this.onCustomisationBannerChangeHandler,
             maxSize: 10 * 1024 * 1024,
             accept: 'image/*',
             uploadInBackground: false,
@@ -1136,7 +1159,7 @@ class Edit extends Component {
                                             <div className='form-row'>
                                                 <div className='form-group col-md-6'>
                                                     <label htmlFor='accepted_at'>Accepted At</label>
-                                                    <input name='accepted_at' value={ this.state.item.accepted_at } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='accepted_at' />
+                                                    <input name='accepted_at' value={ this.state.item.accepted_at } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control date' id='accepted_at' />
                                                 </div>
 
                                                 <div className='form-group col-md-6'>
@@ -1185,34 +1208,22 @@ class Edit extends Component {
                                                                     </div>
                                                                 </div>
 
-                                                                { item.description.short.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                    <div className='form-group'>
-                                                                        <label htmlFor={ `item-description-short-${ i }` }>Short Description</label>
-                                                                        <div className='card'>
-                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.short } } id={ `item-description-short-${ i }` } />
-                                                                        </div>
+                                                                <div className='form-group'>
+                                                                    <label htmlFor={ `item-description-short-${ i }` }>Short Description</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.short } } id={ `item-description-short-${ i }` } />
                                                                     </div>
-                                                                }
+                                                                </div>
 
-                                                                { item.description.long.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                    <div className='form-group'>
-                                                                        <label htmlFor={ `item-description-long-${ i }` }>Long Description</label>
-                                                                        <div className='card'>
-                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.long } } id={ `item-description-long-${ i }` } />
-                                                                        </div>
+                                                                <div className='form-group'>
+                                                                    <label htmlFor={ `item-description-long-${ i }` }>Long Description</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.long } } id={ `item-description-long-${ i }` } />
                                                                     </div>
-                                                                }
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     )}
-
-                                                    <div>
-                                                        { ! this.state.item.itinerary.length &&
-                                                            <div className='alert alert-danger'>
-                                                                No itinerary items found!
-                                                            </div>
-                                                        }
-                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1282,14 +1293,6 @@ class Edit extends Component {
                                                             </div>
                                                         </div>
                                                     )}
-
-                                                    <div>
-                                                        { ! this.state.item.flights.length &&
-                                                            <div className='alert alert-danger'>
-                                                                No flights found!
-                                                            </div>
-                                                        }
-                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1357,25 +1360,15 @@ class Edit extends Component {
                                                                     </div>
                                                                 </div>
 
-                                                                { item.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                    <div className='form-group'>
-                                                                        <label htmlFor={ `hire-description-${ i }` }>Description</label>
-                                                                        <div className='card'>
-                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description } } id={ `hire-description-${ i }` } />
-                                                                        </div>
+                                                                <div className='form-group'>
+                                                                    <label htmlFor={ `hire-description-${ i }` }>Description</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description } } id={ `hire-description-${ i }` } />
                                                                     </div>
-                                                                }
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     )}
-
-                                                    <div>
-                                                        { ! this.state.item.car_hire.length &&
-                                                            <div className='alert alert-danger'>
-                                                                No hires found!
-                                                            </div>
-                                                        }
-                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1409,14 +1402,6 @@ class Edit extends Component {
                                                             </div>
                                                         </div>
                                                     )}
-
-                                                    <div>
-                                                        { ! this.state.item.passengers.length &&
-                                                            <div className='alert alert-danger'>
-                                                                No passengers found!
-                                                            </div>
-                                                        }
-                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1443,34 +1428,22 @@ class Edit extends Component {
                                                                     </div>
                                                                 </div>
 
-                                                                { item.description.short.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                    <div className='form-group'>
-                                                                        <label htmlFor={ `transfer-description-short-${ i }` }>Short Description</label>
-                                                                        <div className='card'>
-                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.short } } id={ `transfer-description-short-${ i }` } />
-                                                                        </div>
+                                                                <div className='form-group'>
+                                                                    <label htmlFor={ `transfer-description-short-${ i }` }>Short Description</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.short } } id={ `transfer-description-short-${ i }` } />
                                                                     </div>
-                                                                }
+                                                                </div>
 
-                                                                { item.description.long.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                    <div className='form-group'>
-                                                                        <label htmlFor={ `transfer-description-long-${ i }` }>Long Description</label>
-                                                                        <div className='card'>
-                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.long } } id={ `transfer-description-long-${ i }` } />
-                                                                        </div>
+                                                                <div className='form-group'>
+                                                                    <label htmlFor={ `transfer-description-long-${ i }` }>Long Description</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.long } } id={ `transfer-description-long-${ i }` } />
                                                                     </div>
-                                                                }
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     )}
-
-                                                    <div>
-                                                        { ! this.state.item.transfers.length &&
-                                                            <div className='alert alert-danger'>
-                                                                No transfers found!
-                                                            </div>
-                                                        }
-                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1497,14 +1470,12 @@ class Edit extends Component {
                                                                     </div>
                                                                 </div>
 
-                                                                { item.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                    <div className='form-group'>
-                                                                        <label htmlFor={ `restaurant-description-${ i }` }>Description</label>
-                                                                        <div className='card'>
-                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description } } id={ `restaurant-description-${ i }` } />
-                                                                        </div>
+                                                                <div className='form-group'>
+                                                                    <label htmlFor={ `restaurant-description-${ i }` }>Description</label>
+                                                                    <div className='card'>
+                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description } } id={ `restaurant-description-${ i }` } />
                                                                     </div>
-                                                                }
+                                                                </div>
 
                                                                 <div className='form-group'>
                                                                     <label>Address</label>
@@ -1554,14 +1525,6 @@ class Edit extends Component {
                                                             </div>
                                                         </div>
                                                     )}
-
-                                                    <div>
-                                                        { ! this.state.item.restaurants.length &&
-                                                            <div className='alert alert-danger'>
-                                                                No restaurants found!
-                                                            </div>
-                                                        }
-                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1589,14 +1552,6 @@ class Edit extends Component {
                                                             </div>
                                                         </div>
                                                     )}
-
-                                                    <div>
-                                                        { ! this.state.item.passengers.length &&
-                                                            <div className='alert alert-danger'>
-                                                                No documents found!
-                                                            </div>
-                                                        }
-                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1610,34 +1565,44 @@ class Edit extends Component {
                                                 <div>
                                                     <div className='form-group'>
                                                         <label htmlFor='customisation-banner'>Banner Image</label>
-                                                        <input value={ this.state.item.customisation.banner } type='text' className='form-control' id='customisation-banner' disabled />
+                                                        <div className='my-2'>
+                                                            <span onClick={ this.pickCustomisationBanner } className='btn btn-primary'>Upload</span>
+                                                        </div>
+
+                                                        { this.state.item.customisation.banner &&
+                                                            <img src={ this.state.item.customisation.banner } id='customisation-banner' className='text-center mx-auto h-100 px-4 pb-4 d-block' />
+                                                        }
                                                     </div>
 
-                                                    { this.state.item.customisation.description &&
-                                                        <div>
-                                                            { this.state.item.customisation.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                <div className='form-group'>
-                                                                    <label htmlFor='customisation-description'>Description</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.customisation.description } } id='customisation-description' />
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    }
+                                                    <div className='form-group'>
+                                                        <label htmlFor='customisation-description'>Description</label>
+                                                        <Editor
+                                                            apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                                            textareaName='customisation.description'
+                                                            value={ this.state.item.customisation.description }
+                                                            onEditorChange={ this.onEditorChangeHandler('customisation.description') }
+                                                            plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                                            toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                                            init={ {
+                                                                height: 200,
+                                                            } }
+                                                        />
+                                                    </div>
 
-                                                    { this.state.item.customisation.welcome &&
-                                                        <div>
-                                                            { this.state.item.customisation.welcome.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                <div className='form-group'>
-                                                                    <label htmlFor='customisation-welcome'>Welcome</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.customisation.welcome } } id='customisation-welcome' />
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    }
+                                                    <div className='form-group'>
+                                                        <label htmlFor='customisation-welcome'>Welcome</label>
+                                                        <Editor
+                                                            apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                                            textareaName='customisation.welcome'
+                                                            value={ this.state.item.customisation.welcome }
+                                                            onEditorChange={ this.onEditorChangeHandler('customisation.welcome') }
+                                                            plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                                            toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                                            init={ {
+                                                                height: 200,
+                                                            } }
+                                                        />
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1649,60 +1614,34 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.requirements.dietary &&
-                                                        <div>
-                                                            { this.state.item.requirements.dietary.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                <div className='form-group'>
-                                                                    <label htmlFor='requirements-dietary'>Dietary</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.requirements.dietary } } id='requirements-dietary' />
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    }
+                                                    <div className='form-group'>
+                                                        <label htmlFor='requirements-dietary'>Dietary</label>
+                                                        <Editor
+                                                            apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                                            textareaName='requirements.dietary'
+                                                            value={ this.state.item.requirements.dietary }
+                                                            onEditorChange={ this.onEditorChangeHandler('requirements.dietary') }
+                                                            plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                                            toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                                            init={ {
+                                                                height: 200,
+                                                            } }
+                                                        />
+                                                    </div>
 
-                                                    { this.state.item.requirements.other &&
-                                                        <div>
-                                                            { this.state.item.requirements.other.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                <div className='form-group'>
-                                                                    <label htmlFor='requirements-other'>Other</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.requirements.other } } id='requirements-other' />
-                                                                    </div>
-                                                                </div>
-                                                            }
-
-                                                            <div>
-                                                                { ! this.state.item.requirements.other.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                    <div>
-                                                                        { this.state.item.requirements.dietary &&
-                                                                            <div>
-                                                                                { ! this.state.item.requirements.dietary.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                                    <div className='alert alert-danger'>
-                                                                                        No requirements found!
-                                                                                    </div>
-                                                                                }
-                                                                            </div>
-                                                                        }
-
-                                                                        { ! this.state.item.requirements.dietary &&
-                                                                            <div className='alert alert-danger'>
-                                                                                No requirements found!
-                                                                            </div>
-                                                                        }
-                                                                    </div>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    }
-
-                                                    <div>
-                                                        { ! this.state.item.requirements.dietary && ! this.state.item.requirements.other &&
-                                                            <div className='alert alert-danger'>
-                                                                No requirements found!
-                                                            </div>
-                                                        }
+                                                    <div className='form-group'>
+                                                        <label htmlFor='requirements-other'>Other</label>
+                                                        <Editor
+                                                            apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                                            textareaName='requirements.other'
+                                                            value={ this.state.item.requirements.other }
+                                                            onEditorChange={ this.onEditorChangeHandler('requirements.other') }
+                                                            plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                                            toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                                            init={ {
+                                                                height: 200,
+                                                            } }
+                                                        />
                                                     </div>
                                                 </div>
                                             </li>
@@ -1715,39 +1654,10 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.notes.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `note-title-${ i }` }>Title</label>
-                                                                        <input value={ item.title } type='text' className='form-control' id={ `note-title-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `note-visibility-${ i }` }>Visibility</label>
-                                                                        <input value={ item.visibility } type='text' className='form-control' id={ `note-visibility-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                { item.content.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                                    <div className='form-group'>
-                                                                        <label htmlFor={ `note-content-${ i }` }>Content</label>
-                                                                        <div className='card'>
-                                                                            <div className='card-body' dangerouslySetInnerHTML={ { __html: item.content } } id={ `note-content-${ i }` } />
-                                                                        </div>
-                                                                    </div>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <this.Notes notes={ this.state.item.notes } onSortEnd={ this.onNotesSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        { ! this.state.item.notes.length &&
-                                                            <div className='alert alert-danger'>
-                                                                No notes found!
-                                                            </div>
-                                                        }
+                                                        <span onClick={ this.onNewNote(this) } className='btn btn-primary'>New Note</span>
                                                     </div>
                                                 </div>
                                             </li>

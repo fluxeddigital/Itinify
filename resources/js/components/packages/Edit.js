@@ -198,6 +198,14 @@ const schema = [
                 ]
             },
             {
+                name: 'duration',
+                type: 'string',
+            },
+            {
+                name: 'locator',
+                type: 'string',
+            },
+            {
                 name: 'number',
                 type: 'string',
             },
@@ -322,10 +330,6 @@ const schema = [
         type: 'array',
         schema: [
             {
-                name: 'name',
-                type: 'string',
-            },
-            {
                 name: 'address',
                 type: 'object',
                 schema: [
@@ -382,6 +386,10 @@ const schema = [
                 type: 'string',
             },
             {
+                name: 'name',
+                type: 'string',
+            },
+            {
                 name: 'phone',
                 type: 'string',
             },
@@ -435,6 +443,13 @@ class Edit extends Component {
         super(props);
 
         this.state = {
+            active: {
+                itinerary: 0,
+                flights: 0,
+                carHire: 0,
+                transfers: 0,
+                restaurants: 0,
+            },
             clients: [
                 {
                     label: 'None',
@@ -448,6 +463,15 @@ class Edit extends Component {
                 },
             ],
             item: buildState(schema),
+            itemPicker: {
+                fields: {
+                    description: 'description',
+                    name: 'name',
+                },
+                index: 0,
+                section: 'itinerary',
+                open: false,
+            },
             items: [
                 {
                     label: 'None',
@@ -566,11 +590,481 @@ class Edit extends Component {
         );
     });
 
+    Document = SortableElement(({ item, index }) => {
+        return (
+            <div className='bg-white border rounded p-3 mb-3'>
+                <div className='form-row'>
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `document-title-${ index }` }>Title</label>
+                        <input name='title' value={ item.title } onChange={ e => this.onDocumentChangeHandler(e, index) } type='text' className='form-control' id={ `document-title-${ index }` } />
+                    </div>
+    
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `document-attachment-${ index }` }>Attachment</label>
+                        <div className='mb-2'>
+                            <span onClick={ this.pickDocumentAttachment(index) } className='btn btn-primary'>Upload</span>
+                        </div>
+
+                        { item.url &&
+                            <a href={ item.url } target='blank'>Link</a>
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <span onClick={ this.onDeleteDocument(index, this) } className='btn btn-danger'>Delete</span>
+                </div>
+            </div>
+        );
+    });
+
+    Passenger = SortableElement(({ item, index }) => {
+        return (
+            <div className='bg-white border rounded p-3 mb-3'>
+                <div className='form-row'>
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `passenger-names-first-${ index }` }>First Name</label>
+                        <input name='names.first' value={ item.names.first } onChange={ e => this.onPassengerChangeHandler(e, index) } type='text' className='form-control' id={ `passenger-names-first-${ index }` } />
+                    </div>
+
+                    <div className='form-group col-md-6'>
+                        <label htmlFor={ `passenger-names-last-${ index }` }>Last Name</label>
+                        <input name='names.last' value={ item.names.last } onChange={ e => this.onPassengerChangeHandler(e, index) } type='text' className='form-control' id={ `passenger-names-last-${ index }` } />
+                    </div>
+                </div>
+
+                <div className='form-group'>
+                    <label htmlFor={ `passenger-birth-${ index }` }>Date of Birth</label>
+                    <Datetime name='birth' value={ item.birth } onChange={ this.onPassengerDateChangeHandler('birth', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `passenger-birth-${ index }` } />
+                </div>
+
+                <div>
+                    <span onClick={ this.onDeletePassenger(index, this) } className='btn btn-danger'>Delete</span>
+                </div>
+            </div>
+        );
+    });
+
+    Transfer = SortableElement(({ item, index }) => {
+        return (
+            <div className='bg-white border rounded p-3 mb-3'>
+                <div onClick={ this.onOpenItemHandler('transfers', index) } className='cursor-pointer'>
+                    { this.state.active.transfers != index &&
+                        <div>
+                            <h4>{ item.date } - { item.name }</h4>
+                        </div>
+                    }
+                </div>
+
+                { this.state.active.transfers == index &&
+                    <div>
+                        <div className='form-row'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `transfer-name-${ index }` }>Name</label>
+                                <input name='name' value={ item.name } onChange={ e => this.onTransferChangeHandler(e, index) } type='text' className='form-control' id={ `transfer-name-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `transfer-date-${ index }` }>Date</label>
+                                <Datetime name='date' value={ item.date } onChange={ this.onTransferDateChangeHandler('date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `transfer-date-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `transfer-time-${ index }` }>Time</label>
+                                <Datetime name='time' value={ item.time } onChange={ this.onTransferTimeChangeHandler('time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `transfer-time-${ index }` } />
+                            </div>
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `transfer-description-short-${ index }` }>Short Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.short'
+                                value={ item.description.short }
+                                onEditorChange={ this.onTransferEditorChangeHandler('description.short', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 200,
+                                } }
+                            />
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `transfer-description-long-${ index }` }>Long Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.long'
+                                value={ item.description.long }
+                                onEditorChange={ this.onTransferEditorChangeHandler('description.long', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 300,
+                                } }
+                            />
+                        </div>
+
+                        <div>
+                            <span onClick={ this.onDeleteTransfer(index, this) } className='btn btn-danger'>Delete</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        );
+    });
+
+    Item = SortableElement(({ item, index }) => {
+        return (
+            <div className='bg-white border rounded p-3 mb-3'>
+                <div onClick={ this.onOpenItemHandler('itinerary', index) } className='cursor-pointer'>
+                    { this.state.active.itinerary != index &&
+                        <div>
+                            <h4>{ item.date } - { item.name }</h4>
+                        </div>
+                    }
+                </div>
+
+                { this.state.active.itinerary == index &&
+                    <div>
+                        <div className='form-row'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `item-name-${ index }` }>Name</label>
+                                <input name='name' value={ item.name } onChange={ e => this.onItemChangeHandler(e, index) } type='text' className='form-control' id={ `item-name-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `item-date-${ index }` }>Date</label>
+                                <Datetime name='date' value={ item.date } onChange={ this.onItemDateChangeHandler('date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `item-date-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `item-time-${ index }` }>Time</label>
+                                <Datetime name='time' value={ item.time } onChange={ this.onItemTimeChangeHandler('time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `item-time-${ index }` } />
+                            </div>
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `item-description-short-${ index }` }>Short Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.short'
+                                value={ item.description.short }
+                                onEditorChange={ this.onItemEditorChangeHandler('description.short', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 200,
+                                } }
+                            />
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `transfer-description-long-${ index }` }>Long Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.long'
+                                value={ item.description.long }
+                                onEditorChange={ this.onTransferEditorChangeHandler('description.long', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 300,
+                                } }
+                            />
+                        </div>
+
+                        <div>
+                            <span onClick={ this.onDeleteTransfer(index, this) } className='btn btn-danger'>Delete</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        );
+    });
+
+    Hire = SortableElement(({ item, index }) => {
+        return (
+            <div className='bg-white border rounded p-3 mb-3'>
+                <div onClick={ this.onOpenItemHandler('carHire', index) } className='cursor-pointer'>
+                    { this.state.active.carHire != index &&
+                        <div>
+                            <h4>{ item.car } - { item.provider } - { item.pickup.date }</h4>
+                        </div>
+                    }
+                </div>
+
+                { this.state.active.carHire == index &&
+                    <div>
+                        <div className='form-row'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `car-hire-name-${ index }` }>Name</label>
+                                <input name='name' value={ item.name } onChange={ e => this.onCarHireChangeHandler(e, index) } type='text' className='form-control' id={ `car-hire-name-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `car-hire-date-${ index }` }>Date</label>
+                                <Datetime name='date' value={ item.date } onChange={ this.onCarHireDateChangeHandler('date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `car-hire-date-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `car-hire-time-${ index }` }>Time</label>
+                                <Datetime name='time' value={ item.time } onChange={ this.onCarHireTimeChangeHandler('time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `car-hire-time-${ index }` } />
+                            </div>
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `car-hire-description-short-${ index }` }>Short Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.short'
+                                value={ item.description.short }
+                                onEditorChange={ this.onCarHireEditorChangeHandler('description.short', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 200,
+                                } }
+                            />
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `car-hire-description-long-${ index }` }>Long Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.long'
+                                value={ item.description.long }
+                                onEditorChange={ this.onCarHireEditorChangeHandler('description.long', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 300,
+                                } }
+                            />
+                        </div>
+
+                        <div>
+                            <span onClick={ this.onDeleteCarHire(index, this) } className='btn btn-danger'>Delete</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        );
+    });
+
+    Flight = SortableElement(({ item, index }) => {
+        return (
+            <div className='bg-white border rounded p-3 mb-3'>
+                <div onClick={ this.onOpenItemHandler('flights', index) } className='cursor-pointer'>
+                    { this.state.active.flights != index &&
+                        <div>
+                            <h4>{ item.class } - { item.airline } - { item.departure.date }</h4>
+                        </div>
+                    }
+                </div>
+
+                { this.state.active.flights == index &&
+                    <div>
+                        <div className='form-row'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `flight-name-${ index }` }>Name</label>
+                                <input name='name' value={ item.name } onChange={ e => this.onFlightChangeHandler(e, index) } type='text' className='form-control' id={ `flight-name-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `flight-date-${ index }` }>Date</label>
+                                <Datetime name='date' value={ item.date } onChange={ this.onFlightDateChangeHandler('date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `flight-date-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `flight-time-${ index }` }>Time</label>
+                                <Datetime name='time' value={ item.time } onChange={ this.onFlightTimeChangeHandler('time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `flight-time-${ index }` } />
+                            </div>
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `flight-description-short-${ index }` }>Short Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.short'
+                                value={ item.description.short }
+                                onEditorChange={ this.onFlightEditorChangeHandler('description.short', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 200,
+                                } }
+                            />
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `flight-description-long-${ index }` }>Long Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.long'
+                                value={ item.description.long }
+                                onEditorChange={ this.onFlightEditorChangeHandler('description.long', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 300,
+                                } }
+                            />
+                        </div>
+
+                        <div>
+                            <span onClick={ this.onDeleteFlight(index, this) } className='btn btn-danger'>Delete</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        );
+    });
+
+    Restaurant = SortableElement(({ item, index }) => {
+        return (
+            <div className='bg-white border rounded p-3 mb-3'>
+                <div onClick={ this.onOpenItemHandler('restaurants', index) } className='cursor-pointer'>
+                    { this.state.active.restaurants != index &&
+                        <div>
+                            <h4>{ item.name }</h4>
+                        </div>
+                    }
+                </div>
+
+                { this.state.active.restaurants == index &&
+                    <div>
+                        <div className='form-row'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `restaurant-name-${ index }` }>Name</label>
+                                <input name='name' value={ item.name } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-name-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `restaurant-date-${ index }` }>Date</label>
+                                <Datetime name='date' value={ item.date } onChange={ this.onRestaurantDateChangeHandler('date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `restaurant-date-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `restaurant-time-${ index }` }>Time</label>
+                                <Datetime name='time' value={ item.time } onChange={ this.onRestaurantTimeChangeHandler('time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `restaurant-time-${ index }` } />
+                            </div>
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `restaurant-description-short-${ index }` }>Short Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.short'
+                                value={ item.description.short }
+                                onEditorChange={ this.onRestaurantEditorChangeHandler('description.short', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 200,
+                                } }
+                            />
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `restaurant-description-long-${ index }` }>Long Description</label>
+                            <Editor
+                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                textareaName='description.long'
+                                value={ item.description.long }
+                                onEditorChange={ this.onRestaurantEditorChangeHandler('description.long', index) }
+                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                init={ {
+                                    height: 300,
+                                } }
+                            />
+                        </div>
+
+                        <div>
+                            <span onClick={ this.onDeleteRestaurant(index, this) } className='btn btn-danger'>Delete</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        );
+    });
+
     Notes = SortableContainer(({ notes }) => {
         return (
             <div>
                 { notes.map((item, i) =>
                     <this.Note key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
+
+    Itinerary = SortableContainer(({ itinerary }) => {
+        return (
+            <div>
+                { itinerary.map((item, i) =>
+                    <this.Item key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
+
+    Flights = SortableContainer(({ flights }) => {
+        return (
+            <div>
+                { flights.map((item, i) =>
+                    <this.Flight key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
+
+    CarHire = SortableContainer(({ carHire }) => {
+        return (
+            <div>
+                { carHire.map((item, i) =>
+                    <this.Hire key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
+
+    Passengers = SortableContainer(({ passengers }) => {
+        return (
+            <div>
+                { passengers.map((item, i) =>
+                    <this.Passenger key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
+
+    Transfers = SortableContainer(({ transfers }) => {
+        return (
+            <div>
+                { transfers.map((item, i) =>
+                    <this.Transfer key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
+
+    Restaurants = SortableContainer(({ restaurants }) => {
+        return (
+            <div>
+                { restaurants.map((item, i) =>
+                    <this.Restaurant key={ i } item={ item } index={ i } />
+                )}
+            </div>
+        );
+    });
+
+    Documents = SortableContainer(({ documents }) => {
+        return (
+            <div>
+                { documents.map((item, i) =>
+                    <this.Document key={ i } item={ item } index={ i } />
                 )}
             </div>
         );
@@ -584,6 +1078,208 @@ class Edit extends Component {
         }).catch((err) => {
             toast.error('An error occurred, please try again later.');
         });
+    };
+    
+    pickItem = (section, i, fields) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.passengers[i][name] = value.format("DD/MM/YYYY");
+            } else {
+                prep.passengers[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onOpenItemHandler = (section, i) => {
+        return () => {
+            let prep = this.state.active;
+
+            prep[section] = i;
+    
+            this.setState({
+                active: prep,
+            });
+        };
+    };
+    
+    onPassengerDateChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.passengers[i][name] = value.format("DD/MM/YYYY");
+            } else {
+                prep.passengers[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onTransferDateChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.transfers[i][name] = value.format("DD/MM/YYYY");
+            } else {
+                prep.transfers[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onTransferTimeChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.transfers[i][name] = value.format("HH:mm");
+            } else {
+                prep.transfers[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onItemDateChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.itinerary[i][name] = value.format("DD/MM/YYYY");
+            } else {
+                prep.itinerary[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onItemTimeChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.itinerary[i][name] = value.format("HH:mm");
+            } else {
+                prep.itinerary[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onFlightDateChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.flights[i][name] = value.format("DD/MM/YYYY");
+            } else {
+                prep.flights[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onFlightTimeChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.flights[i][name] = value.format("HH:mm");
+            } else {
+                prep.flights[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onCarHireDateChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.car_hire[i][name] = value.format("DD/MM/YYYY");
+            } else {
+                prep.car_hire[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
+    
+    onCarHireTimeChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            if (value._isAMomentObject) {
+                prep.car_hire[i][name] = value.format("HH:mm");
+            } else {
+                prep.car_hire[i][name] = value;
+            };
+    
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
     };
     
     onChangeHandler = (element) => {
@@ -654,7 +1350,7 @@ class Edit extends Component {
     onPassengerChangeHandler = (element, i) => {
         let prep = this.state.item;
 
-        prep.passengers[i][element.target.name] = element.target.value;
+        set(prep.passengers[i], element.target.name, element.target.value);
 
         this.setState({
             clients: this.state.clients,
@@ -708,6 +1404,66 @@ class Edit extends Component {
             let prep = this.state.item;
 
             prep.notes[i][name] = value;
+
+            this.setState({
+                clients: this.state.clients,
+                events: this.state.events,
+                item: prep,
+                items: this.state.items,
+            });
+        };
+    };
+
+    onTransferEditorChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            set(prep.transfers[i], name, value)
+
+            this.setState({
+                clients: this.state.clients,
+                events: this.state.events,
+                item: prep,
+                items: this.state.items,
+            });
+        };
+    };
+
+    onItemEditorChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            set(prep.itinerary[i], name, value)
+
+            this.setState({
+                clients: this.state.clients,
+                events: this.state.events,
+                item: prep,
+                items: this.state.items,
+            });
+        };
+    };
+
+    onCarHireEditorChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            set(prep.car_hire[i], name, value)
+
+            this.setState({
+                clients: this.state.clients,
+                events: this.state.events,
+                item: prep,
+                items: this.state.items,
+            });
+        };
+    };
+
+    onRestaurantEditorChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            set(prep.restaurants[i], name, value)
 
             this.setState({
                 clients: this.state.clients,
@@ -1015,6 +1771,21 @@ class Edit extends Component {
         });
     };
 
+    onDocumentAttachmentChangeHandler = (i) => {
+        return (result) => {
+            let prep = this.state.item;
+
+            prep.documents[i].url = result.filesUploaded[0].url;
+
+            this.setState({
+                clients: this.state.clients,
+                events: this.state.events,
+                item: prep,
+                items: this.state.items,
+            });
+        };
+    };
+
     onNewNote (component) {
         return () => {
             let prep = component.state.item;
@@ -1023,6 +1794,185 @@ class Edit extends Component {
                 title: '',
                 content: '',
                 visibility: false,
+            });
+
+            component.setState({
+                clients: component.state.clients,
+                events: component.state.events,
+                item: prep,
+                items: component.state.items,
+            });
+        };
+    };
+
+    onNewDocument (component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.documents.push({
+                title: '',
+                url: '',
+            });
+
+            component.setState({
+                clients: component.state.clients,
+                events: component.state.events,
+                item: prep,
+                items: component.state.items,
+            });
+        };
+    };
+
+    onNewItem (component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.itinerary.push({
+                date: '',
+                description: {
+                    long: '',
+                    short: '',
+                },
+                name: '',
+                time: '',
+            });
+
+            component.setState({
+                clients: component.state.clients,
+                events: component.state.events,
+                item: prep,
+                items: component.state.items,
+            });
+        };
+    };
+
+    onNewFlight (component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.flights.push({
+                airline: '',
+                arrival: {
+                    airport: '',
+                    date: '',
+                    time: '',
+                },
+                class: '',
+                departure: {
+                    airport: '',
+                    date: '',
+                    time: '',
+                },
+                duration: '',
+                locator: '',
+                number: '',
+            });
+
+            component.setState({
+                clients: component.state.clients,
+                events: component.state.events,
+                item: prep,
+                items: component.state.items,
+            });
+        };
+    };
+
+    onNewCarHire (component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.car_hire.push({
+                car: '',
+                confirmationNumber: '',
+                description: '',
+                dropoff: {
+                    date: '',
+                    location: '',
+                    time: '',
+                },
+                pickup: {
+                    date: '',
+                    location: '',
+                    time: '',
+                },
+                provider: '',
+            });
+
+            component.setState({
+                clients: component.state.clients,
+                events: component.state.events,
+                item: prep,
+                items: component.state.items,
+            });
+        };
+    };
+
+    onNewPassenger (component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.passengers.push({
+                names: {
+                    first: '',
+                    last: '',
+                },
+                birth: '',
+            });
+
+            component.setState({
+                clients: component.state.clients,
+                events: component.state.events,
+                item: prep,
+                items: component.state.items,
+            });
+        };
+    };
+
+    onNewTransfer (component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.transfers.push({
+                date: '',
+                description: {
+                    long: '',
+                    short: '',
+                },
+                name: '',
+                time: '',
+            });
+
+            component.setState({
+                clients: component.state.clients,
+                events: component.state.events,
+                item: prep,
+                items: component.state.items,
+            });
+        };
+    };
+
+    onNewRestaurant (component) {
+        return () => {
+            let prep = component.state.item;
+
+            prep.restaurants.push({
+                address: {
+                    line1: '',
+                    line2: '',
+                    line3: '',
+                    city: '',
+                    county: '',
+                    postcode: '',
+                    country: '',
+                },
+                description: '',
+                links: {
+                    map: '',
+                    reservation: '',
+                },
+                logo: '',
+                name: '',
+                phone: '',
             });
 
             component.setState({
@@ -1074,6 +2024,15 @@ class Edit extends Component {
             accept: 'image/*',
             uploadInBackground: false,
         }).open();
+    };
+
+    pickDocumentAttachment = (i) => {
+        return () => {
+            filestack.init(document.head.querySelector('meta[name="filestack-key"]').content).picker({
+                onUploadDone: this.onDocumentAttachmentChangeHandler(i),
+                uploadInBackground: false,
+            }).open();
+        };
     };
 
     save = async () => {
@@ -1193,37 +2152,11 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.itinerary.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `item-name-${ i }` }>Name</label>
-                                                                        <input value={ item.name } type='text' className='form-control' id={ `item-name-${ i }` } disabled />
-                                                                    </div>
+                                                    <this.Itinerary itinerary={ this.state.item.itinerary } onSortEnd={ this.onItinerarySortEnd } lockAxis='y' pressDelay={ 200 } />
 
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `item-date-${ i }` }>Date</label>
-                                                                        <input value={ item.date } type='text' className='form-control' id={ `item-date-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-group'>
-                                                                    <label htmlFor={ `item-description-short-${ i }` }>Short Description</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.short } } id={ `item-description-short-${ i }` } />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-group'>
-                                                                    <label htmlFor={ `item-description-long-${ i }` }>Long Description</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.long } } id={ `item-description-long-${ i }` } />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <div>
+                                                        <span onClick={ this.onNewItem(this) } className='btn btn-primary'>New Item</span>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1235,64 +2168,11 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.flights.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-number-${ i }` }>Number</label>
-                                                                        <input value={ item.number } type='text' className='form-control' id={ `flight-number-${ i }` } disabled />
-                                                                    </div>
+                                                    <this.Flights flights={ this.state.item.flights } onSortEnd={ this.onFlightsSortEnd } lockAxis='y' pressDelay={ 200 } />
 
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-airline-${ i }` }>Airline</label>
-                                                                        <input value={ airlines[item.airline] } type='text' className='form-control' id={ `flight-airline-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-class-${ i }` }>Class</label>
-                                                                        <input value={ item.class } type='text' className='form-control' id={ `flight-class-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                <label htmlFor={ `flight-departure-${ i }` }>Departure</label>
-                                                                <div className='form-row pl-3' id={ `flight-departure-${ i }` }>
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-departure-location-${ i }` }>Location</label>
-                                                                        <input value={ airports[item.departure.location] } type='text' className='form-control' id={ `flight-departure-location-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-departure-date-${ i }` }>Date</label>
-                                                                        <input value={ item.departure.date } type='text' className='form-control' id={ `flight-departure-date-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-departure-time-${ i }` }>Time</label>
-                                                                        <input value={ item.departure.time } type='text' className='form-control' id={ `flight-departure-time-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                <label htmlFor={ `flight-arrival-${ i }` }>Arrival</label>
-                                                                <div className='form-row pl-3' id={ `flight-arrival-${ i }` }>
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-arrival-location-${ i }` }>Location</label>
-                                                                        <input value={ airports[item.arrival.location] } type='text' className='form-control' id={ `flight-arrival-location-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-arrival-date-${ i }` }>Date</label>
-                                                                        <input value={ item.arrival.date } type='text' className='form-control' id={ `flight-arrival-date-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `flight-arrival-time-${ i }` }>Time</label>
-                                                                        <input value={ item.arrival.time } type='text' className='form-control' id={ `flight-arrival-time-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <div>
+                                                        <span onClick={ this.onNewFlight(this) } className='btn btn-primary'>New Flight</span>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1304,71 +2184,11 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.car_hire.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-confirmation-number-${ i }` }>Confirmation Number</label>
-                                                                        <input value={ item.confirmationNumber } type='text' className='form-control' id={ `hire-confirmation-number-${ i }` } disabled />
-                                                                    </div>
+                                                    <this.CarHire carHire={ this.state.item.car_hire } onSortEnd={ this.onCarHireSortEnd } lockAxis='y' pressDelay={ 200 } />
 
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-car-${ i }` }>Car</label>
-                                                                        <input value={ item.car } type='text' className='form-control' id={ `hire-car-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-provider-${ i }` }>Provider</label>
-                                                                        <input value={ carHireProviders[item.provider] } type='text' className='form-control' id={ `hire-provider-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                <label htmlFor={ `hire-pickup-${ i }` }>Pickup</label>
-                                                                <div className='form-row pl-3' id={ `hire-pickup-${ i }` }>
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-pickup-location-${ i }` }>Location</label>
-                                                                        <input value={ item.pickup.location } type='text' className='form-control' id={ `hire-pickup-location-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-pickup-date-${ i }` }>Date</label>
-                                                                        <input value={ item.pickup.date } type='text' className='form-control' id={ `hire-pickup-date-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-pickup-time-${ i }` }>Time</label>
-                                                                        <input value={ item.pickup.time } type='text' className='form-control' id={ `hire-pickup-time-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                <label htmlFor={ `hire-dropoff-${ i }` }>Dropoff</label>
-                                                                <div className='form-row pl-3' id={ `hire-dropoff-${ i }` }>
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-dropoff-location-${ i }` }>Location</label>
-                                                                        <input value={ item.dropoff.location } type='text' className='form-control' id={ `hire-dropoff-location-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-dropoff-date-${ i }` }>Date</label>
-                                                                        <input value={ item.dropoff.date } type='text' className='form-control' id={ `hire-dropoff-date-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `hire-dropoff-time-${ i }` }>Time</label>
-                                                                        <input value={ item.dropoff.time } type='text' className='form-control' id={ `hire-dropoff-time-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-group'>
-                                                                    <label htmlFor={ `hire-description-${ i }` }>Description</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description } } id={ `hire-description-${ i }` } />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <div>
+                                                        <span onClick={ this.onNewCarHire(this) } className='btn btn-primary'>New Car Hire</span>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1380,28 +2200,11 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.passengers.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `passenger-names-first-${ i }` }>First Name</label>
-                                                                        <input value={ item.names.first } type='text' className='form-control' id={ `passenger-names-first-${ i }` } disabled />
-                                                                    </div>
+                                                    <this.Passengers passengers={ this.state.item.passengers } onSortEnd={ this.onPassengersSortEnd } lockAxis='y' pressDelay={ 200 } />
 
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `passenger-names-last-${ i }` }>Last Name</label>
-                                                                        <input value={ item.names.last } type='text' className='form-control' id={ `passenger-names-last-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-4'>
-                                                                        <label htmlFor={ `passenger-birth-${ i }` }>Date of Birth</label>
-                                                                        <input value={ item.birth } type='text' className='form-control' id={ `passenger-birth-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <div>
+                                                        <span onClick={ this.onNewPassenger(this) } className='btn btn-primary'>New Passenger</span>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1413,37 +2216,11 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.transfers.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `transfer-name-${ i }` }>Name</label>
-                                                                        <input value={ item.name } type='text' className='form-control' id={ `transfer-name-${ i }` } disabled />
-                                                                    </div>
+                                                    <this.Transfers transfers={ this.state.item.transfers } onSortEnd={ this.onTransfersSortEnd } lockAxis='y' pressDelay={ 200 } />
 
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `transfer-date-${ i }` }>Date</label>
-                                                                        <input value={ item.date } type='text' className='form-control' id={ `transfer-date-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-group'>
-                                                                    <label htmlFor={ `transfer-description-short-${ i }` }>Short Description</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.short } } id={ `transfer-description-short-${ i }` } />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-group'>
-                                                                    <label htmlFor={ `transfer-description-long-${ i }` }>Long Description</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description.long } } id={ `transfer-description-long-${ i }` } />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <div>
+                                                        <span onClick={ this.onNewTransfer(this) } className='btn btn-primary'>New Transfer</span>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1455,76 +2232,11 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.restaurants.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `restaurant-name-${ i }` }>Name</label>
-                                                                        <input value={ item.name } type='text' className='form-control' id={ `restaurant-name-${ i }` } disabled />
-                                                                    </div>
+                                                    <this.Restaurants restaurants={ this.state.item.restaurants } onSortEnd={ this.onRestaurantsSortEnd } lockAxis='y' pressDelay={ 200 } />
 
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `restaurant-phone-${ i }` }>Phone</label>
-                                                                        <input value={ item.phone } type='text' className='form-control' id={ `restaurant-phone-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-group'>
-                                                                    <label htmlFor={ `restaurant-description-${ i }` }>Description</label>
-                                                                    <div className='card'>
-                                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: item.description } } id={ `restaurant-description-${ i }` } />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-group'>
-                                                                    <label>Address</label>
-                                                                    <div className='border rounded'>
-                                                                        { item.address.line1 &&
-                                                                            <input value={ item.address.line1 } type='text' className='form-control border-0 rounded-0' disabled />
-                                                                        }
-                                                                        { item.address.line2 &&
-                                                                            <input value={ item.address.line2 } type='text' className='form-control border-0 rounded-0' disabled />
-                                                                        }
-                                                                        { item.address.line3 &&
-                                                                            <input value={ item.address.line3 } type='text' className='form-control border-0 rounded-0' disabled />
-                                                                        }
-                                                                        { item.address.city &&
-                                                                            <input value={ item.address.city } type='text' className='form-control border-0 rounded-0' disabled />
-                                                                        }
-                                                                        { item.address.county &&
-                                                                            <input value={ item.address.county } type='text' className='form-control border-0 rounded-0' disabled />
-                                                                        }
-                                                                        { item.address.postcode &&
-                                                                            <input value={ item.address.postcode } type='text' className='form-control border-0 rounded-0' disabled />
-                                                                        }
-                                                                        { item.address.country &&
-                                                                            <input value={ item.address.country } type='text' className='form-control border-0 rounded-0' disabled />
-                                                                        }
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `restaurant-links-map-${ i }` }>Map Link</label>
-                                                                        <input value={ item.links.map } type='text' className='form-control' id={ `restaurant-links-map-${ i }` } disabled />
-                                                                    </div>
-
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `restaurant-links-reservation-${ i }` }>Reservation Link</label>
-                                                                        <input value={ item.links.reservation } type='text' className='form-control' id={ `restaurant-links-reservation-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-
-                                                                { item.logo &&
-                                                                    <div className='form-group'>
-                                                                        <label htmlFor={ `restaurant-logo-${ i }` }>Logo</label>
-                                                                        <img src={ item.logo } id={ `restaurant-logo-${ i }` } className='text-center mx-auto h-100 px-4 pb-4 d-block' />
-                                                                    </div>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <div>
+                                                        <span onClick={ this.onNewRestaurant(this) } className='btn btn-primary'>New Restaurant</span>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1536,22 +2248,11 @@ class Edit extends Component {
 
                                             <li className='list-group-item p-3'>
                                                 <div>
-                                                    { this.state.item.documents.map((item, i) => 
-                                                        <div key={ i }>
-                                                            <div className='bg-white border rounded p-3 mb-3'>
-                                                                <div className='form-row'>
-                                                                    <div className='form-group col-md-6'>
-                                                                        <Link to={ item.url } className='d-block'>{ item.title }</Link>
-                                                                    </div>
+                                                    <this.Documents documents={ this.state.item.documents } onSortEnd={ this.onDocumentsSortEnd } lockAxis='y' pressDelay={ 200 } />
 
-                                                                    <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `document-passenger-${ i }` }>Passenger</label>
-                                                                        <input value={ item.passenger } type='text' className='form-control' id={ `document-passenger-${ i }` } disabled />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <div>
+                                                        <span onClick={ this.onNewDocument(this) } className='btn btn-primary'>New Document</span>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>

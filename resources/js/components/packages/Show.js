@@ -191,6 +191,14 @@ const schema = [
                 ]
             },
             {
+                name: 'duration',
+                type: 'string',
+            },
+            {
+                name: 'locator',
+                type: 'string',
+            },
+            {
                 name: 'number',
                 type: 'string',
             },
@@ -311,10 +319,6 @@ const schema = [
         type: 'array',
         schema: [
             {
-                name: 'name',
-                type: 'string',
-            },
-            {
                 name: 'address',
                 type: 'object',
                 schema: [
@@ -368,6 +372,10 @@ const schema = [
             },
             {
                 name: 'logo',
+                type: 'string',
+            },
+            {
+                name: 'name',
                 type: 'string',
             },
             {
@@ -613,7 +621,7 @@ class Show extends Component {
                                                                 <div className='form-row pl-3' id={ `flight-departure-${ i }` }>
                                                                     <div className='form-group col-md-4'>
                                                                         <label htmlFor={ `flight-departure-location-${ i }` }>Location</label>
-                                                                        <input value={ airports[item.departure.location] } type='text' className='form-control' id={ `flight-departure-location-${ i }` } disabled />
+                                                                        <input value={ airports[item.departure.airport] } type='text' className='form-control' id={ `flight-departure-location-${ i }` } disabled />
                                                                     </div>
 
                                                                     <div className='form-group col-md-4'>
@@ -631,7 +639,7 @@ class Show extends Component {
                                                                 <div className='form-row pl-3' id={ `flight-arrival-${ i }` }>
                                                                     <div className='form-group col-md-4'>
                                                                         <label htmlFor={ `flight-arrival-location-${ i }` }>Location</label>
-                                                                        <input value={ airports[item.arrival.location] } type='text' className='form-control' id={ `flight-arrival-location-${ i }` } disabled />
+                                                                        <input value={ airports[item.arrival.airport] } type='text' className='form-control' id={ `flight-arrival-location-${ i }` } disabled />
                                                                     </div>
 
                                                                     <div className='form-group col-md-4'>

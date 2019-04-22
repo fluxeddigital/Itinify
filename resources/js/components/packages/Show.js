@@ -165,6 +165,7 @@ const schema = [
                 name: 'class',
                 type: 'string',
                 options: [
+                    '',
                     'Business',
                     'Economy',
                     'Economy Plus',
@@ -908,13 +909,11 @@ class Show extends Component {
 
                                                                 <div className='form-row'>
                                                                     <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `restaurant-links-map-${ i }` }>Map Link</label>
-                                                                        <input value={ item.links.map } type='text' className='form-control' id={ `restaurant-links-map-${ i }` } disabled />
+                                                                        <Link to={ item.links.map } className='d-block'>Map Link</Link>
                                                                     </div>
 
                                                                     <div className='form-group col-md-6'>
-                                                                        <label htmlFor={ `restaurant-links-reservation-${ i }` }>Reservation Link</label>
-                                                                        <input value={ item.links.reservation } type='text' className='form-control' id={ `restaurant-links-reservation-${ i }` } disabled />
+                                                                        <Link to={ item.links.reservation } className='d-block'>Map Link</Link>
                                                                     </div>
                                                                 </div>
 

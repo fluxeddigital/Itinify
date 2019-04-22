@@ -24,5 +24,5 @@ const buildOptions = (providers) => {
 };
 
 export const carHireProviders = data;
-export const carHireProvidersOptions = [{label:'None',value:null}].concat(buildOptions(data));
+export const carHireProvidersOptions = [{label:'None',value:''}].concat(buildOptions(data));
 export const carHireProvidersSet = [''].concat(Object.keys(data));

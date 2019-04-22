@@ -6,6 +6,7 @@ import Datetime from 'react-datetime';
 import { Link } from 'react-router-dom';
 import Select from 'react-select'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import PhoneInput from 'react-telephone-input';
 import { toast } from 'react-toastify';
 import { Editor } from '@tinymce/tinymce-react';
 import set from 'lodash.set';
@@ -651,7 +652,7 @@ class Edit extends Component {
                 <div onClick={ this.onOpenItemHandler('transfers', index) } className='cursor-pointer'>
                     { this.state.active.transfers != index &&
                         <div>
-                            <h4>{ item.date } - { item.name }</h4>
+                            <h4>{ item.date } - { item.pickup.location }</h4>
                         </div>
                     }
                 </div>
@@ -789,7 +790,7 @@ class Edit extends Component {
                 <div onClick={ this.onOpenItemHandler('carHire', index) } className='cursor-pointer'>
                     { this.state.active.carHire != index &&
                         <div>
-                            <h4>{ item.car } - { item.provider } - { item.pickup.date }</h4>
+                            <h4>{ item.pickup.date } - { item.pickup.location }</h4>
                         </div>
                     }
                 </div>
@@ -797,48 +798,69 @@ class Edit extends Component {
                 { this.state.active.carHire == index &&
                     <div>
                         <div className='form-row'>
+                            <div className='form-group col-md-4'>
+                                <label htmlFor={ `car-hire-confirmation-number-${ index }` }>Confirmation Number</label>
+                                <input name='confirmationNumber' value={ item.confirmationNumber } onChange={ e => this.onCarHireChangeHandler(e, index) } type='text' className='form-control' id={ `car-hire-confirmation-number-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-4'>
+                                <label htmlFor={ `car-hire-car-${ index }` }>Car</label>
+                                <input name='car' value={ item.car } onChange={ e => this.onCarHireChangeHandler(e, index) } type='text' className='form-control' id={ `car-hire-car-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-4'>
+                                <label htmlFor={ `car-hire-provider-${ index }` }>Provider</label>
+                                <Select name='provider' value={ { value: item.provider, label: carHireProviders[item.provider] } } options={ carHireProvidersOptions } onChange={ this.onCarHireSelectChangeHandler(index)('provider') } className='form-control p-0' id={ `car-hire-provider-${ index }` } />
+                            </div>
+                        </div>
+
+                        <label>Pickup</label>
+                        <div className='form-row pl-2'>
                             <div className='form-group col-md-6'>
-                                <label htmlFor={ `car-hire-name-${ index }` }>Name</label>
-                                <input name='name' value={ item.name } onChange={ e => this.onCarHireChangeHandler(e, index) } type='text' className='form-control' id={ `car-hire-name-${ index }` } />
+                                <label htmlFor={ `car-hire-pickup-location-${ index }` }>Location</label>
+                                <input name='pickup.location' value={ item.pickup.location } onChange={ e => this.onCarHireChangeHandler(e, index) } type='text' className='form-control' id={ `car-hire-pickup-location-${ index }` } />
                             </div>
 
                             <div className='form-group col-md-3'>
-                                <label htmlFor={ `car-hire-date-${ index }` }>Date</label>
-                                <Datetime name='date' value={ item.date } onChange={ this.onCarHireDateChangeHandler('date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `car-hire-date-${ index }` } />
+                                <label htmlFor={ `car-hire-pickup-date-${ index }` }>Date</label>
+                                <Datetime name='pickup.date' value={ item.pickup.date } onChange={ this.onCarHireDateChangeHandler('pickup.date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `car-hire-pickup-date-${ index }` } />
                             </div>
 
                             <div className='form-group col-md-3'>
-                                <label htmlFor={ `car-hire-time-${ index }` }>Time</label>
-                                <Datetime name='time' value={ item.time } onChange={ this.onCarHireTimeChangeHandler('time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `car-hire-time-${ index }` } />
+                                <label htmlFor={ `car-hire-pickup-time-${ index }` }>Time</label>
+                                <Datetime name='pickup.time' value={ item.pickup.time } onChange={ this.onCarHireTimeChangeHandler('pickup.time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `car-hire-pickup-time-${ index }` } />
+                            </div>
+                        </div>
+
+                        <label>Dropoff</label>
+                        <div className='form-row pl-2'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `car-hire-dropoff-location-${ index }` }>Location</label>
+                                <input name='dropoff.location' value={ item.dropoff.location } onChange={ e => this.onCarHireChangeHandler(e, index) } type='text' className='form-control' id={ `car-hire-dropoff-location-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `car-hire-dropoff-date-${ index }` }>Date</label>
+                                <Datetime name='dropoff.date' value={ item.dropoff.date } onChange={ this.onCarHireDateChangeHandler('dropoff.date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `car-hire-dropoff-date-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `car-hire-dropoff-time-${ index }` }>Time</label>
+                                <Datetime name='dropoff.time' value={ item.dropoff.time } onChange={ this.onCarHireTimeChangeHandler('dropoff.time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `car-hire-dropoff-time-${ index }` } />
                             </div>
                         </div>
 
                         <div className='form-group'>
-                            <label htmlFor={ `car-hire-description-short-${ index }` }>Short Description</label>
+                            <label htmlFor={ `car-hire-description-${ index }` }>Description</label>
                             <Editor
                                 apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
-                                textareaName='description.short'
-                                value={ item.description.short }
-                                onEditorChange={ this.onCarHireEditorChangeHandler('description.short', index) }
+                                textareaName='description'
+                                value={ item.description }
+                                onEditorChange={ this.onCarHireEditorChangeHandler('description', index) }
                                 plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
                                 toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
                                 init={ {
                                     height: 200,
-                                } }
-                            />
-                        </div>
-
-                        <div className='form-group'>
-                            <label htmlFor={ `car-hire-description-long-${ index }` }>Long Description</label>
-                            <Editor
-                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
-                                textareaName='description.long'
-                                value={ item.description.long }
-                                onEditorChange={ this.onCarHireEditorChangeHandler('description.long', index) }
-                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
-                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
-                                init={ {
-                                    height: 300,
                                 } }
                             />
                         </div>
@@ -858,7 +880,7 @@ class Edit extends Component {
                 <div onClick={ this.onOpenItemHandler('flights', index) } className='cursor-pointer'>
                     { this.state.active.flights != index &&
                         <div>
-                            <h4>{ item.class } - { item.airline } - { item.departure.date }</h4>
+                            <h4>{ item.departure.date } - { airports[item.departure.airport] } - { airports[item.arrival.airport] }</h4>
                         </div>
                     }
                 </div>
@@ -866,50 +888,74 @@ class Edit extends Component {
                 { this.state.active.flights == index &&
                     <div>
                         <div className='form-row'>
+                            <div className='form-group col-md-4'>
+                                <label htmlFor={ `flight-number-${ index }` }>Number</label>
+                                <input name='number' value={ item.number } onChange={ e => this.onFlightChangeHandler(e, index) } type='text' className='form-control' id={ `flight-number-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-4'>
+                                <label htmlFor={ `flight-locator-${ index }` }>Locator</label>
+                                <input name='locator' value={ item.locator } onChange={ e => this.onFlightChangeHandler(e, index) } type='text' className='form-control' id={ `flight-locator-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-4'>
+                                <label htmlFor={ `flight-duration-${ index }` }>Duration</label>
+                                <input name='duration' value={ item.duration } onChange={ e => this.onFlightChangeHandler(e, index) } type='text' className='form-control' id={ `flight-duration-${ index }` } />
+                            </div>
+                        </div>
+
+                        <div className='form-row'>
                             <div className='form-group col-md-6'>
-                                <label htmlFor={ `flight-name-${ index }` }>Name</label>
-                                <input name='name' value={ item.name } onChange={ e => this.onFlightChangeHandler(e, index) } type='text' className='form-control' id={ `flight-name-${ index }` } />
+                                <label htmlFor={ `flight-name-${ index }` }>Class</label>
+                                <Select name='class' value={ { value: item.class, label: item.class } } options={ [
+                                    { label: 'None', value: '' },
+                                    { label: 'Economy', value: 'Economy' },
+                                    { label: 'Economy Plus', value: 'Economy Plus' },
+                                    { label: 'Business', value: 'Business' },
+                                    { label: 'First Class', value: 'First Class' },
+                                ] } onChange={ this.onFlightSelectChangeHandler(index)('class') } className='form-control p-0' id={ `flight-class-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `flight-name-${ index }` }>Airline</label>
+                                <Select name='airline' value={ { value: item.airline, label: airlines[item.airline] } } options={ airlinesOptions } onChange={ this.onFlightSelectChangeHandler(index)('airline') } className='form-control p-0' id={ `flight-airline-${ index }` } />
+                            </div>
+                        </div>
+                        
+                        <label>Departure</label>
+                        <div className='form-row pl-2'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `flight-departure-airport-${ index }` }>Airport</label>
+                                <Select name='departure.airport' value={ { value: item.departure.airport, label: airports[item.departure.airport] } } options={ airportsOptions } onChange={ this.onFlightSelectChangeHandler(index)('departure.airport') } className='form-control p-0' id={ `flight-departure-airport-${ index }` } />
                             </div>
 
                             <div className='form-group col-md-3'>
-                                <label htmlFor={ `flight-date-${ index }` }>Date</label>
-                                <Datetime name='date' value={ item.date } onChange={ this.onFlightDateChangeHandler('date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `flight-date-${ index }` } />
+                                <label htmlFor={ `flight-departure-date-${ index }` }>Date</label>
+                                <Datetime name='departure.date' value={ item.departure.date } onChange={ this.onFlightDateChangeHandler('departure.date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `flight-departure-date-${ index }` } />
                             </div>
 
                             <div className='form-group col-md-3'>
-                                <label htmlFor={ `flight-time-${ index }` }>Time</label>
-                                <Datetime name='time' value={ item.time } onChange={ this.onFlightTimeChangeHandler('time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `flight-time-${ index }` } />
+                                <label htmlFor={ `flight-departure-time-${ index }` }>Time</label>
+                                <Datetime name='departure.time' value={ item.departure.time } onChange={ this.onFlightTimeChangeHandler('departure.time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `flight-departure-time-${ index }` } />
                             </div>
                         </div>
 
-                        <div className='form-group'>
-                            <label htmlFor={ `flight-description-short-${ index }` }>Short Description</label>
-                            <Editor
-                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
-                                textareaName='description.short'
-                                value={ item.description.short }
-                                onEditorChange={ this.onFlightEditorChangeHandler('description.short', index) }
-                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
-                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
-                                init={ {
-                                    height: 200,
-                                } }
-                            />
-                        </div>
+                        <label>Arrival</label>
+                        <div className='form-row pl-2'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `flight-arrival-airport-${ index }` }>Airport</label>
+                                <Select name='arrival.airport' value={ { value: item.arrival.airport, label: airports[item.arrival.airport] } } options={ airportsOptions } onChange={ this.onFlightSelectChangeHandler(index)('arrival.airport') } className='form-control p-0' id={ `flight-arrival-airport-${ index }` } />
+                            </div>
 
-                        <div className='form-group'>
-                            <label htmlFor={ `flight-description-long-${ index }` }>Long Description</label>
-                            <Editor
-                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
-                                textareaName='description.long'
-                                value={ item.description.long }
-                                onEditorChange={ this.onFlightEditorChangeHandler('description.long', index) }
-                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
-                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
-                                init={ {
-                                    height: 300,
-                                } }
-                            />
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `flight-arrival-date-${ index }` }>Date</label>
+                                <Datetime name='arrival.date' value={ item.arrival.date } onChange={ this.onFlightDateChangeHandler('arrival.date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `flight-arrival-date-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-3'>
+                                <label htmlFor={ `flight-arrival-time-${ index }` }>Time</label>
+                                <Datetime name='arrival.time' value={ item.arrival.time } onChange={ this.onFlightTimeChangeHandler('arrival.time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `flight-arrival-time-${ index }` } />
+                            </div>
                         </div>
 
                         <div>
@@ -940,24 +986,19 @@ class Edit extends Component {
                                 <input name='name' value={ item.name } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-name-${ index }` } />
                             </div>
 
-                            <div className='form-group col-md-3'>
-                                <label htmlFor={ `restaurant-date-${ index }` }>Date</label>
-                                <Datetime name='date' value={ item.date } onChange={ this.onRestaurantDateChangeHandler('date', index) } dateFormat='DD/MM/YYYY' timeFormat={ false } id={ `restaurant-date-${ index }` } />
-                            </div>
-
-                            <div className='form-group col-md-3'>
-                                <label htmlFor={ `restaurant-time-${ index }` }>Time</label>
-                                <Datetime name='time' value={ item.time } onChange={ this.onRestaurantTimeChangeHandler('time', index) } dateFormat={ false } timeFormat='HH:mm' id={ `restaurant-time-${ index }` } />
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `restaurant-phone-${ index }` }>Phone</label>
+                                <PhoneInput name='phone' defaultCountry='gb' autoFormat={ false } flagsImagePath='/images/flags.png' value={ item.phone } onChange={ this.onRestaurantPhoneChangeHandler('phone', index) } classNames='w-100' listItemClassName='dropdown-item' id={ `restaurant-phone-${ index }` } />
                             </div>
                         </div>
 
                         <div className='form-group'>
-                            <label htmlFor={ `restaurant-description-short-${ index }` }>Short Description</label>
+                            <label htmlFor={ `car-hire-description-${ index }` }>Description</label>
                             <Editor
                                 apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
-                                textareaName='description.short'
-                                value={ item.description.short }
-                                onEditorChange={ this.onRestaurantEditorChangeHandler('description.short', index) }
+                                textareaName='description'
+                                value={ item.description }
+                                onEditorChange={ this.onRestaurantEditorChangeHandler('description', index) }
                                 plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
                                 toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
                                 init={ {
@@ -966,19 +1007,68 @@ class Edit extends Component {
                             />
                         </div>
 
+                        <div className='row'>
+                            <div className='col-6'>
+                                <div className='form-group'>
+                                    <label htmlFor={ `restaurant-address-line1-${ index }` }>Line 1</label>
+                                    <input name='address.line1' value={ item.address.line1 } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-address-line1-${ index }` } />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label htmlFor={ `restaurant-address-line2-${ index }` }>Line 2</label>
+                                    <input name='address.line2' value={ item.address.line2 } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-address-line2-${ index }` } />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label htmlFor={ `restaurant-address-line3-${ index }` }>Line 3</label>
+                                    <input name='address.line3' value={ item.address.line3 } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-address-line3-${ index }` } />
+                                </div>
+                            </div>
+
+                            <div className='col-6'>
+                                <div className='form-group'>
+                                    <label htmlFor={ `restaurant-address-city-${ index }` }>City</label>
+                                    <input name='address.city' value={ item.address.city } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-address-city-${ index }` } />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label htmlFor={ `restaurant-address-county-${ index }` }>County</label>
+                                    <input name='address.county' value={ item.address.county } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-address-county-${ index }` } />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label htmlFor={ `restaurant-address-postcode-${ index }` }>Postcode</label>
+                                    <input name='address.postcode' value={ item.address.postcode } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-address-postcode-${ index }` } />
+                                </div>
+                            </div>
+                        </div>
+
                         <div className='form-group'>
-                            <label htmlFor={ `restaurant-description-long-${ index }` }>Long Description</label>
-                            <Editor
-                                apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
-                                textareaName='description.long'
-                                value={ item.description.long }
-                                onEditorChange={ this.onRestaurantEditorChangeHandler('description.long', index) }
-                                plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
-                                toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
-                                init={ {
-                                    height: 300,
-                                } }
-                            />
+                            <label htmlFor={ `restaurant-address-country-${ index }` }>Country</label>
+                            <input name='address.country' value={ item.address.country } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-address-country-${ index }` } />
+                        </div>
+
+                        <div className='form-row'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `restaurant-links-map-${ index }` }>Map Link</label>
+                                <input name='links.map' value={ item.links.map } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-links-map-${ index }` } />
+                            </div>
+
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `restaurant-links-reservation-${ index }` }>Reservation Link</label>
+                                <input name='links.reservation' value={ item.links.reservation } onChange={ e => this.onRestaurantChangeHandler(e, index) } type='text' className='form-control' id={ `restaurant-links-reservation-${ index }` } />
+                            </div>
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor={ `restaurant-logo-${ index }` }>Logo</label>
+                            <div className='mb-2'>
+                                <span onClick={ this.pickRestaurantLogo(index) } className='btn btn-primary'>Upload</span>
+                            </div>
+
+                            { item.logo &&
+                                <img src={ item.logo } className='text-center mx-auto h-100 px-4 pb-4 d-block' />
+                            }
                         </div>
 
                         <div>
@@ -1110,6 +1200,21 @@ class Edit extends Component {
             });
         };
     };
+
+    onRestaurantPhoneChangeHandler = (name, i) => {
+        return (value) => {
+            let prep = this.state.item;
+
+            prep.restaurants[i][name] = value;
+
+            this.setState({
+                address: this.state.address,
+                events: this.state.events,
+                interests: this.state.interests,
+                item: prep,
+            });
+        };
+    };
     
     onPassengerDateChangeHandler = (name, i) => {
         return (value) => {
@@ -1211,9 +1316,9 @@ class Edit extends Component {
             let prep = this.state.item;
 
             if (value._isAMomentObject) {
-                prep.flights[i][name] = value.format("DD/MM/YYYY");
+                set(prep.flights[i], name, value.format("DD/MM/YYYY"));
             } else {
-                prep.flights[i][name] = value;
+                set(prep.flights[i], name, value);
             };
     
             this.setState({
@@ -1230,9 +1335,9 @@ class Edit extends Component {
             let prep = this.state.item;
 
             if (value._isAMomentObject) {
-                prep.flights[i][name] = value.format("HH:mm");
+                set(prep.flights[i], name, value.format("HH:mm"));
             } else {
-                prep.flights[i][name] = value;
+                set(prep.flights[i], name, value);
             };
     
             this.setState({
@@ -1249,9 +1354,9 @@ class Edit extends Component {
             let prep = this.state.item;
 
             if (value._isAMomentObject) {
-                prep.car_hire[i][name] = value.format("DD/MM/YYYY");
+                set(prep.car_hire[i], name, value.format("DD/MM/YYYY"));
             } else {
-                prep.car_hire[i][name] = value;
+                set(prep.car_hire[i], name, value);
             };
     
             this.setState({
@@ -1268,9 +1373,9 @@ class Edit extends Component {
             let prep = this.state.item;
 
             if (value._isAMomentObject) {
-                prep.car_hire[i][name] = value.format("HH:mm");
+                set(prep.car_hire[i], name, value.format("HH:mm"));
             } else {
-                prep.car_hire[i][name] = value;
+                set(prep.car_hire[i], name, value);
             };
     
             this.setState({
@@ -1337,7 +1442,7 @@ class Edit extends Component {
     onCarHireChangeHandler = (element, i) => {
         let prep = this.state.item;
 
-        prep.car_hire[i][element.target.name] = element.target.value;
+        set(prep.car_hire[i], element.target.name, element.target.value);
 
         this.setState({
             clients: this.state.clients,
@@ -1376,7 +1481,7 @@ class Edit extends Component {
     onRestaurantChangeHandler = (element, i) => {
         let prep = this.state.item;
 
-        prep.restaurants[i][element.target.name] = element.target.value;
+        set(prep.restaurants[i], element.target.name, element.target.value);
 
         this.setState({
             clients: this.state.clients,
@@ -1786,6 +1891,21 @@ class Edit extends Component {
         };
     };
 
+    onRestaurantLogoChangeHandler = (i) => {
+        return (result) => {
+            let prep = this.state.item;
+
+            prep.restaurants[i].logo = result.filesUploaded[0].url;
+
+            this.setState({
+                clients: this.state.clients,
+                events: this.state.events,
+                item: prep,
+                items: this.state.items,
+            });
+        };
+    };
+
     onNewNote (component) {
         return () => {
             let prep = component.state.item;
@@ -2002,6 +2122,48 @@ class Edit extends Component {
             });
         };
     };
+    
+    onFlightSelectChangeHandler = (index) => {
+        return (valueName, labelName = null) => {
+            return (selected) => {
+                let prep = this.state.item;
+    
+                set(prep.flights[index], valueName, selected.value)
+    
+                if (labelName) {
+                    set(prep.flights[index], labelName, selected.label);
+                };
+    
+                this.setState({
+                    clients: this.state.clients,
+                    events: this.state.events,
+                    item: prep,
+                    items: this.state.items,
+                });
+            };
+        };
+    };
+    
+    onCarHireSelectChangeHandler = (index) => {
+        return (valueName, labelName = null) => {
+            return (selected) => {
+                let prep = this.state.item;
+    
+                set(prep.car_hire[index], valueName, selected.value)
+    
+                if (labelName) {
+                    set(prep.car_hire[index], labelName, selected.label);
+                };
+    
+                this.setState({
+                    clients: this.state.clients,
+                    events: this.state.events,
+                    item: prep,
+                    items: this.state.items,
+                });
+            };
+        };
+    };
 
     onEditorChangeHandler = (name) => {
         return (value) => {
@@ -2030,6 +2192,17 @@ class Edit extends Component {
         return () => {
             filestack.init(document.head.querySelector('meta[name="filestack-key"]').content).picker({
                 onUploadDone: this.onDocumentAttachmentChangeHandler(i),
+                uploadInBackground: false,
+            }).open();
+        };
+    };
+
+    pickRestaurantLogo = (i) => {
+        return () => {
+            filestack.init(document.head.querySelector('meta[name="filestack-key"]').content).picker({
+                onUploadDone: this.onRestaurantLogoChangeHandler(i),
+                maxSize: 10 * 1024 * 1024,
+                accept: 'image/*',
                 uploadInBackground: false,
             }).open();
         };

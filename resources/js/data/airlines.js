@@ -1023,5 +1023,5 @@ const buildOptions = (airlines) => {
 };
 
 export const airlines = data;
-export const airlinesOptions = [{label:'None',value:null}].concat(buildOptions(data));
+export const airlinesOptions = [{label:'None',value:''}].concat(buildOptions(data));
 export const airlinesSet = [''].concat(Object.keys(data));

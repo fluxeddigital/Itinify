@@ -60,28 +60,43 @@ class PackageController extends Controller
             return null;
         }
 
-        if (Auth::user()->company->mailchimp->apiKey && $event->newsletter->mailchimp->list && $client->email) {
-            $mailchimp = new MailChimp(Auth::user()->company->mailchimp_api_key);
+        // if (Auth::user()->company->mailchimp->apiKey && $event->newsletter->mailchimp->list && $client->email) {
+        //     $mailchimp = new MailChimp(Auth::user()->company->mailchimp_api_key);
 
-            $mailchimp->post('lists/' . $event->newsletter->mailchimp->list . '/members', [
-                'email_address' => $client->email,
-                'status'        => 'subscribed',
-                'merge_fields' => [
-                    'FNAME' => $client->name,
-                ],
-            ]);
-        }
+        //     $mailchimp->post('lists/' . $event->newsletter->mailchimp->list . '/members', [
+        //         'email_address' => $client->email,
+        //         'status'        => 'subscribed',
+        //         'merge_fields' => [
+        //             'FNAME' => $client->name,
+        //         ],
+        //     ]);
+        // }
 
         $package = Package::create([
-            'title' => $request->input('title'),
             'company_id' => Auth::user()->company->id,
             'client_id' => $request->input('client_id'),
             'event_id' => $request->input('event_id'),
+            'title' => $request->input('title'),
+            'car_hire' => $request->input('car_hire'),
+            'customisation' => $request->input('customisation'),
+            'documents' => $request->input('documents'),
+            'expires' => $request->input('expires'),
+            'flights' => $request->input('flights'),
+            'issued' => $request->input('issued'),
+            'itinerary' => $request->input('itinerary'),
+            'lead_status' => $request->input('lead_status'),
+            'notes' => $request->input('notes'),
+            'passengers' => $request->input('passengers'),
+            'pricing' => $request->input('pricing'),
+            'requirements' => $request->input('requirements'),
+            'restaurants' => $request->input('restaurants'),
+            'status' => $request->input('status'),
+            'transfers' => $request->input('transfers'),
         ]);
 
-        if ($client->email) {
-            Mail::to($client->email)->send(new NewPackage($package));
-        }
+        // if ($client->email) {
+        //     Mail::to($client->email)->send(new NewPackage($package));
+        // }
 
         return new PackageResource($package);
     }
@@ -157,12 +172,6 @@ class PackageController extends Controller
 		}
 
         if ($package->company->id == Auth::user()->company->id) {
-            if ($package->status == 'accepted') {
-                $status = 'accepted';
-            } else {
-                $status = $request->input('status');
-            }
-
             $package->client_id = $request->input('client_id');
             $package->event_id = $request->input('event_id');
             $package->title = $request->input('title');
@@ -174,6 +183,7 @@ class PackageController extends Controller
             $package->issued = $request->input('issued');
             $package->itinerary = $request->input('itinerary');
             $package->lead_status = $request->input('lead_status');
+            $package->notes = $request->input('notes');
             $package->passengers = $request->input('passengers');
             $package->pricing = $request->input('pricing');
             $package->requirements = $request->input('requirements');

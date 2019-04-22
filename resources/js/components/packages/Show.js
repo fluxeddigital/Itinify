@@ -165,7 +165,6 @@ const schema = [
                 name: 'class',
                 type: 'string',
                 options: [
-                    '',
                     'Business',
                     'Economy',
                     'Economy Plus',
@@ -244,6 +243,10 @@ const schema = [
     {
         name: 'lead_status',
         type: 'string',
+        options: [
+            'Cold',
+            'Hot',
+        ],
     },
     {
         name: 'notes',
@@ -388,6 +391,11 @@ const schema = [
     {
         name: 'status',
         type: 'string',
+        options: [
+            'Accepted',
+            'Declined',
+            'Open',
+        ],
     },
     {
         name: 'transfers',

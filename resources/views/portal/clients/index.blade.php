@@ -7,6 +7,9 @@
 
   <title>Portal - Itinify</title>
 
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <link href="{{ asset('plugins/css/plugins.css') }}" rel="stylesheet">
   <link href="{{ asset('css/portal/style.css') }}" rel="stylesheet">
   <link href="{{ asset('css/portal/responsiveness.css') }}" rel="stylesheet">

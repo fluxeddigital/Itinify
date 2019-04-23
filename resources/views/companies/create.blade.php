@@ -1,14 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.auth')
+
+@section('title', 'Create Company')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header">{{ __('Companies Create') }}</div>
 
                 <div class="card-body">
-                    <form id="form" method="POST" action="{{ route('register') }}">
+                    <form id="form" method="POST" action="{{ route('companies.create') }}">
                         @csrf
 
                         <div class="form-group row">

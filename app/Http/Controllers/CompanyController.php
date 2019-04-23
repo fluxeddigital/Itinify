@@ -20,18 +20,8 @@ class CompanyController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'verified']);
-        $this->middleware('company')->except(['create', 'store']);
-        $this->middleware('company.none')->only(['create', 'store']);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('companies.create');
+        $this->middleware('company')->except('store');
+        $this->middleware('company.none')->only('store');
     }
 
     /**
@@ -49,11 +39,7 @@ class CompanyController extends Controller
 
         $company = Company::create([
             'name' => $request->name,
-            'address' => $request->address,
             'email' => $request->email,
-            'industry' => $request->industry,
-            'phone' => $request->phone,
-            'vat_number' => $request->vat_number,
         ]);
 		
 		if ($request->free) {
@@ -65,15 +51,15 @@ class CompanyController extends Controller
         Auth::user()->company_id = $company->id;
         Auth::user()->save();
 		
-		if (! $company->free) {
-			$company->newSubscription('main', env('STRIPE_PLAN_ID'))->trialDays(30)->create($request->input('stripe_token'));
-			$company->subscription('main')->updateQuantity(0);
-			$company->invoiceFor('Setup Fee', 30000);
-		}
+		// if (! $company->free) {
+		// 	$company->newSubscription('main', env('STRIPE_PLAN_ID'))->trialDays(30)->create($request->input('stripe_token'));
+		// 	$company->subscription('main')->updateQuantity(0);
+		// 	$company->invoiceFor('Setup Fee', 30000);
+		// }
 
-        Mail::to($company->email)->send(new CompanyWelcome($company));
+        // Mail::to($company->email)->send(new CompanyWelcome($company));
 
-        return new CompanyResource($company);
+        return redirect()->route('app');
     }
 
     /**

@@ -15,9 +15,7 @@ Auth::routes(['verify' => true]);
 
 Route::view('/app/{path?}', 'app')->where('path', '(.*)')->name('app')->middleware(['auth', 'verified', 'company']);
 
-Route::get('/onboarding', 'GeneralController@onboarding')->name('onboarding')->middleware(['auth', 'verified', 'company.none']);
-Route::get('/attach', 'GeneralController@attach')->name('attach')->middleware(['auth', 'verified', 'company.none']);
-Route::view('/companies/create', 'companies.create')->name('companies.create');
+Route::view('/companies/create', 'companies.create')->name('companies.create')->middleware(['auth', 'verified', 'company.none']);
 
 Route::get('/invoices/{id}', 'GeneralController@invoice');
 

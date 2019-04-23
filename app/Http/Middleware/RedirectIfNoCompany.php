@@ -17,7 +17,7 @@ class RedirectIfNoCompany
     public function handle($request, Closure $next)
     {
         if (! Auth::user()->company_id) {
-            return redirect()->route('onboarding');
+            return redirect()->route('companies.create');
         }
 
         return $next($request);

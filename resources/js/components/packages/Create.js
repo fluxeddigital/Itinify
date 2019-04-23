@@ -464,21 +464,19 @@ class Create extends Component {
                 },
             ],
             item: buildState(schema),
-            itemPicker: {
-                fields: {
-                    description: 'description',
-                    name: 'name',
-                },
-                index: 0,
-                section: 'itinerary',
-                open: false,
+            items: {},
+            itemCategories: {},
+            itineraryItemsOptions: {},
+            itineraryCategoriesOptions: [],
+            restaurantsItemsOptions: {},
+            restaurantsCategoriesOptions: [],
+            transfersItemsOptions: {},
+            transfersCategoriesOptions: [],
+            activeItemCategory: {
+                'itinerary': 0,
+                'transfers': 0,
+                'restaurants': 0,
             },
-            items: [
-                {
-                    label: 'None',
-                    value: null,
-                },
-            ],
         };
     };
 
@@ -521,10 +519,74 @@ class Create extends Component {
             let prep = this.state;
 
             for (let i in res.data.data) {
-                prep.items.push({
-                    label: res.data.data[i].name,
-                    value: res.data.data[i].id,
-                });
+                prep.items[res.data.data[i].id] = {
+                    name: res.data.data[i].name,
+                    long_description: res.data.data[i].long_description,
+                    short_description: res.data.data[i].short_description,
+                };
+
+                if (res.data.data[i].category_id) {
+                    prep.itemCategories[res.data.data[i].category_id] = res.data.data[i].category_name;
+
+                    if (res.data.data[i].category_section == 'Itinerary') {
+                        if (! (res.data.data[i].category_id in prep.itineraryItemsOptions)) {
+                            prep.itineraryItemsOptions[res.data.data[i].category_id] = [];
+
+                            prep.itineraryCategoriesOptions.push({
+                                label: res.data.data[i].category_name,
+                                value: res.data.data[i].category_id,
+                            });
+                        };
+
+                        prep.itineraryItemsOptions[res.data.data[i].category_id].push({
+                            label: res.data.data[i].name,
+                            value: res.data.data[i].id,
+                        });
+                    } else if (res.data.data[i].category_section == 'Transfers') {
+                        if (! (res.data.data[i].category_id in prep.transfersItemsOptions)) {
+                            prep.transfersItemsOptions[res.data.data[i].category_id] = [];
+
+                            prep.transfersCategoriesOptions.push({
+                                label: res.data.data[i].category_name,
+                                value: res.data.data[i].category_id,
+                            });
+                        };
+
+                        prep.transfersItemsOptions[res.data.data[i].category_id].push({
+                            label: res.data.data[i].name,
+                            value: res.data.data[i].id,
+                        });
+                    } else if (res.data.data[i].category_section == 'Restaurants') {
+                        if (! (res.data.data[i].category_id in prep.restaurantsItemsOptions)) {
+                            prep.restaurantsItemsOptions[res.data.data[i].category_id] = [];
+
+                            prep.restaurantsCategoriesOptions.push({
+                                label: res.data.data[i].category_name,
+                                value: res.data.data[i].category_id,
+                            });
+                        };
+
+                        prep.restaurantsItemsOptions[res.data.data[i].category_id].push({
+                            label: res.data.data[i].name,
+                            value: res.data.data[i].id,
+                        });
+                    } else {
+                        prep.itineraryItemsOptions[0].push({
+                            label: res.data.data[i].name,
+                            value: res.data.data[i].id,
+                        });
+
+                        prep.transfersItemsOptions[0].push({
+                            label: res.data.data[i].name,
+                            value: res.data.data[i].id,
+                        });
+
+                        prep.restaurantsItemsOptions[0].push({
+                            label: res.data.data[i].name,
+                            value: res.data.data[i].id,
+                        });
+                    };
+                };
             };
 
             this.setState(prep);
@@ -637,13 +699,26 @@ class Create extends Component {
                 <div onClick={ this.onOpenItemHandler('transfers', index) } className='cursor-pointer'>
                     { this.state.active.transfers != index &&
                         <div>
-                            <h4>{ item.date } - { item.pickup.location }</h4>
+                            <h4>{ item.date } - { item.name }</h4>
                         </div>
                     }
                 </div>
 
                 { this.state.active.transfers == index &&
                     <div>
+                        <label>Item</label>
+                        <div className='form-row ml-2'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `transfer-select-category-${ index }` }>Category</label>
+                                <Select placeholder='Search category name...' options={ this.state.transfersCategoriesOptions } onChange={ this.onItemCategorySelectHandler('transfers') } className='form-control p-0' />
+                            </div>
+
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `transfer-select-name-${ index }` }>Name</label>
+                                <Select options={ this.state.transfersItemsOptions[this.state.activeItemCategory.transfers] } onChange={ this.onItemSelectHandler('transfers', index) } className='form-control p-0' />
+                            </div>
+                        </div>
+
                         <div className='form-row'>
                             <div className='form-group col-md-6'>
                                 <label htmlFor={ `transfer-name-${ index }` }>Name</label>
@@ -713,6 +788,19 @@ class Create extends Component {
 
                 { this.state.active.itinerary == index &&
                     <div>
+                        <label>Item</label>
+                        <div className='form-row ml-2'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `item-select-category-${ index }` }>Category</label>
+                                <Select placeholder='Search category name...' options={ this.state.itineraryCategoriesOptions } onChange={ this.onItemCategorySelectHandler('itinerary') } className='form-control p-0' />
+                            </div>
+
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `item-select-name-${ index }` }>Name</label>
+                                <Select options={ this.state.itineraryItemsOptions[this.state.activeItemCategory.itinerary] } onChange={ this.onItemSelectHandler('itinerary', index) } className='form-control p-0' />
+                            </div>
+                        </div>
+
                         <div className='form-row'>
                             <div className='form-group col-md-6'>
                                 <label htmlFor={ `item-name-${ index }` }>Name</label>
@@ -751,7 +839,7 @@ class Create extends Component {
                                 apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
                                 textareaName='description.long'
                                 value={ item.description.long }
-                                onEditorChange={ this.onTransferEditorChangeHandler('description.long', index) }
+                                onEditorChange={ this.onItemEditorChangeHandler('description.long', index) }
                                 plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
                                 toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
                                 init={ {
@@ -965,6 +1053,19 @@ class Create extends Component {
 
                 { this.state.active.restaurants == index &&
                     <div>
+                        <label>Item</label>
+                        <div className='form-row ml-2'>
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `restaurant-select-category-${ index }` }>Category</label>
+                                <Select placeholder='Search category name...' options={ this.state.restaurantCategoriesOptions } onChange={ this.onItemCategorySelectHandler('restaurant') } className='form-control p-0' />
+                            </div>
+
+                            <div className='form-group col-md-6'>
+                                <label htmlFor={ `restaurant-select-name-${ index }` }>Name</label>
+                                <Select options={ this.state.restaurantsItemsOptions[this.state.activeItemCategory.restaurant] } onChange={ this.onrestaurantsItemSelectHandler('restaurant', index) } className='form-control p-0' />
+                            </div>
+                        </div>
+
                         <div className='form-row'>
                             <div className='form-group col-md-6'>
                                 <label htmlFor={ `restaurant-name-${ index }` }>Name</label>
@@ -1155,21 +1256,48 @@ class Create extends Component {
         });
     };
     
-    pickItem = (section, i, fields) => {
-        return (value) => {
+    onItemSelectHandler = (section, i) => {
+        return (selected) => {
             let prep = this.state.item;
 
-            if (value._isAMomentObject) {
-                prep.passengers[i][name] = value.format("DD/MM/YYYY");
-            } else {
-                prep.passengers[i][name] = value;
-            };
-    
+            prep[section][i].name = this.state.items[selected.value].name;
+
+            prep[section][i].description.long = this.state.items[selected.value].long_description;
+
+            prep[section][i].description.short = this.state.items[selected.value].short_description;
+
             this.setState({
-                address: this.state.address,
-                events: this.state.events,
-                interests: this.state.interests,
                 item: prep,
+            });
+        };
+    };
+    
+    onrestaurantsItemSelectHandler = (section, i) => {
+        return (selected) => {
+            let prep = this.state.item;
+
+            prep[section][i].name = this.state.items[selected.value].name;
+
+            if (this.state.items[selected.value].long_description) {
+                prep[section][i].description = this.state.items[selected.value].long_description;
+            } else {
+                prep[section][i].description = this.state.items[selected.value].short_description;
+            };
+
+            this.setState({
+                item: prep,
+            });
+        };
+    };
+    
+    onItemCategorySelectHandler = (section) => {
+        return (selected) => {
+            let prep = this.state.activeItemCategory;
+
+            prep[section] = selected.value;
+
+            this.setState({
+                activeItemCategory: prep,
             });
         };
     };
@@ -1943,6 +2071,13 @@ class Create extends Component {
             });
 
             component.setState({
+                active: {
+                    itinerary: component.state.item.itinerary.length - 1,
+                    flights: component.state.active.flights,
+                    carHire: component.state.active.carHire,
+                    transfers: component.state.active.transfers,
+                    restaurants: component.state.active.restaurants,
+                },
                 clients: component.state.clients,
                 events: component.state.events,
                 item: prep,
@@ -1974,6 +2109,13 @@ class Create extends Component {
             });
 
             component.setState({
+                active: {
+                    itinerary: component.state.active.itinerary,
+                    flights: component.state.item.flights.length - 1,
+                    carHire: component.state.active.carHire,
+                    transfers: component.state.active.transfers,
+                    restaurants: component.state.active.restaurants,
+                },
                 clients: component.state.clients,
                 events: component.state.events,
                 item: prep,
@@ -2004,6 +2146,13 @@ class Create extends Component {
             });
 
             component.setState({
+                active: {
+                    itinerary: component.state.active.itinerary,
+                    flights: component.state.active.flights,
+                    carHire: component.state.item.car_hire.length -1,
+                    transfers: component.state.active.transfers,
+                    restaurants: component.state.active.restaurants,
+                },
                 clients: component.state.clients,
                 events: component.state.events,
                 item: prep,
@@ -2048,6 +2197,13 @@ class Create extends Component {
             });
 
             component.setState({
+                active: {
+                    itinerary: component.state.active.itinerary,
+                    flights: component.state.active.flights,
+                    carHire: component.state.active.carHire,
+                    transfers: component.state.item.transfers.length - 1,
+                    restaurants: component.state.active.restaurants,
+                },
                 clients: component.state.clients,
                 events: component.state.events,
                 item: prep,
@@ -2081,6 +2237,13 @@ class Create extends Component {
             });
 
             component.setState({
+                active: {
+                    itinerary: component.state.active.itinerary,
+                    flights: component.state.active.flights,
+                    carHire: component.state.active.carHire,
+                    transfers: component.state.active.transfers,
+                    restaurants: component.state.item.restaurants.length - 1,
+                },
                 clients: component.state.clients,
                 events: component.state.events,
                 item: prep,

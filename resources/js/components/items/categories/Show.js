@@ -14,8 +14,6 @@ const schema = [
         name: 'section',
         type: 'string',
         options: [
-            'Car Hire',
-            'Flights',
             'Itinerary',
             'Restaurants',
             'Transfers',

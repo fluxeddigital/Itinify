@@ -59,7 +59,7 @@ class Company extends Model
      */
     public function items()
     {
-        return $this->hasMany('App\Item')->select('id', 'name', 'category_id', 'event_id');
+        return $this->hasMany('App\Item')->select('id', 'name', 'long_description', 'short_description', 'category_id', 'event_id');
     }
 
     /**

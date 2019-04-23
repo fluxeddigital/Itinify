@@ -28,10 +28,10 @@ class Item extends Model
      *
      * @var array
      */
-    protected $appends = ['category_name', 'event_name'];
+    protected $appends = ['category_name', 'category_section', 'event_name'];
 
     /**
-     * Get the package's category's name.
+     * Get the item's category's name.
      *
      * @return string
      */
@@ -45,7 +45,21 @@ class Item extends Model
     }
 
     /**
-     * Get the package's event's name.
+     * Get the item's category's name.
+     *
+     * @return string
+     */
+    public function getCategorySectionAttribute()
+    {
+        if (is_object($this->category)) {
+            return $this->category->section;
+        };
+
+        return null;
+    }
+
+    /**
+     * Get the item's event's name.
      *
      * @return string
      */

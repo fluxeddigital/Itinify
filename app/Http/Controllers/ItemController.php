@@ -28,7 +28,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return ItemResource::collection(Auth::user()->company->items);
+        return ItemResource::collection(Auth::user()->company->items->map(function ($item) {
+            return $item->only(['id', 'name', 'category_id', 'category_name', 'category_section', 'event_id', 'event_name', 'long_description', 'short_description']);
+        }));
     }
 
     /**

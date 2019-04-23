@@ -13,11 +13,11 @@
 
 Auth::routes(['verify' => true]);
 
-Route::view('/app/{path?}', 'app')->where('path', '(.*)')->name('app')->middleware(['auth', 'verified', 'company']);
-
 Route::view('/companies/create', 'companies.create')->name('companies.create')->middleware(['auth', 'verified', 'company.none']);
 
-Route::get('/invoices/{id}', 'GeneralController@invoice');
+Route::view('/app/{path?}', 'app')->where('path', '(.*)')->name('app')->middleware(['auth', 'verified', 'company']);
+
+Route::get('/invoices/{id}', 'AppController@invoice')->name('app.invoice');
 
 Route::get('/portal/clients', 'PortalController@clientsIndex')->name('portal.clients.index');
 Route::get('/portal/clients/{id}/{email}', 'PortalController@clientShow')->name('portal.clients.show');

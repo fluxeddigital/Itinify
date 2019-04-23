@@ -86,7 +86,9 @@
                 });
             </script>
 
-            <button type="submit" class="btn btn-pill btn-accent d-table mx-auto">Register</button>
+            <p>By clicking the button below, a setup fee of £300.00 will be charged to your account and a monthly subscription set up.</p>
+
+            <button type="submit" class="btn btn-pill btn-accent d-table mx-auto">Create Company</button>
         </form>
     </div>
 </div>

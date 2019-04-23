@@ -54,11 +54,13 @@ class EventController extends Controller
             'newsletter' => $request->input('newsletter'),
             'pack' => $request->input('pack'),
         ]);
-		
+        
+        // DANH more payment stuff
 		// if (! $event->company->payment->free) {
         // 	$event->company->subscription('main')->incrementQuantity();
         // };
 
+        // DANH check newsletter stuff
         if (! $event->newsletter['mailchimp']['list'] && Auth::user()->company->mailchimp['apiKey']) {
             // $mailchimp = new MailChimp(Auth::user()->company->mailchimp['apiKey']);
 
@@ -161,6 +163,7 @@ class EventController extends Controller
                 $package->save();
             };
 
+            // DANH even more payment stuff
 			// if (! $event->company->payment->free) {
             // 	$event->company->subscription('main')->decrementQuantity();
 			// };

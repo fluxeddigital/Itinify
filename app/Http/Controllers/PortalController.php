@@ -6,8 +6,6 @@ use App\Client;
 use App\Company;
 Use App\Item;
 use App\Package;
-use App\Mail\ClientPackageAccepted;
-use App\Mail\CompanyPackageAccepted;
 use \Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -63,6 +61,7 @@ class PortalController extends Controller
         }
     }
 
+    // DANH merge updates into packageUpdate()
     // /**
     //  * Update the specified resource in storage.
     //  *
@@ -106,8 +105,7 @@ class PortalController extends Controller
 			
     //         $package->save();
             
-    //         Mail::to($package->client->contact_email)->send(new ClientPackageAccepted($package));
-    //         Mail::to($package->company->email)->send(new CompanyPackageAccepted($package));
+    //         DANH send package accepted emails to $package->client->email and $package->company->email
 			
 	// 		return redirect()->route('portal.show', ['client' => $client, 'id' => $id]);
     //     }

@@ -19,6 +19,19 @@ class AppController extends Controller
     }
 
     /**
+     * Download an invoice.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function invoice($id)
+    {
+        return Auth::user()->company->downloadInvoice($id, [
+            'vendor'  => 'Itinify',
+            'product' => 'Itinify',
+        ]);
+    }
+
+    /**
      * Return search results.
      *
      * @return \Illuminate\Http\Response

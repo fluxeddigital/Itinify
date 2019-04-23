@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Http\Resources\Client as ClientResource;
 use App\Event;
-use App\Mail\ClientWelcome;
 use App\Notifications\SMS;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -60,7 +59,7 @@ class ClientController extends Controller
             'status' => $request->input('status'),
         ]);
 
-        // Mail::to($client->email)->send(new ClientWelcome($client));
+        // DANH send welcome email to $client->email
 
         return new ClientResource($client);
     }
@@ -71,7 +70,7 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function sendNotifications(Request $request)
+    public function notify(Request $request)
     {
         if ($request->input('client') && Auth::user()->company->nexmo_key && Auth::user()->company->nexmo_secret && Auth::user()->company->nexmo_sms_from) {
             $recipients = [];

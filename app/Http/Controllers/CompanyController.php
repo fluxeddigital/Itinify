@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Company;
 use App\Http\Resources\Company as CompanyResource;
 use App\User;
-use App\Mail\CompanyWelcome;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -50,14 +49,15 @@ class CompanyController extends Controller
 
         Auth::user()->company_id = $company->id;
         Auth::user()->save();
-		
+        
+        // DANH check payment stuff
 		// if (! $company->free) {
 		// 	$company->newSubscription('main', env('STRIPE_PLAN_ID'))->trialDays(30)->create($request->input('stripe_token'));
 		// 	$company->subscription('main')->updateQuantity(0);
 		// 	$company->invoiceFor('Setup Fee', 30000);
 		// }
 
-        // Mail::to($company->email)->send(new CompanyWelcome($company));
+        // DANH send welcome email to $company->email
 
         return redirect()->route('app');
     }

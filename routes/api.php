@@ -16,8 +16,7 @@ use Illuminate\Http\Request;
 Route::get('/search', 'AppController@search')->name('app.search');
 Route::get('/stats', 'AppController@stats')->name('app.stats');
 
-Route::get('/clients/notify', 'ClientController@prepareNotifications')->name('clients.notifications.prepare');
-Route::post('/clients/notify', 'ClientController@sendNotifications')->name('clients.notifications.send');
+Route::post('/clients/notify', 'ClientController@notify')->name('clients.notify');
 
 Route::patch('/users/attach', 'UserController@attach')->name('users.attach');
 

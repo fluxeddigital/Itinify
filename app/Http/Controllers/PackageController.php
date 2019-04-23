@@ -6,7 +6,6 @@ use App\Client;
 use App\Event;
 use App\Package;
 use App\Http\Resources\Package as PackageResource;
-use App\Mail\NewPackage;
 use \DrewM\MailChimp\MailChimp;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -60,6 +59,7 @@ class PackageController extends Controller
             return null;
         }
 
+        // DANH more newsletter stuff
         // if (Auth::user()->company->mailchimp->apiKey && $event->newsletter->mailchimp->list && $client->email) {
         //     $mailchimp = new MailChimp(Auth::user()->company->mailchimp_api_key);
 
@@ -95,7 +95,7 @@ class PackageController extends Controller
         ]);
 
         // if ($client->email) {
-        //     Mail::to($client->email)->send(new NewPackage($package));
+        //     DANH send package email to $client->email
         // }
 
         return new PackageResource($package);
@@ -147,31 +147,32 @@ class PackageController extends Controller
 
         $package = Package::findOrFail($id);
 
-        $mailchimpSubscriberDeleted = false;
-		
-		if ($request->input('client_id')) {
-			if ($package->client_id) {
-				if ($request->input('client_id') != $package->client->id) {
-					if (Auth::user()->company->mailchimp_api_key && $event->mailchimp_list_id) {
-						$mailchimp = new MailChimp(Auth::user()->company->mailchimp_api_key);
-
-						$mailchimp->delete('lists/' . $event->newsletter->mailchimp->list . '/members/' . $mailchimp->subscriberHash('$client->email'));
-
-						$mailchimpSubscriberDeleted = true;
-					}
-				}
-			} else {
-				if (Auth::user()->company->mailchimp_api_key && $event->mailchimp_list_id) {
-					$mailchimp = new MailChimp(Auth::user()->company->mailchimp_api_key);
-
-					$mailchimp->delete('lists/' . $event->newsletter->mailchimp->list . '/members/' . $mailchimp->subscriberHash('$client->email'));
-
-					$mailchimpSubscriberDeleted = true;
-				}
-			}
-		}
-
         if ($package->company->id == Auth::user()->company->id) {
+            // DANH some more newsletter stuff
+            // $mailchimpSubscriberDeleted = false;
+            
+            // if ($request->input('client_id')) {
+            //     if ($package->client_id) {
+            //         if ($request->input('client_id') != $package->client->id) {
+            //             if (Auth::user()->company->mailchimp_api_key && $event->mailchimp_list_id) {
+            //                 $mailchimp = new MailChimp(Auth::user()->company->mailchimp_api_key);
+    
+            //                 $mailchimp->delete('lists/' . $event->newsletter->mailchimp->list . '/members/' . $mailchimp->subscriberHash('$client->email'));
+    
+            //                 $mailchimpSubscriberDeleted = true;
+            //             }
+            //         }
+            //     } else {
+            //         if (Auth::user()->company->mailchimp_api_key && $event->mailchimp_list_id) {
+            //             $mailchimp = new MailChimp(Auth::user()->company->mailchimp_api_key);
+    
+            //             $mailchimp->delete('lists/' . $event->newsletter->mailchimp->list . '/members/' . $mailchimp->subscriberHash('$client->email'));
+    
+            //             $mailchimpSubscriberDeleted = true;
+            //         }
+            //     }
+            // }
+
             $package->client_id = $request->input('client_id');
             $package->event_id = $request->input('event_id');
             $package->title = $request->input('title');
@@ -193,17 +194,18 @@ class PackageController extends Controller
 
             $package->save();
 
-            if (Auth::user()->company->mailchimp->apiKey && $event->newsletter->mailchimp->list && $client->email) {
-                $mailchimp = new MailChimp(Auth::user()->company->mailchimp->apiKey);
+            // DANH what???? more newsletters???
+            // if (Auth::user()->company->mailchimp->apiKey && $event->newsletter->mailchimp->list && $client->email) {
+            //     $mailchimp = new MailChimp(Auth::user()->company->mailchimp->apiKey);
     
-                $mailchimp->post('lists/' . $event->newsletter->mailchimp->list . '/members', [
-                    'email_address' => $client->email,
-                    'status'        => 'subscribed',
-                    'merge_fields' => [
-                        'FNAME' => $client->name,
-                    ],
-                ]);
-            }
+            //     $mailchimp->post('lists/' . $event->newsletter->mailchimp->list . '/members', [
+            //         'email_address' => $client->email,
+            //         'status'        => 'subscribed',
+            //         'merge_fields' => [
+            //             'FNAME' => $client->name,
+            //         ],
+            //     ]);
+            // }
 
             return new PackageResource($package);
         }

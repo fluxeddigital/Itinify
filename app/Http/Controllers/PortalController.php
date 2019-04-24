@@ -57,6 +57,117 @@ class PortalController extends Controller
         $client = Client::where([['id', $clientId], ['email', $clientEmail]])->firstOrFail();
 
         if ($package->client_id == $clientId) {
+            $itinerary = [];
+
+            foreach ($package->itinerary as $item) {
+                if (array_key_exists('date', $item)) {
+                    if ($item->date) {
+                        $itinerary[Carbon::createFromFormat('d/m/Y', $item->date)->format('Y-m-d')] = [];
+                    };
+                };
+            };
+
+            foreach ($package->flights as $item) {
+                if (array_key_exists('departure', $item)) {
+                    if (array_key_exists('date', $item->departure)) {
+                        if ($item->departure->date) {
+                            $itinerary[Carbon::createFromFormat('d/m/Y', $item->departure->date)->format('Y-m-d')] = [];
+                        };
+                    };
+                };
+            };
+
+            foreach ($package->transfers as $item) {
+                if (array_key_exists('date', $item)) {
+                    if ($item->date) {
+                        $itinerary[Carbon::createFromFormat('d/m/Y', $item->date)->format('Y-m-d')] = [];
+                    };
+                };
+            };
+
+            foreach ($package->car_hire as $item) {
+                if (array_key_exists('dropoff', $item)) {
+                    if (array_key_exists('date', $item->dropoff)) {
+                        if ($item->dropoff->date) {
+                            $itinerary[Carbon::createFromFormat('d/m/Y', $item->dropoff->date)->format('Y-m-d')] = [];
+                        };
+                    };
+                };
+
+                if (array_key_exists('pickup', $item)) {
+                    if (array_key_exists('date', $item->pickup)) {
+                        if ($item->pickup->date) {
+                            $itinerary[Carbon::createFromFormat('d/m/Y', $item->pickup->date)->format('Y-m-d')] = [];
+                        };
+                    };
+                };
+            };
+
+            ksort($itinerary);
+
+            foreach ($package->itinerary as $item) {
+                if (array_key_exists('date', $item)) {
+                    if ($item->date) {
+                        $itinerary[Carbon::createFromFormat('d/m/Y', $item->date)->format('Y-m-d')][] = [
+                            'item' => $item,
+                            'type' => 'item',
+                        ];
+                    };
+                };
+            };
+
+            foreach ($package->flights as $item) {
+                if (array_key_exists('departure', $item)) {
+                    if (array_key_exists('date', $item->departure)) {
+                        if ($item->departure->date) {
+                            $itinerary[Carbon::createFromFormat('d/m/Y', $item->departure->date)->format('Y-m-d')][] = [
+                                'item' => $item,
+                                'type' => 'flight',
+                            ];
+                        };
+                    };
+                };
+            };
+
+            foreach ($package->transfers as $item) {
+                if (array_key_exists('date', $item)) {
+                    if ($item->date) {
+                        $itinerary[Carbon::createFromFormat('d/m/Y', $item->date)->format('Y-m-d')][] = [
+                            'item' => $item,
+                            'type' => 'transfer',
+                        ];
+                    };
+                };
+            };
+
+            foreach ($package->car_hire as $item) {
+                if (array_key_exists('dropoff', $item)) {
+                    if (array_key_exists('date', $item->dropoff)) {
+                        if ($item->dropoff->date) {
+                            $itinerary[Carbon::createFromFormat('d/m/Y', $item->dropoff->date)->format('Y-m-d')][] = [
+                                'item' => $item,
+                                'type' => 'carHire.dropoff',
+                            ];
+                        };
+                    };
+                };
+
+                if (array_key_exists('pickup', $item)) {
+                    if (array_key_exists('date', $item->pickup)) {
+                        if ($item->pickup->date) {
+                            $itinerary[Carbon::createFromFormat('d/m/Y', $item->pickup->date)->format('Y-m-d')][] = [
+                                'item' => $item,
+                                'type' => 'carHire.pickup',
+                            ];
+                        };
+                    };
+                };
+            };
+
+            $package->itinerary = $itinerary;
+
+            dd($package->itinerary);
+
             return view('portal.packages.show', ['package' => $package]);
         }
     }

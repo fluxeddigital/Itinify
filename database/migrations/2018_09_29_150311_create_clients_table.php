@@ -17,12 +17,12 @@ class CreateClientsTable extends Migration
             $table->increments('id');
             $table->integer('company_id')->unsigned();
             $table->string('name');
-            $table->longText('address');
-            $table->longText('contacts');
+            $table->longText('address')->nullable();
+            $table->longText('contacts')->nullable();
             $table->string('email')->nullable();
-            $table->longText('interests');
+            $table->longText('interests')->nullable();
             $table->string('logo')->nullable();
-            $table->longText('notes');
+            $table->longText('notes')->nullable();
             $table->string('phone')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();

@@ -72,7 +72,7 @@ class CompanyController extends Controller
     {
         $company = Company::findOrFail($id);
 
-        if ($id == Auth::user()->company->id) {
+        if ($id == Auth::user()->company_id) {
             return new CompanyResource($company);
         }
     }
@@ -99,6 +99,7 @@ class CompanyController extends Controller
             $company->address = $request->input('address');
             $company->customisation = $request->input('customisation');
             $company->email = $request->input('email');
+            $company->emails = $request->input('emails');
             $company->feefo = $request->input('feefo');
             $company->industry = $request->input('industry');
             $company->logo = $request->input('logo');

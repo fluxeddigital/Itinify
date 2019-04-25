@@ -3,6 +3,7 @@ import { Link, Route, Switch } from 'react-router-dom';
 
 import Main from './Main';
 import Client from './Client.js';
+import Company from './Company';
 import Event from './Event.js';
 import Package from './Package.js';
 import Packages from './Packages.js';
@@ -43,7 +44,7 @@ class Sidebar extends Component {
                 {document.head.querySelector('meta[name="company-logo"]').content &&
                     <div className='main-navbar'>
                         <nav className='navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0'>
-                            <Link className='navbar-brand w-100 mr-0' to={ `/app/companies/${ document.head.querySelector('meta[name="company-id"]').content }` }>
+                            <Link className='navbar-brand w-100 mr-0' to='/app/company'>
                                 <div className='text-center w-100'>
                                     <img style={ { height: '100%' } } src={ document.head.querySelector('meta[name="company-logo"]').content }/>
                                 </div>
@@ -56,6 +57,8 @@ class Sidebar extends Component {
                     <ul className='nav flex-column'>
                         <Switch>
                             <Route path='/app/clients/:id' component={ Client } />
+
+                            <Route path='/app/company' component={ Company } />
 
                             <Route path='/app/events/:id' component={ Event } />
 

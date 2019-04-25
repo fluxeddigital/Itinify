@@ -33,6 +33,7 @@ class Company extends Model
         'about' => 'object',
         'address' => 'object',
         'customisation' => 'object',
+        'emails' => 'object',
         'feefo' => 'object',
         'mailchimp' => 'object',
         'nexmo' => 'object',

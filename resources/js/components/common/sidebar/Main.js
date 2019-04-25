@@ -52,7 +52,7 @@ class Main extends Component {
                 </li>
                 
                 <li className='nav-item'>
-                    <NavLink to='/app/settings' className='nav-link' activeClassName='active'>
+                    <NavLink to='/app/company' className='nav-link' activeClassName='active'>
                         <i className='material-icons'>settings</i>
                         <span>Settings</span>
                     </NavLink>

@@ -13,6 +13,7 @@ import ClientsIndex from './clients/Index';
 import ClientsCreate from './clients/Create';
 import ClientsShow from './clients/Show';
 import ClientsEdit from './clients/Edit';
+import Company from './Company';
 import EventsIndex from './events/Index';
 import EventsCreate from './events/Create';
 import EventsShow from './events/Show';
@@ -72,6 +73,8 @@ class App extends Component {
                             <Route exact path='/app/clients/create' component={ ClientsCreate } />
                             <Route exact path='/app/clients/:id' component={ ClientsShow } />
                             <Route exact path='/app/clients/:id/edit' component={ ClientsEdit } />
+
+                            <Route exact path='/app/company' component={ Company } />
 
                             <Route exact path='/app/events' component={ EventsIndex } />
                             <Route exact path='/app/events/create' component={ EventsCreate } />

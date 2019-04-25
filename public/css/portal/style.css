@@ -7999,6 +7999,7 @@ border-bottom: 1px dashed #333;
 
 .label-proposal {
 background: #283447;
+padding: .2em 1.4em .3em 1.4em;
 }
 
 .label-itinerary {
@@ -8055,4 +8056,45 @@ padding: 0 0 5px 0;
 .bottom-line.car {
   margin-top:0 !important;
   margin-bottom: 0;
+}
+
+.log-out {
+  background: #413F41;
+}
+
+.log-out a {
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+
+@media (max-width: 992px) {
+    .sign-up a{
+      margin-top: 0!important;
+    }
+}
+#welcomeContent,
+#aboutContent,
+#eventContent,
+#termContent {
+padding-top: 2rem;
+}
+
+#termContent h1 {
+font-size: 2.5rem;
+}
+
+#termContent h2 {
+font-size: 2.1rem;
+}
+#termContent h3 {
+font-size: 1.7rem;
+}
+#termContent h4 {
+font-size: 1.4rem;
+}
+#termContent h5 {
+font-size: 1.2rem;
+}
+#termContent h6 {
+font-size: 1rem;
 }

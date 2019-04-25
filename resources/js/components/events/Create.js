@@ -176,21 +176,6 @@ class Create extends Component {
                                                 <input name='name' value={ this.state.item.name } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='name' />
                                             </div>
 
-                                            <div className='form-group'>
-                                                <label htmlFor='description'>Description</label>
-                                                <Editor
-                                                    apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
-                                                    textareaName='description'
-                                                    value={ this.state.item.description }
-                                                    onEditorChange={ this.onEditorChangeHandler('description') }
-                                                    plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
-                                                    toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
-                                                    init={ {
-                                                        height: 500,
-                                                    } }
-                                                />
-                                            </div>
-
                                             <div className='form-row'>
                                                 <div className='form-group col-md-6'>
                                                     <label htmlFor='dates_starts'>Start Date</label>
@@ -211,6 +196,21 @@ class Create extends Component {
                                             <div className='form-group'>
                                                 <label htmlFor='newsletter_mailchimp_list'>MailChimp List ID</label>
                                                 <input name='newsletter.mailchimp.list' value={ this.state.item.newsletter.mailchimp.list } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='newsletter_mailchimp_list' />
+                                            </div>
+
+                                            <div className='form-group'>
+                                                <label htmlFor='description'>Description</label>
+                                                <Editor
+                                                    apiKey={ document.head.querySelector('meta[name="tinymce-key"]').content }
+                                                    textareaName='description'
+                                                    value={ this.state.item.description }
+                                                    onEditorChange={ this.onEditorChangeHandler('description') }
+                                                    plugins='print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help code'
+                                                    toolbar='formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat'
+                                                    init={ {
+                                                        height: 500,
+                                                    } }
+                                                />
                                             </div>
 
                                             <div className='form-row pb-4'>

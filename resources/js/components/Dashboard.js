@@ -116,20 +116,6 @@ class Dashboard extends Component {
                 </div>
 
                 <div className='row'>
-                    <div className='col mb-4'>
-                        <div className='card card-small'>
-                            <div className='card-header border-bottom'>
-                                <h6 className='m-0'>Overview - Past 28 Days</h6>
-                            </div>
-
-                            <div className='card-body pt-0'>
-                                <canvas id='overview' height='130' className='mw-100'></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className='row'>
                     <div className='col-md-4 mb-4'>
                         <div className='stats-small stats-small--1 card card-small'>
                             <div className='card-body p-0 d-flex'>
@@ -255,6 +241,20 @@ class Dashboard extends Component {
                                         <Link to='/app/packages/create'>New Package &rarr;</Link>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className='row'>
+                    <div className='col mb-4'>
+                        <div className='card card-small'>
+                            <div className='card-header border-bottom'>
+                                <h6 className='m-0'>Overview - Past 28 Days</h6>
+                            </div>
+
+                            <div className='card-body pt-0'>
+                                <canvas id='overview' height='130' className='mw-100'></canvas>
                             </div>
                         </div>
                     </div>

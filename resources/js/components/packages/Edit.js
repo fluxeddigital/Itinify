@@ -27,6 +27,10 @@ const schema = [
         type: 'string',
     },
     {
+        name: 'client_name',
+        type: 'string',
+    },
+    {
         name: 'event_id',
         type: 'string',
     },
@@ -267,6 +271,14 @@ const schema = [
             {
                 name: 'content',
                 type: 'string',
+            },
+            {
+                name: 'visibility',
+                type: 'string',
+                options: [
+                    'false',
+                    'true',
+                ],
             },
         ],
     },
@@ -627,7 +639,10 @@ class Edit extends Component {
     
                     <div className='form-group col-md-6'>
                         <label htmlFor={ `note-visibility-${ index }` }>Visibility</label>
-                        <input name='visibility' value={ item.visibility } onChange={ e => this.onNoteChangeHandler(e, index) } type='text' className='form-control' id={ `note-visibility-${ index }` } />
+                        <Select name='visibility' value={ { value: item.visibility, label: (item.visibility != 'true' ? 'Private' : 'Visible to Client') } } options={ [
+                            { label: 'Private', value: 'false' },
+                            { label: 'Visible to Client', value: 'true' },
+                        ] } onChange={ this.onNoteSelectChangeHandler(index)('visibility') } className='form-control p-0' id={ `note-visibility-${ index }` } />
                     </div>
                 </div>
 
@@ -864,7 +879,7 @@ class Edit extends Component {
                         </div>
 
                         <div>
-                            <span onClick={ this.onDeleteTransfer(index, this) } className='btn btn-danger'>Delete</span>
+                            <span onClick={ this.onDeleteItem(index, this) } className='btn btn-danger'>Delete</span>
                         </div>
                     </div>
                 }
@@ -1890,7 +1905,7 @@ class Edit extends Component {
         return () => {
             let prep = component.state.item;
 
-            prep.notes.splice(i, 1);
+            prep.itinerary.splice(i, 1);
 
             component.setState({
                 clients: component.state.clients,
@@ -1905,7 +1920,7 @@ class Edit extends Component {
         return () => {
             let prep = component.state.item;
 
-            prep.notes.splice(i, 1);
+            prep.flights.splice(i, 1);
 
             component.setState({
                 clients: component.state.clients,
@@ -1920,7 +1935,7 @@ class Edit extends Component {
         return () => {
             let prep = component.state.item;
 
-            prep.notes.splice(i, 1);
+            prep.car_hire.splice(i, 1);
 
             component.setState({
                 clients: component.state.clients,
@@ -2307,6 +2322,27 @@ class Edit extends Component {
         };
     };
     
+    onNoteSelectChangeHandler = (index) => {
+        return (valueName, labelName = null) => {
+            return (selected) => {
+                let prep = this.state.item;
+    
+                set(prep.notes[index], valueName, selected.value)
+    
+                if (labelName) {
+                    set(prep.notes[index], labelName, selected.label);
+                };
+    
+                this.setState({
+                    clients: this.state.clients,
+                    events: this.state.events,
+                    item: prep,
+                    items: this.state.items,
+                });
+            };
+        };
+    };
+    
     onCarHireSelectChangeHandler = (index) => {
         return (valueName, labelName = null) => {
             return (selected) => {
@@ -2387,12 +2423,13 @@ class Edit extends Component {
         return (
             <div className='main-content-container container-fluid px-4'>
                 <div className='page-header row no-gutters py-4'>
-                    <div className='col-10 mb-0'>
+                    <div className='col-7 mb-0'>
                         <h3 className='page-title'>{ this.state.item.title }</h3>
                     </div>
 
-                    <div className='col-2 text-right mb-0'>
+                    <div className='col-5 text-right mb-0'>
                         <Link to={ `/app/packages/${ this.state.item.id + location.hash }` } className='btn btn-primary'>View</Link>
+                        <a href={ `/portal/clients/${ this.state.item.client_id }/${ this.state.item.client_email }/packages/${ this.state.item.id }` } className='btn btn-primary ml-1'>View as Client</a>
                     </div>
                 </div>
 
@@ -2491,7 +2528,7 @@ class Edit extends Component {
                                                     <this.Itinerary itinerary={ this.state.item.itinerary } onSortEnd={ this.onItinerarySortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewItem(this) } className='btn btn-primary'>New Item</span>
+                                                        <span onClick={ this.onNewItem(this) } className='btn btn-block btn-new-item p-3'>New Item</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -2507,7 +2544,7 @@ class Edit extends Component {
                                                     <this.Flights flights={ this.state.item.flights } onSortEnd={ this.onFlightsSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewFlight(this) } className='btn btn-primary'>New Flight</span>
+                                                        <span onClick={ this.onNewFlight(this) } className='btn btn-block btn-new-item p-3'>New Flight</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -2523,7 +2560,7 @@ class Edit extends Component {
                                                     <this.CarHire carHire={ this.state.item.car_hire } onSortEnd={ this.onCarHireSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewCarHire(this) } className='btn btn-primary'>New Car Hire</span>
+                                                        <span onClick={ this.onNewCarHire(this) } className='btn btn-block btn-new-item p-3'>New Car Hire</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -2539,7 +2576,7 @@ class Edit extends Component {
                                                     <this.Passengers passengers={ this.state.item.passengers } onSortEnd={ this.onPassengersSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewPassenger(this) } className='btn btn-primary'>New Passenger</span>
+                                                        <span onClick={ this.onNewPassenger(this) } className='btn btn-block btn-new-item p-3'>New Passenger</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -2555,7 +2592,7 @@ class Edit extends Component {
                                                     <this.Transfers transfers={ this.state.item.transfers } onSortEnd={ this.onTransfersSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewTransfer(this) } className='btn btn-primary'>New Transfer</span>
+                                                        <span onClick={ this.onNewTransfer(this) } className='btn btn-block btn-new-item p-3'>New Transfer</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -2571,7 +2608,7 @@ class Edit extends Component {
                                                     <this.Restaurants restaurants={ this.state.item.restaurants } onSortEnd={ this.onRestaurantsSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewRestaurant(this) } className='btn btn-primary'>New Restaurant</span>
+                                                        <span onClick={ this.onNewRestaurant(this) } className='btn btn-block btn-new-item p-3'>New Restaurant</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -2587,7 +2624,7 @@ class Edit extends Component {
                                                     <this.Documents documents={ this.state.item.documents } onSortEnd={ this.onDocumentsSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewDocument(this) } className='btn btn-primary'>New Document</span>
+                                                        <span onClick={ this.onNewDocument(this) } className='btn btn-block btn-new-item p-3'>New Document</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -2694,7 +2731,7 @@ class Edit extends Component {
                                                     <this.Notes notes={ this.state.item.notes } onSortEnd={ this.onNotesSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewNote(this) } className='btn btn-primary'>New Note</span>
+                                                        <span onClick={ this.onNewNote(this) } className='btn btn-block btn-new-item p-3'>New Note</span>
                                                     </div>
                                                 </div>
                                             </li>

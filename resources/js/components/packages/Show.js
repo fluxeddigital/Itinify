@@ -19,6 +19,10 @@ const schema = [
         type: 'string',
     },
     {
+        name: 'client_email',
+        type: 'string',
+    },
+    {
         name: 'event_id',
         type: 'string',
     },
@@ -260,6 +264,14 @@ const schema = [
                 name: 'content',
                 type: 'string',
             },
+            {
+                name: 'visibility',
+                type: 'string',
+                options: [
+                    'false',
+                    'true',
+                ],
+            },
         ],
     },
     {
@@ -458,12 +470,13 @@ class Show extends Component {
         return (
             <div className='main-content-container container-fluid px-4'>
                 <div className='page-header row no-gutters py-4'>
-                    <div className='col-10 mb-0'>
+                    <div className='col-7 mb-0'>
                         <h3 className='page-title'>{ this.state.item.title }</h3>
                     </div>
 
-                    <div className='col-2 text-right mb-0'>
+                    <div className='col-5 text-right mb-0'>
                         <Link to={ `/app/packages/${ this.state.item.id }/edit${ location.hash }` } className='btn btn-primary'>Edit</Link>
+                        <a href={ `/portal/clients/${ this.state.item.client_id }/${ this.state.item.client_email }/packages/${ this.state.item.id }` } className='btn btn-primary ml-1'>View as Client</a>
                     </div>
                 </div>
 

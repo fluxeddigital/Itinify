@@ -5,6 +5,7 @@ import Main from './Main';
 import Client from './Client.js';
 import Event from './Event.js';
 import Package from './Package.js';
+import Packages from './Packages.js';
 
 class Sidebar extends Component {
     constructor (props) {
@@ -59,6 +60,7 @@ class Sidebar extends Component {
                             <Route path='/app/events/:id' component={ Event } />
 
                             <Route path='/app/packages/:id' component={ Package } />
+                            <Route path='/app/packages' component={ Packages } />
 
                             <Route component={ Main } />
                         </Switch>

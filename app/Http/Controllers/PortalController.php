@@ -166,8 +166,6 @@ class PortalController extends Controller
 
             $package->itinerary = $itinerary;
 
-            dd($package->itinerary);
-
             return view('portal.packages.show', ['package' => $package]);
         }
     }

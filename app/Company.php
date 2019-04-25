@@ -75,7 +75,7 @@ class Company extends Model
      */
     public function packages()
     {
-        return $this->hasMany('App\Package')->select('id', 'title', 'client_id', 'created_at', 'event_id');
+        return $this->hasMany('App\Package')->select('id', 'title', 'client_id', 'created_at', 'event_id', 'lead_status', 'status');
     }
 
     /**

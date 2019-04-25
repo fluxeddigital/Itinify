@@ -109,15 +109,6 @@ class Show extends Component {
                                 <form>
                                     { location.hash != '#conditions' && location.hash != '#pack' &&
                                         <div>
-                                            { this.state.item.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
-                                                <div className='form-group'>
-                                                    <label htmlFor='description'>Description</label>
-                                                    <div id='description' className='card mb-5'>
-                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.description } } />
-                                                    </div>
-                                                </div>
-                                            }
-
                                             <div className='form-row'>
                                                 <div className='form-group col-md-6'>
                                                     <label htmlFor='dates_starts'>Start Date</label>
@@ -139,6 +130,15 @@ class Show extends Component {
                                                 <label htmlFor='newsletter_mailchimp_list'>MailChimp List ID</label>
                                                 <input value={ this.state.item.newsletter.mailchimp.list } type='text' className='form-control' id='newsletter_mailchimp_list' disabled />
                                             </div>
+
+                                            { this.state.item.description.replace(/(<([^>]+)>)/ig, '').replace(/\r?\n|\r/g, '') &&
+                                                <div className='form-group'>
+                                                    <label htmlFor='description'>Description</label>
+                                                    <div id='description' className='card mb-5'>
+                                                        <div className='card-body' dangerouslySetInnerHTML={ { __html: this.state.item.description } } />
+                                                    </div>
+                                                </div>
+                                            }
 
                                             <div className='form-row pb-4'>
                                                 { this.state.item.banner &&

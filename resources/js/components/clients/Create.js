@@ -706,7 +706,7 @@ class Create extends Component {
                                                     <this.Contacts contacts={ this.state.item.contacts } onSortEnd={ this.onContactsSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewContact(this) } className='btn btn-primary'>New Contact</span>
+                                                        <span onClick={ this.onNewContact(this) } className='btn btn-block btn-new-item p-3'>New Contact</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -722,7 +722,7 @@ class Create extends Component {
                                                     <this.Notes notes={ this.state.item.notes } onSortEnd={ this.onNotesSortEnd } lockAxis='y' pressDelay={ 200 } />
 
                                                     <div>
-                                                        <span onClick={ this.onNewNote(this) } className='btn btn-primary'>New Note</span>
+                                                        <span onClick={ this.onNewNote(this) } className='btn btn-block btn-new-item p-3'>New Note</span>
                                                     </div>
                                                 </div>
                                             </li>

@@ -84,6 +84,7 @@ class Index extends Component {
                                             pagination={ PaginationFactory({
                                                 withFirstAndLast: true,
                                                 alwaysShowAllBtns: true,
+                                                sizePerPage: 25,
                                             }) }
                                             rowEvents={ {
                                                 onClick: (e, row, rowIndex) => {

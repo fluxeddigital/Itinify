@@ -26322,6 +26322,14 @@ html .ql-toolbar .ql-picker .ql-picker-options {
   color: #818EA3;
 }
 
+.btn-new-item {
+  background: none;
+  border-color: #007bff;
+  border-style: dashed;
+  color: #007bff;
+  font-size: 110%;
+}
+
 .cursor-pointer {
   cursor: pointer !important;
 }

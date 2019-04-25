@@ -47,7 +47,7 @@ class Package extends Model
      *
      * @var array
      */
-    protected $appends = ['client_name', 'event_name'];
+    protected $appends = ['client_name', 'client_email', 'event_name'];
 
     /**
      * Get the package's client's name.
@@ -58,6 +58,20 @@ class Package extends Model
     {
         if (is_object($this->client)) {
             return $this->client->name;
+        };
+
+        return null;
+    }
+
+    /**
+     * Get the package's client's email.
+     *
+     * @return string
+     */
+    public function getClientEmailAttribute()
+    {
+        if (is_object($this->client)) {
+            return $this->client->email;
         };
 
         return null;

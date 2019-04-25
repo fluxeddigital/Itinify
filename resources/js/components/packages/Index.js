@@ -5,6 +5,7 @@ import TableProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import PaginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from 'react-router-dom';
 import { SyncLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
 
 const { SearchBar } = Search;
 
@@ -13,15 +14,35 @@ class Index extends Component {
         super(props);
 
         this.state = {
+            acceptedPackages: [],
             loading: true,
+            openPackages: [],
             packages: [],
         };
     };
 
     componentDidMount () {
         axios.get('/api/packages').then(res => {
+            let acceptedPackages = [];
+
+            for (let item of res.data.data) {
+                if (item.status == 'accepted') {
+                    acceptedPackages.push(item);
+                };
+            };
+
+            let openPackages = [];
+
+            for (let item of res.data.data) {
+                if (item.status == 'open') {
+                    openPackages.push(item);
+                };
+            };
+
             this.setState({
+                acceptedPackages: acceptedPackages,
                 loading: false,
+                openPackages: openPackages,
                 packages: res.data.data,
             });
         }).catch((err) => {
@@ -32,8 +53,6 @@ class Index extends Component {
     };
 
     render () {
-        const { packages } = this.state;
-
         const columns = [
             {
                 text: 'Title',
@@ -47,6 +66,10 @@ class Index extends Component {
                 text: 'Event',
                 dataField: 'event_name',
                 sort: true,
+            }, {
+                text: 'Lead Status',
+                dataField: 'lead_status',
+                sort: true,
             }
         ];
 
@@ -59,7 +82,7 @@ class Index extends Component {
                 </div>
 
                 <div className='col'>
-                    <TableProvider keyField='id' columns={ columns } data={ packages } bootstrap4 search>
+                    <TableProvider keyField='id' columns={ columns } data={ (location.hash != '#accepted' && location.hash != '#open' ? this.state.packages : (location.hash != '#accepted' ? this.state.openPackages : this.state.acceptedPackages)) } bootstrap4 search>
                         {
                             props => (
                                 <div>
@@ -81,6 +104,7 @@ class Index extends Component {
                                             pagination={ PaginationFactory({
                                                 withFirstAndLast: true,
                                                 alwaysShowAllBtns: true,
+                                                sizePerPage: 25,
                                             }) }
                                             rowEvents={ {
                                                 onClick: (e, row, rowIndex) => {

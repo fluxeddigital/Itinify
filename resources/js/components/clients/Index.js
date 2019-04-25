@@ -5,6 +5,7 @@ import TableProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import PaginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from 'react-router-dom';
 import { SyncLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
 
 const { SearchBar } = Search;
 
@@ -78,6 +79,7 @@ class Index extends Component {
                                             pagination={ PaginationFactory({
                                                 withFirstAndLast: true,
                                                 alwaysShowAllBtns: true,
+                                                sizePerPage: 25,
                                             }) }
                                             rowEvents={ {
                                                 onClick: (e, row, rowIndex) => {

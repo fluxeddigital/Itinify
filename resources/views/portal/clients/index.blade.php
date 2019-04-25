@@ -48,9 +48,11 @@
     </section>
 
     <script src="{{ asset('plugins/js/jquery.min.js') }}" defer></script>
-    <script src="{{ asset('plugins/js/bootstrap.min.js') }}" defer></script>
-    <script src="{{ asset('plugins/js/viewportchecker.js') }}" defer></script>
-    <script src="{{ asset('plugins/js/jquery.nice-select.min.js') }}" defer></script>
+  	<script src="{{ asset('plugins/js/bootstrap.min.js') }}" defer></script>
+  	<script src="{{ asset('plugins/js/viewportchecker.js') }}" defer></script>
+  	<script src="{{ asset('plugins/js/bootsnav.js') }}" defer></script>
+  	<script src="{{ asset('plugins/js/jquery.nice-select.min.js') }}" defer></script>
+  	<script src="{{ asset('plugins/js/moment.min.js') }}" defer></script>
     <script src="{{ asset('js/portal/custom.js') }}" defer></script>
 
   </div>

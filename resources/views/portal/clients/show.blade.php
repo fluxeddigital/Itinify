@@ -31,11 +31,24 @@
         </a>
       </div>
       <div class="collapse navbar-collapse" id="navbar-menu">
+
+        <ul class="nav navbar-nav navbar-left" data-in="fadeInDown" data-out="fadeOutUp">
+          <li class="dropdown">
+            <a href="messages.html#" class="dropdown-toggle" data-toggle="dropdown">Home</a>
+            <ul class="dropdown-menu animated fadeOutUp">
+              <li><a href="index.html">Home 1</a></li>
+              <li><a href="home-2.html">Home 2</a></li>
+              <li><a href="home-3.html">Home 3</a></li>
+              <li><a href="home-4.html">Home 4</a></li>
+              <li><a href="home-5.html">Home 5</a></li>
+            </ul>
+          </li>
+        </ul>
+
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown dash-link">
             <a href="javascript:void()" class="dropdown-toggle">Hi, {{ $client->name }}</a>
             <ul class="dropdown-menu left-nav">
-              <li><a href="">Contact Us</a></li>
               <li><a href="">Log Out</a></li>
             </ul>
           </li>
@@ -81,7 +94,7 @@
               <div class="dropdown-menu pull-right">
                 <a href="">Accending</a>
                 <a href="">Decending</a>
-                <a href="destination-grid.html#">By Date</a>
+                <a href="">By Date</a>
               </div>
             </div>
           </div>
@@ -128,7 +141,7 @@
                 </div>
               </article>
             </div>
-          @endforeach
+            @endforeach
           </div>
           <div class="row">
             <ul class="pagination">
@@ -162,24 +175,9 @@
       </div>
       <div class="col-md-3 col-sm-3 br-1 mbb-1">
         <div class="data-flex text-center">
-          @if ($client->company->address_line_1)
-            {{ $client->company->address_line_1 }},
-          @endif
-          @if ($client->company->address_line_2)
-            {{ $client->company->address_line_2 }},
-          @endif
-          @if ($client->company->address_line_3)
-            {{ $client->company->address_line_3 }},
-          @endif
-          @if ($client->company->address_town)
-            {{ $client->company->address_town }},
-          @endif
-          @if ($client->company->address_county)
-            {{ $client->company->address_county }},
-          @endif
-          @if ($client->company->address_postcode)
-            {{ $client->company->address_postcode }}
-          @endif
+          @if ($client->company->address_line_1) {{ $client->company->address_line_1 }}, @endif @if ($client->company->address_line_2) {{ $client->company->address_line_2 }}, @endif @if ($client->company->address_line_3) {{ $client->company->address_line_3 }},
+          @endif @if ($client->company->address_town) {{ $client->company->address_town }}, @endif @if ($client->company->address_county) {{ $client->company->address_county }}, @endif @if ($client->company->address_postcode) {{ $client->company->address_postcode
+          }} @endif
         </div>
       </div>
       <div class="col-md-3 col-sm-3 br-1 mbb-1">
@@ -197,22 +195,19 @@
                 <i class="fa fa-facebook theme-cl"></i>
               </a>
             </li>
-            @endif
-            @if ($client->company->about->social->instagram)
+            @endif @if ($client->company->about->social->instagram)
             <li>
               <a href="{{ $client->company->about->social->instagram }}">
                 <i class="fa fa-instagram theme-cl"></i>
               </a>
             </li>
-            @endif
-            @if ($client->company->about->social->twitter)
+            @endif @if ($client->company->about->social->twitter)
             <li>
               <a href="{{ $client->company->about->social->twitter }}">
                 <i class="fa fa-twitter theme-cl"></i>
               </a>
             </li>
-            @endif
-            @if ($client->company->about->social->linkedin)
+            @endif @if ($client->company->about->social->linkedin)
             <li>
               <a href="{{ $client->company->about->social->facebook }}">
                 <i class="fa fa-linkedin theme-cl"></i>
@@ -228,7 +223,9 @@
   <script src="{{ asset('plugins/js/jquery.min.js') }}" defer></script>
   <script src="{{ asset('plugins/js/bootstrap.min.js') }}" defer></script>
   <script src="{{ asset('plugins/js/viewportchecker.js') }}" defer></script>
+  <script src="{{ asset('plugins/js/bootsnav.js') }}" defer></script>
   <script src="{{ asset('plugins/js/jquery.nice-select.min.js') }}" defer></script>
+  <script src="{{ asset('plugins/js/moment.min.js') }}" defer></script>
   <script src="{{ asset('js/portal/custom.js') }}" defer></script>
 
 </body>

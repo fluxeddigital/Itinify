@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>{{ $package->title }} prepared for {{ $package->client->name }} - Itinify</title>
+  <title>{{ $package->title }} prepared for {{ $package->client->name }} - @yield('APP_NAME')</title>
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -18,31 +18,55 @@
 </head>
 
 <body>
-
   <nav class="navbar navbar-default navbar-mobile navbar-fixed light bootsnav">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
           <i class="fa fa-bars"></i>
         </button>
-        <a class="navbar-brand" href="#">
-          <img src="{{ $package->company->logo }}" class="logo logo-display" alt="">
-          <img src="{{ $package->company->logo }}" class="logo logo-scrolled" alt="">
+        <a class="navbar-brand" href="javascript:void()">
+          <img src="{{ $package->company->logo }}" class="logo logo-display" alt="{{ $package->company->name }}">
+          <img src="{{ $package->company->logo }}" class="logo logo-scrolled" alt="{{ $package->company->name }}">
         </a>
       </div>
       <div class="collapse navbar-collapse" id="navbar-menu">
-        <ul class="nav navbar-nav navbar-right">
+
+        <ul class="nav navbar-nav navbar-left visible-xs visible-sm" data-in="fadeInDown" data-out="fadeOutUp">
+          <li>
+            <a href="#Welcome">Welcome</a>
+          </li>
+          <li>
+            <a href="#About">About</a>
+          </li>
+          <li>
+            <a href="#Event">The Event</a>
+          </li>
+          <li>
+            <a href="#Itinerary">Itinerary</a>
+          </li>
+          <li>
+            <a href="#Terms">Terms & Conditions</a>
+          </li>
+          <li class="sign-up">
+            <a class="btn-signup red-btn" href="javascript:void(0)" data-toggle="modal" data-target="#accept">Accept Proposal</a>
+          </li>
+          <li class="log-out">
+            <a href="javascript:void()">Log Out</a>
+          </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
           <li class="dropdown dash-link">
-            <a href="" class="dropdown-toggle">Hi, {{ $package->client->name }}</a>
+            <a href="javascript:void()" class="dropdown-toggle">Hi, {{ $package->client->name }}</a>
             <ul class="dropdown-menu left-nav">
               <li><a href="/portal/clients/{{ $package->client->id }}/{{ $package->client->email }}/">All Packages</a></li>
-              <li><a href="">Contact Us</a></li>
               <li class="sign-up">
                 <a class="btn-signup red-btn" href="javascript:void(0)" data-toggle="modal" data-target="#accept">Accept Proposal</a>
               </li>
             </ul>
           </li>
         </ul>
+
       </div>
     </div>
   </nav>
@@ -89,7 +113,9 @@
                   <div class="tr-single-box">
                     <div class="tr-single-body">
                       <h3>Welcome {{ $package->client->name }},</h3>
-                      <br> {!! $package->event->description !!}
+                      <div id="welcomeContent">
+                        {!! $package->event->description !!}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -147,8 +173,10 @@
                 <div class="col-md-12">
                   <div class="tr-single-box">
                     <div class="tr-single-body">
-                      <h3>About {{ $package->company->description }}</h3>
-                      <p></p>
+                      <h3>About {{ $package->company->name }}</h3>
+                      <div id="aboutContent">
+                        {!! $package->company->description !!}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -159,7 +187,10 @@
               <div class="row">
                 <div class="tr-single-box">
                   <div class="tr-single-body">
-                    <h3>About The US Masters</h3> {!! $package->event->description !!}
+                    <h3>About {{ $package->event->name }}</h3>
+                    <div id="eventContent">
+                      {!! $package->event->description !!}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -170,14 +201,14 @@
                 <div class="col-md-9">
                   <h2>Your @if ($package->status !== 'accepted')Proposal @else Itinerary @endif<span class="status"><p>STATUS</p>
                     <br>
-                    <span class="label @if ($package->status == 'accepted')label-itinerary @else ($package->status == 'open') label-proposal @endif">@if ($package->status == 'accepted') Itinerary @else {{ $package->status }} @endif</span></span></h2>
+                    <span class="label @if ($package->status == 'accepted') label-itinerary @else ($package->status == 'open') label-proposal @endif">@if ($package->status == 'accepted') Itinerary @else {{ $package->status }} @endif</span></span></h2>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-9">
                   @foreach ($package->itinerary as $item)
                   <div class="tr-single-day">
-                    <p><strong>{{ $item ->date }}</strong></p>
+                    <p><strong>{{ $item->date }}</strong></p>
                     <div class="tr-single-box">
                       <div class="tr-single-header">
                         <div class="tr-single-time">
@@ -212,14 +243,14 @@
                             @foreach ($package->passengers as $item)
                             <tr>
                               <td><i class="ti-user"></i></td>
-                              <td>{{ $item->name }}</td>
+                              <td>{{ $item->names->first }} {{ $item->names->last }}</td>
                             </tr>
                             @endforeach
                           </tbody>
                         </table>
                       </div>
                     </div>
-                    @endif @if ($package->flights and $package->car_hire and $package->transfers)
+                    @endif @if (sizeof($package->flights) && sizeof($package->car_hire) && sizeof($package->transfers))
                     <div class="tr-single-box" id="whatsIncluded">
                       <div class="tr-single-header">
                         <div class="tr-single-time alt">
@@ -294,11 +325,15 @@
               <div class="row">
                 <div class="tr-single-box">
                   <div class="tr-single-body">
-                    <h3>Our Terms & Conditions</h3> {!! $package->event->conditions !!}
+                    <h3>Our Terms & Conditions</h3>
+                    <div id="termContent">
+                      {!! $package->event->conditions !!}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -325,6 +360,7 @@
           <a href="mailto:{{ $package->company->email }}" class="theme-cl"><strong>{{ $package->company->email }}</strong></a>
         </div>
       </div>
+      @if (($package->company->about->social->facebook) && ($package->company->about->social->instagram) && ($package->company->about->social->twitter) && ($package->company->about->social->linkedin))
       <div class="col-md-4 col-sm-4 padd-0">
         <div class="data-flex padd-0">
           <ul class="social-share">
@@ -340,6 +376,7 @@
           </ul>
         </div>
       </div>
+      @endif
     </div>
   </section>
 
@@ -424,7 +461,7 @@
                             <span>{{ $item->departure->airport }}</span>
                           </div>
                           <div class="trip-map">
-                            <h5>Add Field</h5>
+                            <h5></h5>
                             <div class="img-line">
                               <div class="line"></div>
                             </div>
@@ -460,7 +497,7 @@
                           <tbody>
                             <tr>
                               <td><strong>Locator</strong></td>
-                              <td>Add Field</td>
+                              <td></td>
                             </tr>
                             <tr>
                               <td><strong>Class</strong></td>
@@ -786,10 +823,10 @@
   <script src="{{ asset('plugins/js/bootstrap.min.js') }}" defer></script>
   <script src="{{ asset('plugins/js/viewportchecker.js') }}" defer></script>
   <script src="{{ asset('plugins/js/bootsnav.js') }}" defer></script>
-  <script src="{{ asset('plugins/js/slick.min.js') }}" defer></script>
   <script src="{{ asset('plugins/js/jquery.nice-select.min.js') }}" defer></script>
-  <script src="http://maps.google.com/maps/api/js?key="></script>
-  <script src="{{ asset('js/portal/custom.js') }}" defer></script>
+  <script src="{{ asset('plugins/js/moment.min.js') }}" defer></script>
+
+  <script src="{{ asset('js/portal/custom.js') }}"></script>
 
   <script>
     function openRightMenu() {

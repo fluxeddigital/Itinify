@@ -9,7 +9,7 @@
         
         <h5 class="auth-form__title text-center mb-4">Create Company</h5>
 
-        <form method="POST" action="{{ route('companies.store') }}">
+        <form method="POST" action="{{ route('companies.store') }}" id="form">
             @csrf
 
             <div class="form-group">

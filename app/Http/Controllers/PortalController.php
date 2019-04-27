@@ -46,6 +46,21 @@ class PortalController extends Controller
     }
 
     /**
+     * Send the specified resource an id reminder email.
+     *
+     * @param  int  $email
+     * @return \Illuminate\Http\Response
+     */
+    public function clientSendIdReminder($email)
+    {
+        $client = Client::where('email', $email)->firstOrFail();
+
+        if ($client) {
+            // DANH send id reminder email to $client->email
+        };
+    }
+
+    /**
      * Display a package.
      *
      * @return \Illuminate\Http\Response
@@ -170,55 +185,39 @@ class PortalController extends Controller
         }
     }
 
-    // DANH merge updates into packageUpdate()
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $client
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, $client, $id)
-    // {
-    //     $package = Package::findOrFail($id);
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $clientId
+     * @param  int  $clientEmail
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function packageUpdate(Request $request, $clientId, $clientEmail, $id)
+    {
+        $package = Package::findOrFail($id);
 
-    //     if ($package->client->id == $client) {
-    //         $package->special_requirements = $request->input('special_requirements');
-    //         $package->dietary_requirements = $request->input('dietary_requirements');
-			
-    //         $package->save();
-			
-	// 		return redirect()->route('portal.show', ['client' => $client, 'id' => $id]);
-    //     }
+        if ($package->client->id == $client) {
+            $package->requirements = $request->input('requirements');
 
-    //     abort(404);
-    // }
+            if ($request->input('accepted_by')) {
+                $package->accepted_at = Carbon::now();
+                $package->accepted_by = $request->input('accepted_by');
+                $package->status = 'Accepted';
 
-    // /**
-    //  * Accept the specified resource.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $client
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function accept(Request $request, $client, $id)
-    // {
-    //     $package = Package::findOrFail($id);
+                // DANH send package accepted emails to $package->client->email and $package->company->email
+            } elseif ($request->input('declined')) {
+                $package->status = 'Declined';
 
-    //     if ($package->client->id == $client) {
-    //         $package->accepted_at = Carbon::now();
-    //         $package->accepted_by = $request->input('accepted_by');
-    //         $package->status = 'accepted';
-			
-    //         $package->save();
+                // DANH send package declined emails to $package->client->email and $package->company->email
+            };
             
-    //         DANH send package accepted emails to $package->client->email and $package->company->email
+            $package->save();
 			
-	// 		return redirect()->route('portal.show', ['client' => $client, 'id' => $id]);
-    //     }
+			return redirect()->route('portal.packages.show', ['clientId' => $package->client_id, 'clientEmail' => $package->client->email, 'id' => $package->id]);
+        }
 
-    //     abort(404);
-    // }
+        abort(404);
+    }
 }

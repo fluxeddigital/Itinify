@@ -58,9 +58,9 @@ const property = (value, options) => {
 const formatter = (data, schema = null) => {
     for (let i in Object.entries(schema)) {
         if (schema[i].type == 'array') {
-            // if (! schema[i].name in data) {
-            //     data[schema[i].name] = [];
-            // };
+            if (data[schema[i].name] == undefined) {
+                data[schema[i].name] = [];
+            };
 
             for (let i2 in Object.entries(data[schema[i].name])) {
                 if (schema[i].schema) {
@@ -70,15 +70,15 @@ const formatter = (data, schema = null) => {
                 };
             };
         } else if (schema[i].type == 'object') {
-            // if (! schema[i].name in data) {
-            //     data[schema[i].name] = {};
-            // };
+            if (data[schema[i].name] == undefined) {
+                data[schema[i].name] = {};
+            };
 
             data[schema[i].name] = formatter(data[schema[i].name], schema[i].schema);
         } else if (schema[i].type == 'string') {
-            // if (! schema[i].name in data) {
-            //     data[schema[i].name] = '';
-            // };
+            if (data[schema[i].name] == undefined) {
+                data[schema[i].name] = '';
+            };
 
             let options = null;
 

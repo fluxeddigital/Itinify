@@ -9,6 +9,7 @@
 
     <!-- App API Keys -->
     <meta name="filestack-key" content="{{ env('FILESTACK_KEY') }}">
+    <meta name="stripe-key" content="{{ env('STRIPE_KEY') }}">
     <meta name="tinymce-key" content="{{ env('TINYMCE_KEY') }}">
 
     <!-- Authenticated Company & User Information -->
@@ -22,6 +23,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src='https://maps.googleapis.com/maps/api/js?key={{ env('MAPS_KEY') }}&libraries=places'></script>
+    <script src="https://js.stripe.com/v3/"></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">

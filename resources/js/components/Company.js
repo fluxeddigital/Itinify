@@ -5,9 +5,12 @@ import PhoneInput from 'react-telephone-input';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { Link } from 'react-router-dom';
 import Select from 'react-select'
+import {Elements, StripeProvider} from 'react-stripe-elements';
 import { toast } from 'react-toastify';
 import { Editor } from '@tinymce/tinymce-react';
 import set from 'lodash.set';
+
+import StripeForm from './common/StripeForm';
 
 import { buildState, format } from '../utils';
 
@@ -225,6 +228,10 @@ const schema = [
         type: 'string',
     },
     {
+        name: 'stripe_token',
+        type: 'string',
+    },
+    {
         name: 'vat_number',
         type: 'string',
     },
@@ -236,6 +243,7 @@ class Company extends Component {
 
         this.state = {
             address: '',
+            invoices: [],
             item: buildState(schema),
         };
     };
@@ -246,6 +254,16 @@ class Company extends Component {
 
             this.setState({
                 item: {...this.state.item, ...res.data.data},
+            });
+        }).catch((err) => {
+            toast.error('An error occurred, please try again later.');
+
+            this.props.history.push('/app');
+        });
+
+        axios.get(`/api/companies/${ document.head.querySelector('meta[name="company-id"]').content }/invoices`).then(res => {
+            this.setState({
+                invoices: res.data,
             });
         }).catch((err) => {
             toast.error('An error occurred, please try again later.');
@@ -277,9 +295,6 @@ class Company extends Component {
         set(prep, element.target.name, element.target.value);
 
         this.setState({
-            address: this.state.address,
-            events: this.state.events,
-            interests: this.state.interests,
             item: prep,
         });
     };
@@ -293,6 +308,16 @@ class Company extends Component {
             this.setState({ item: prep });
         };
     };
+
+    onStripeChangeHandler = (token) => {
+        let prep = this.state.item;
+
+        set(prep, 'stripe_token', token)
+
+        this.setState({ item: prep });
+
+        this.save();
+    };
     
     onPhoneChangeHandler = (name) => {
         return (value) => {
@@ -301,9 +326,6 @@ class Company extends Component {
             set(prep, name, value);
 
             this.setState({
-                address: this.state.address,
-                events: this.state.events,
-                interests: this.state.interests,
                 item: prep,
             });
         };
@@ -315,9 +337,6 @@ class Company extends Component {
         prep.logo = result.filesUploaded[0].url;
 
         this.setState({
-            address: this.state.address,
-            events: this.state.events,
-            interests: this.state.interests,
             item: prep,
         });
     };
@@ -351,9 +370,6 @@ class Company extends Component {
                     prep.address.country = address.country;
 
                     component.setState({
-                        address: component.state.address,
-                        events: component.state.events,
-                        interests: component.state.interests,
                         item: prep,
                     });
                 };
@@ -418,7 +434,7 @@ class Company extends Component {
                                             <div className='form-group'>
                                                 <label htmlFor='address'>Address</label>
                                                 <div className='pl-3' id='address'>
-                                                    {/* <PlacesAutocomplete
+                                                    <PlacesAutocomplete
                                                         value={ this.state.address }
                                                         onChange={ this.onAddressChangeHandler }
                                                         onSelect={ this.onSelectAddressHandler(this) }
@@ -448,7 +464,7 @@ class Company extends Component {
                                                                 <span className='d-none' id='map'></span>
                                                             </div>
                                                         )}
-                                                    </PlacesAutocomplete> */}
+                                                    </PlacesAutocomplete>
 
                                                     <div className='row'>
                                                         <div className='col-6'>
@@ -629,7 +645,7 @@ class Company extends Component {
 
                                                             <div className='form-group col-6'>
                                                                 <label htmlFor='feefo-password'>Password</label>
-                                                                <input name='feefo.password' value={ this.state.item.feefo.password } onChange={ e => this.onChangeHandler(e) } type='password' className='form-control' id='feefo-password' />
+                                                                <input name='feefo.password' value={ this.state.item.feefo.password } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='feefo-password' />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -652,7 +668,7 @@ class Company extends Component {
 
                                                             <div className='form-group col-6'>
                                                                 <label htmlFor='nexmo-secret'>Secret</label>
-                                                                <input name='nexmo.secret' value={ this.state.item.nexmo.secret } onChange={ e => this.onChangeHandler(e) } type='password' className='form-control' id='nexmo-secret' />
+                                                                <input name='nexmo.secret' value={ this.state.item.nexmo.secret } onChange={ e => this.onChangeHandler(e) } type='text' className='form-control' id='nexmo-secret' />
                                                             </div>
                                                         </div>
 
@@ -671,13 +687,48 @@ class Company extends Component {
                                             <h4 className='page-title'>Billing</h4>
 
                                             <li className='list-group-item p-3'>
-                                                
+                                                { ! this.state.item.free &&
+                                                    <div>
+                                                        <StripeProvider apiKey={ document.head.querySelector('meta[name="stripe-key"]').content }>
+                                                            <Elements>
+                                                                <StripeForm changeHandler={ this.onStripeChangeHandler } />
+                                                            </Elements>
+                                                        </StripeProvider>
+
+                                                        <table className="table mb-0 mt-2">
+                                                            <thead className="bg-light">
+                                                                <tr>
+                                                                    <th scope="col" className="border-0">Date</th>
+                                                                    <th scope="col" className="border-0">Amount</th>
+                                                                    <th scope="col" className="border-0"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                { this.state.invoices.map((item, i) =>
+                                                                    <tr key={ i }>
+                                                                        <td>{ item.date }</td>
+                                                                        <td>{ item.amount }</td>
+                                                                        <td><a href={ `/invoices/${item.id}` } target='_blank'>Download</a></td>
+                                                                    </tr>
+                                                                )}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                }
+
+                                                { this.state.item.free &&
+                                                    <h5>This is a free account!</h5>
+                                                }
                                             </li>
                                         </ul>
                                     }
 
-                                    <span onClick={ this.save } className='btn btn-primary mr-2'>Save</span>
-                                    <span onClick={ this.delete } className='btn btn-danger'>Delete</span>
+                                    { location.hash != '#billing' &&
+                                        <div>
+                                            <span onClick={ this.save } className='btn btn-primary mr-2'>Save</span>
+                                            <span onClick={ this.delete } className='btn btn-danger'>Delete</span>
+                                        </div>
+                                    }
                                 </form>
                             </div>
                         </div>

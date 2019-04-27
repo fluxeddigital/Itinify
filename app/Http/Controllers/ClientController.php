@@ -65,64 +65,6 @@ class ClientController extends Controller
     }
 
     /**
-     * Send newly prepared notifications to their recipients.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function notify(Request $request)
-    {
-        if ($request->input('client') && Auth::user()->company->nexmo_key && Auth::user()->company->nexmo_secret && Auth::user()->company->nexmo_sms_from) {
-            $recipients = [];
-
-            if ($request->input('client')) {
-                $client = Client::findOrFail($request->input('client'));
-
-                if ($client->company->id == Auth::user()->company->id) {
-                    if ($client->contact_mobile) {
-                        $recipients[] = $client->contact_mobile;
-                    }
-                }
-            } elseif ($request->input('clients')) {
-                foreach ($request->input('clients') as $client) {
-                    $client = Client::findOrFail($client);
-
-                    if ($client->company->id == Auth::user()->company->id) {
-                        if ($client->contact_mobile) {
-                            $recipients[] = $client->contact_mobile;
-                        }
-                    }
-                }
-            } elseif ($request->input('event')) {
-                $event = Event::findOrFail($request->input('event'));
-
-                if ($event->company->id == Auth::user()->company->id) {
-                    foreach ($event->packages as $package) {
-                        if ($package->status == $request->input('package_scope')) {
-                            if ($package->client->company->id == Auth::user()->company->id) {
-                                if ($package->client->contact_mobile) {
-                                    $recipients[] = $package->client->contact_mobile;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            config([
-                'services.nexmo.key' => Auth::user()->company->nexmo->key,
-                'services.nexmo.secret' => Auth::user()->company->nexmo->secret,
-                'services.nexmo.sms_from' => Auth::user()->company->nexmo->smsFrom,
-            ]);
-
-            foreach ($recipients as $recipient) {
-                Notification::route('nexmo', $recipient)
-                    ->notify(new SMS($request->input('message')));
-            }
-        }
-    }
-
-    /**
      * Return a specified resource.
      *
      * @param  int  $id
@@ -134,6 +76,21 @@ class ClientController extends Controller
 
         if ($client->company->id == Auth::user()->company->id) {
             return new ClientResource($client);
+        }
+    }
+
+    /**
+     * Send the specified resource a welcome email.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function sendWelcomeEmail($id)
+    {
+        $client = Client::findOrFail($id);
+
+        if ($client->company->id == Auth::user()->company->id) {
+            // DANH send welcome email to $client->email
         }
     }
 

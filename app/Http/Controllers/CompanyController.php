@@ -46,16 +46,21 @@ class CompanyController extends Controller
 			
 			$company->save();
 		}
+        
+		if (! $company->free) {
+            if ($request->input('stripe_token')) {
+                $company->newSubscription('main', env('STRIPE_PLAN_ID'))->trialDays(30)->create($request->input('stripe_token'));
+                $company->subscription('main')->updateQuantity(0);
+                $company->invoiceFor('Setup Fee', 30000);
+            } else {
+                $company->delete();
+
+                return redirect()->route('companies.create');
+            };
+		}
 
         Auth::user()->company_id = $company->id;
         Auth::user()->save();
-        
-        // DANH check payment stuff
-		// if (! $company->free) {
-		// 	$company->newSubscription('main', env('STRIPE_PLAN_ID'))->trialDays(30)->create($request->input('stripe_token'));
-		// 	$company->subscription('main')->updateQuantity(0);
-		// 	$company->invoiceFor('Setup Fee', 30000);
-		// }
 
         // DANH send welcome email to $company->email
 
@@ -74,6 +79,35 @@ class CompanyController extends Controller
 
         if ($id == Auth::user()->company_id) {
             return new CompanyResource($company);
+        }
+    }
+
+    /**
+     * Return a specified resource's invoices.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function invoices($id)
+    {
+        $company = Company::findOrFail($id);
+
+        if ($id == Auth::user()->company_id) {
+            if ($company->stripe_id) {
+                $invoices = [];
+
+                foreach ($company->invoicesIncludingPending() as $invoice) {
+                    $invoices[] = [
+                        'id' => $invoice->id,
+                        'amount' => $invoice->total(),
+                        'date' => $invoice->date()->toFormattedDateString(),
+                    ];
+                };
+
+                return $invoices;
+            } else {
+                return [];
+            };
         }
     }
 
@@ -108,9 +142,11 @@ class CompanyController extends Controller
             $company->phone = $request->input('phone');
             $company->vat_number = $request->input('vat_number');
             
-            if ($request->input('stripe_token')) {
-                $company->updateCard($request->input('stripe_token'));
-            }
+            if (! $company->free) {
+                if ($request->input('stripe_token')) {
+                    $company->updateCard($request->input('stripe_token'));
+                };
+            };
             
             $company->save();
 

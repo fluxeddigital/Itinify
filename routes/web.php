@@ -20,6 +20,7 @@ Route::view('/app/{path?}', 'app')->where('path', '(.*)')->name('app')->middlewa
 Route::get('/invoices/{id}', 'AppController@invoice')->name('app.invoice');
 
 Route::get('/portal/clients', 'PortalController@clientsIndex')->name('portal.clients.index');
+Route::post('/portal/clients/{email}/id', 'PortalController@clientSendIdReminder')->name('portal.clients.id');
 Route::get('/portal/clients/{id}/{email}', 'PortalController@clientShow')->name('portal.clients.show');
 Route::get('/portal/clients/{clientId}/{clientEmail}/packages/{id}', 'PortalController@packageShow')->name('portal.packages.show');
 Route::patch('/portal/clients/{clientId}/{clientEmail}/packages/{id}', 'PortalController@packageUpdate')->name('portal.packages.update');

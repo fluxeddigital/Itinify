@@ -6,7 +6,7 @@ import Datetime from 'react-datetime';
 import PhoneInput from 'react-telephone-input';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { Link } from 'react-router-dom';
-import Select from 'react-select'
+import Select from 'react-select';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { toast } from 'react-toastify';
 import { Editor } from '@tinymce/tinymce-react';

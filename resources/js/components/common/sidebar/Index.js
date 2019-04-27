@@ -3,6 +3,7 @@ import { Link, Route, Switch } from 'react-router-dom';
 
 import Main from './Main';
 import Client from './Client.js';
+import Clients from './Clients.js';
 import Company from './Company';
 import Event from './Event.js';
 import Package from './Package.js';
@@ -57,6 +58,7 @@ class Sidebar extends Component {
                     <ul className='nav flex-column'>
                         <Switch>
                             <Route path='/app/clients/:id' component={ Client } />
+                            <Route path='/app/clients' component={ Clients } />
 
                             <Route path='/app/company' component={ Company } />
 

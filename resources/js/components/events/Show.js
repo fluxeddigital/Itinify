@@ -60,10 +60,97 @@ const schema = [
             },
         ],
     },
-    // {
-    //     name: 'pack',
-    //     type: 'string',
-    // },
+    {
+        name: 'pack',
+        type: 'array',
+        schema: [
+            {
+                name: 'title',
+                type: 'string',
+            },
+            {
+                name: 'type',
+                type: 'string',
+                options: [
+                    'faqs',
+                    'html',
+                    'team',
+                ],
+            },
+            {
+                name: 'faqs',
+                type: 'array',
+                schema: [
+                    {
+                        name: 'question',
+                        type: 'string',
+                    },
+                    {
+                        name: 'answer',
+                        type: 'string',
+                    },
+                ],
+            },
+            {
+                name: 'html',
+                type: 'string',
+            },
+            {
+                name: 'team',
+                type: 'array',
+                schema: [
+                    {
+                        name: 'name',
+                        type: 'string',
+                    },
+                    {
+                        name: 'email',
+                        type: 'string',
+                    },
+                    {
+                        name: 'image',
+                        type: 'string',
+                    },
+                    {
+                        name: 'linkedin',
+                        type: 'string',
+                    },
+                    {
+                        name: 'location',
+                        type: 'string',
+                    },
+                    {
+                        name: 'position',
+                        type: 'string',
+                    },
+                    {
+                        name: 'phoneNumbers',
+                        type: 'object',
+                        schema: [
+                            {
+                                name: 'mobile',
+                                type: 'string',
+                            },
+                            {
+                                name: 'office',
+                                type: 'object',
+                                schema: [
+                                    {
+                                        name: 'number',
+                                        type: 'string',
+                                    },
+                                    {
+                                        name: 'ext',
+                                        type: 'string',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
 ];
 
 class Show extends Component {

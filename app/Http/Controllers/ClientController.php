@@ -31,7 +31,23 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
-        return ClientResource::collection(Auth::user()->company->clients);
+        $clients = collect([]);
+
+        foreach (Auth::user()->company->clients as $client) {
+            $type = 'lead';
+
+            foreach ($client->packages as $package) {
+                if ($package->status == 'accepted' || $package->status == 'Accepted') {
+                    $type = 'customer';
+                };
+            };
+
+            $client->type = $type;
+
+            $clients->push($client);
+        };
+
+        return ClientResource::collection($clients);
     }
 
     /**

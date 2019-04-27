@@ -279,6 +279,24 @@ Route::get('/format', function () {
             ];
         }
 
+        $pack = [];
+
+        if ($event->pack) {
+            if (array_key_exists('welcomePack', $event->pack)) {
+                foreach ($event->pack->welcomePack as $item) {
+                    $pack[] = [
+                        'title' => $item->title,
+                        'type' => 'html',
+                        'html' => $item->content,
+                    ];
+                };
+            } else {
+                $pack = $event->pack;
+            };
+        };
+
+        $event->pack = $pack;
+
         $event->save();
     };
 
@@ -356,28 +374,28 @@ Route::get('/format', function () {
 
         if ($package->car_hire) {
             if (array_key_exists('carHire', $package->car_hire)) {
-                foreach ($package->car_hire['carHire'] as $hire) {
-                    if ($hire['provider']) {
-                        if (is_string($hire['provider'])) {
-                            $hire['provider'] = strtoupper(substr($hire['provider'], 0, 3));
+                foreach ($package->car_hire->carHire as $hire) {
+                    if ($hire->provider) {
+                        if (is_string($hire->provider)) {
+                            $hire->provider = strtoupper(substr($hire->provider, 0, 3));
                         };
                     };
 
                     $car_hire[] = [
-                        'car' => $hire['carType'],
-                        'confirmationNumber' => $hire['confirmationNumber'],
-                        'description' => $hire['whats_included'],
+                        'car' => $hire->carType,
+                        'confirmationNumber' => $hire->confirmationNumber,
+                        'description' => $hire->whats_included,
                         'dropoff' => [
-                            'date' => Carbon\Carbon::parse($hire['dropoffDate'])->format('d/m/Y'),
-                            'location' => $hire['dropoffLocation'],
-                            'time' => $hire['dropoffTime'],
+                            'date' => Carbon\Carbon::parse($hire->dropoffDate)->format('d/m/Y'),
+                            'location' => $hire->dropoffLocation,
+                            'time' => $hire->dropoffTime,
                         ],
                         'pickup' => [
-                            'date' => Carbon\Carbon::parse($hire['pickupDate'])->format('d/m/Y'),
-                            'location' => $hire['pickupLocation'],
-                            'time' => $hire['pickupTime'],
+                            'date' => Carbon\Carbon::parse($hire->pickupDate)->format('d/m/Y'),
+                            'location' => $hire->pickupLocation,
+                            'time' => $hire->pickupTime,
                         ],
-                        'provider' => $hire['provider'],
+                        'provider' => $hire->provider,
                     ];
                 };
             } else {
@@ -391,21 +409,21 @@ Route::get('/format', function () {
 
         if ($package->flights) {
             if (array_key_exists('flights', $package->flights)) {
-                foreach ($package->flights['flights'] as $flight) {
+                foreach ($package->flights->flights as $flight) {
                     $flights[] = [
-                        'airline' => $flight['airline'],
+                        'airline' => $flight->airline,
                         'arrival' => [
-                            'airport' => $flight['arrivalAirport'],
-                            'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
-                            'time' => $flight['arrivalTime'],
+                            'airport' => $flight->arrivalAirport,
+                            'date' => Carbon\Carbon::parse($flight->date)->format('d/m/Y'),
+                            'time' => $flight->arrivalTime,
                         ],
-                        'class' => $flight['class'],
+                        'class' => $flight->class,
                         'departure' => [
-                            'airport' => $flight['departureAirport'],
-                            'date' => Carbon\Carbon::parse($flight['date'])->format('d/m/Y'),
-                            'time' => $flight['departureTime'],
+                            'airport' => $flight->departureAirport,
+                            'date' => Carbon\Carbon::parse($flight->date)->format('d/m/Y'),
+                            'time' => $flight->departureTime,
                         ],
-                        'number' => $flight['number'],
+                        'number' => $flight->number,
                     ];
                 };
             } else {
@@ -419,14 +437,14 @@ Route::get('/format', function () {
 
         if ($package->itinerary) {
             if (array_key_exists('itinerary', $package->itinerary)) {
-                foreach ($package->itinerary['itinerary'] as $item) {
+                foreach ($package->itinerary->itinerary as $item) {
                     $itinerary[] = [
-                        'date' => Carbon\Carbon::parse($item['date'])->format('d/m/Y'),
+                        'date' => Carbon\Carbon::parse($item->date)->format('d/m/Y'),
                         'description' => [
-                            'long' => $item['long_description'],
-                            'short' => $item['short_description'],
+                            'long' => $item->long_description,
+                            'short' => $item->short_description,
                         ],
-                        'name' => $item['name'],
+                        'name' => $item->name,
                     ];
                 };
             } else {
@@ -440,14 +458,14 @@ Route::get('/format', function () {
 
         if ($package->transfers) {
             if (array_key_exists('transfers', $package->transfers)) {
-                foreach ($package->transfers['transfers'] as $transfer) {
+                foreach ($package->transfers->transfers as $transfer) {
                     $transfers[] = [
                         'date' => null,
                         'description' => [
-                            'long' => $transfer['long_description'],
-                            'short' => $transfer['short_description'],
+                            'long' => $transfer->long_description,
+                            'short' => $transfer->short_description,
                         ],
-                        'name' => $transfer['name'],
+                        'name' => $transfer->name,
                     ];
                 };
             } else {
@@ -461,11 +479,11 @@ Route::get('/format', function () {
 
         if ($package->passengers) {
             if (array_key_exists('passengers', $package->passengers)) {
-                foreach ($package->passengers['passengers'] as $passenger) {
+                foreach ($package->passengers->passengers as $passenger) {
                     $passengers[] = [
                         'names' => [
-                            'first' => $passenger['firstName'],
-                            'last' => $passenger['lastName'],
+                            'first' => $passenger->firstName,
+                            'last' => $passenger->lastName,
                         ],
                         'birth' => '',
                     ];

@@ -15,14 +15,29 @@ class Index extends Component {
 
         this.state = {
             clients: [],
+            customers: [],
+            leads: [],
             loading: true,
         };
     };
 
     componentDidMount () {
         axios.get('/api/clients').then(res => {
+            let customers = [];
+            let leads = [];
+
+            for (let client of res.data.data) {
+                if (client.type == 'customer') {
+                    customers.push(client);
+                } else if (client.type == 'lead') {
+                    leads.push(client);
+                };
+            };
+
             this.setState({
                 clients: res.data.data,
+                customers: customers,
+                leads: leads,
                 loading: false,
             });
         }).catch((err) => {
@@ -57,7 +72,7 @@ class Index extends Component {
                 </div>
 
                 <div className='col'>
-                    <TableProvider keyField='id' columns={ columns } data={ clients } bootstrap4 search>
+                    <TableProvider keyField='id' columns={ columns } data={ (location.hash != '#leads' && location.hash != '#customers' ? this.state.clients : (location.hash != '#leads' ? this.state.customers : this.state.leads)) } bootstrap4 search>
                         {
                             props => (
                                 <div>

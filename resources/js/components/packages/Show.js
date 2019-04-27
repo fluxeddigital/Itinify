@@ -466,16 +466,93 @@ class Show extends Component {
         });
     };
 
+    duplicate = async () => {
+        await axios.post(`/api/packages`, format(this.state.item, schema), {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res) {
+                toast.success('Duplicated!');
+
+                this.props.history.push(`/app/packages/${ res.data.data.id }`);
+            };
+        }).catch((err) => {
+            if (err.response.data.errors) {
+                return toast.error(err.response.data.errors[
+                    Object.keys(err.response.data.errors)[0]
+                ][0]);
+            };
+
+            toast.error('An error occurred, please try again later.');
+        });
+    };
+
+    hotlist = (status) => {
+        return async () => {
+            await axios.patch(`/api/packages/${ this.props.match.params.id }/hotlist`, {
+                status: status,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then((res) => {
+                if (res) {
+                    if (res.data) {
+                        let prep = this.state.item;
+        
+                        prep.hotlisted = 'true';
+        
+                        this.setState({
+                            item: prep,
+                        });
+        
+                        toast.success('Added to hotlist!');
+                    } else if (! res.data) {
+                        let prep = this.state.item;
+        
+                        prep.hotlisted = 'false';
+        
+                        this.setState({
+                            item: prep,
+                        });
+        
+                        toast.success('Removed from hotlist!');
+                    };
+                };
+            }).catch((err) => {
+                if (err.response.data.errors) {
+                    return toast.error(err.response.data.errors[
+                        Object.keys(err.response.data.errors)[0]
+                    ][0]);
+                };
+    
+                toast.error('An error occurred, please try again later.');
+            });
+        }
+    };
+
     render () {
         return (
             <div className='main-content-container container-fluid px-4'>
                 <div className='page-header row no-gutters py-4'>
                     <div className='col-7 mb-0'>
-                        <h3 className='page-title'>{ this.state.item.title }</h3>
+                        <h3 className='page-title'>
+                            { this.state.item.hotlisted == 'true' &&
+                                <i onClick={ this.hotlist('false') } className='material-icons cursor-pointer mr-2'>star</i>
+                            }
+
+                            { this.state.item.hotlisted == 'false' &&
+                                <i onClick={ this.hotlist('true') } className='material-icons cursor-pointer mr-2'>star_border</i>
+                            }
+
+                            { this.state.item.title }
+                        </h3>
                     </div>
 
                     <div className='col-5 text-right mb-0'>
                         <Link to={ `/app/packages/${ this.state.item.id }/edit${ location.hash }` } className='btn btn-primary'>Edit</Link>
+                        <span onClick={ this.duplicate } className='btn btn-primary ml-1'>Duplicate</span>
                         <a href={ `/portal/clients/${ this.state.item.client_id }/${ this.state.item.client_email }/packages/${ this.state.item.id }` } className='btn btn-primary ml-1'>View as Client</a>
                     </div>
                 </div>

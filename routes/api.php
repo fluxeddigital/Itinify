@@ -20,6 +20,9 @@ Route::post('/clients/welcome', 'ClientController@sendWelcomeEmail')->name('clie
 
 Route::get('/companies/{id}/invoices', 'CompanyController@invoices')->name('companies.invoices');
 
+Route::get('/packages/hotlist', 'PackageController@hotlist')->name('packages.hotlist');
+Route::patch('/packages/{id}/hotlist', 'PackageController@updateHotlistStatus')->name('packages.hotlist.status');
+
 Route::patch('/users/attach', 'UserController@attach')->name('users.attach');
 
 Route::resources([

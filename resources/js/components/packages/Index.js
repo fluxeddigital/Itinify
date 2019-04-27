@@ -16,6 +16,7 @@ class Index extends Component {
         this.state = {
             acceptedPackages: [],
             loading: true,
+            hotlist: [],
             openPackages: [],
             packages: [],
         };
@@ -41,9 +42,19 @@ class Index extends Component {
 
             this.setState({
                 acceptedPackages: acceptedPackages,
-                loading: false,
                 openPackages: openPackages,
                 packages: res.data.data,
+            });
+        }).catch((err) => {
+            toast.error('An error occurred, please try again later.');
+
+            this.props.history.push('/app');
+        });
+
+        axios.get('/api/packages/hotlist').then(res => {
+            this.setState({
+                loading: false,
+                hotlist: res.data.data,
             });
         }).catch((err) => {
             toast.error('An error occurred, please try again later.');
@@ -82,7 +93,7 @@ class Index extends Component {
                 </div>
 
                 <div className='col'>
-                    <TableProvider keyField='id' columns={ columns } data={ (location.hash != '#accepted' && location.hash != '#open' ? this.state.packages : (location.hash != '#accepted' ? this.state.openPackages : this.state.acceptedPackages)) } bootstrap4 search>
+                    <TableProvider keyField='id' columns={ columns } data={ (location.hash != '#accepted' && location.hash != '#open' && location.hash != '#hotlist' ? this.state.packages : (location.hash != '#accepted' && location.hash != '#hotlist' ? this.state.openPackages : (location.hash == '#hotlist' ? this.state.hotlist : this.state.acceptedPackages))) } bootstrap4 search>
                         {
                             props => (
                                 <div>

@@ -26,7 +26,7 @@ class Packages extends Component {
             <div>
                 <div id='Packages'>
                     <li className='nav-item cursor-pointer'>
-                        <a href='#' className={ `nav-link${ location.hash != '#open' && location.hash != '#accepted' ? ' active' : '' }` }>
+                        <a href='#' className={ `nav-link${ location.hash != '#open' && location.hash != '#accepted' && location.hash != '#hotlist' ? ' active' : '' }` }>
                             <i className='material-icons'>list</i>
                             <span>All</span>
                         </a>
@@ -34,15 +34,22 @@ class Packages extends Component {
 
                     <li className='nav-item cursor-pointer'>
                         <a href='#open' className={ `nav-link${ location.hash == '#open' ? ' active' : '' }` }>
-                            <i className='material-icons'>description</i>
+                            <i className='material-icons'>edit</i>
                             <span>Proposals</span>
                         </a>
                     </li>
 
                     <li className='nav-item cursor-pointer'>
                         <a href='#accepted' className={ `nav-link${ location.hash == '#accepted' ? ' active' : '' }` }>
-                            <i className='material-icons'>folder_special</i>
+                            <i className='material-icons'>event_note</i>
                             <span>Itineraries</span>
+                        </a>
+                    </li>
+
+                    <li className='nav-item cursor-pointer'>
+                        <a href='#hotlist' className={ `nav-link${ location.hash == '#hotlist' ? ' active' : '' }` }>
+                            <i className='material-icons'>folder_special</i>
+                            <span>Hotlist</span>
                         </a>
                     </li>
 

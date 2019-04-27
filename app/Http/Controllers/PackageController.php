@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Event;
 use App\Package;
+use App\PackageUser;
 use App\Http\Resources\Package as PackageResource;
 use \DrewM\MailChimp\MailChimp;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,17 @@ class PackageController extends Controller
     public function index(Request $request)
     {
         return PackageResource::collection(Auth::user()->company->packages);
+    }
+    
+    /**
+     * Return a listing of the resources that are present in the User's hotlist.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function hotlist(Request $request)
+    {
+        return PackageResource::collection(Auth::user()->packages);
     }
 
     /**
@@ -112,6 +124,12 @@ class PackageController extends Controller
         $package = Package::findOrFail($id);
 
         if ($package->company->id == Auth::user()->company->id) {
+            $package->hotlisted = 'false';
+
+            if (PackageUser::where([['package_id', $id], ['user_id', Auth::id()]])->first()) {
+                $package->hotlisted = 'true';
+            };
+
             return new PackageResource($package);
         }
     }
@@ -208,6 +226,41 @@ class PackageController extends Controller
             // }
 
             return new PackageResource($package);
+        }
+    }
+
+    /**
+     * Update the hotlist status of the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateHotlistStatus(Request $request, $id)
+    {
+        $package = Package::findOrFail($id);
+
+        if ($package->company->id == Auth::user()->company->id) {
+            if ($request->input('status')) {
+                if ($request->input('status') == 'true') {
+                    if (! PackageUser::where([['package_id', $id], ['user_id', Auth::id()]])->first()) {
+                        PackageUser::create([
+                            'package_id' => $id,
+                            'user_id' => Auth::id(),
+                        ]);
+                    };
+
+                    return 'true';
+                } else {
+                    $packageUser = PackageUser::where([['package_id', $id], ['user_id', Auth::id()]])->first();
+
+                    if ($packageUser) {
+                        $packageUser->delete();
+                    };
+
+                    return 'false';
+                };
+            };
         }
     }
 

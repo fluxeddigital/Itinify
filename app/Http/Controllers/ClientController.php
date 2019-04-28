@@ -37,7 +37,7 @@ class ClientController extends Controller
             $type = 'lead';
 
             foreach ($client->packages as $package) {
-                if ($package->status == 'accepted' || $package->status == 'Accepted') {
+                if ($package->status == 'Accepted') {
                     $type = 'customer';
                 };
             };

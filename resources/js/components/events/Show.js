@@ -176,16 +176,37 @@ class Show extends Component {
         });
     };
 
+    sendPackagesDetails = async () => {
+        await axios.post(`/api/events/${ this.props.match.params.id }/packages/details`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res) {
+                toast.success('Event\'s packages details emails sent!');
+            };
+        }).catch((err) => {
+            if (err.response.data.errors) {
+                return toast.error(err.response.data.errors[
+                    Object.keys(err.response.data.errors)[0]
+                ][0]);
+            };
+
+            toast.error('An error occurred, please try again later.');
+        });
+    };
+
     render () {
         return (
             <div className='main-content-container container-fluid px-4'>
                 <div className='page-header row no-gutters py-4'>
-                    <div className='col-10 mb-0'>
+                    <div className='col-9 mb-0'>
                         <h3 className='page-title'>{ this.state.item.name }</h3>
                     </div>
 
-                    <div className='col-2 text-right mb-0'>
+                    <div className='col-3 text-right mb-0'>
                         <Link to={ `/app/events/${ this.state.item.id }/edit${ location.hash }` } className='btn btn-primary'>Edit</Link>
+                        <span onClick={ this.sendPackagesDetails } className='btn btn-primary ml-1'>Send Packages Details</span>
                     </div>
                 </div>
 

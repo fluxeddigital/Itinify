@@ -149,6 +149,26 @@ class Show extends Component {
         });
     };
 
+    sendWelcome = async () => {
+        await axios.post(`/api/clients/${ this.props.match.params.id }/welcome`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res) {
+                toast.success('Client welcome email sent!');
+            };
+        }).catch((err) => {
+            if (err.response.data.errors) {
+                return toast.error(err.response.data.errors[
+                    Object.keys(err.response.data.errors)[0]
+                ][0]);
+            };
+
+            toast.error('An error occurred, please try again later.');
+        });
+    };
+
     render () {
         return (
             <div className='main-content-container container-fluid px-4'>
@@ -159,6 +179,7 @@ class Show extends Component {
 
                     <div className='col-2 text-right mb-0'>
                         <Link to={ `/app/clients/${ this.state.item.id }/edit${ location.hash }` } className='btn btn-primary'>Edit</Link>
+                        <span onClick={ this.sendWelcome } className='btn btn-primary ml-1'>Send Welcome</span>
                     </div>
                 </div>
 

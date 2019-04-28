@@ -16,9 +16,11 @@ use Illuminate\Http\Request;
 Route::get('/search', 'AppController@search')->name('app.search');
 Route::get('/stats', 'AppController@stats')->name('app.stats');
 
-Route::post('/clients/welcome', 'ClientController@sendWelcomeEmail')->name('clients.welcome');
+Route::post('/clients/{id}/welcome', 'ClientController@sendWelcomeEmail')->name('clients.welcome');
 
 Route::get('/companies/{id}/invoices', 'CompanyController@invoices')->name('companies.invoices');
+
+Route::post('/events/{id}/packages/details', 'EventController@sendPackagesDetails')->name('events.packages.details');
 
 Route::get('/packages/hotlist', 'PackageController@hotlist')->name('packages.hotlist');
 Route::patch('/packages/{id}/hotlist', 'PackageController@updateHotlistStatus')->name('packages.hotlist.status');

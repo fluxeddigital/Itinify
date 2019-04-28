@@ -59,6 +59,28 @@ class Show extends Component {
         });
     };
 
+    duplicate = async () => {
+        await axios.post(`/api/items`, format(this.state.item, schema), {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res) {
+                toast.success('Duplicated!');
+
+                this.props.history.push(`/app/items/${ res.data.data.id }`);
+            };
+        }).catch((err) => {
+            if (err.response.data.errors) {
+                return toast.error(err.response.data.errors[
+                    Object.keys(err.response.data.errors)[0]
+                ][0]);
+            };
+
+            toast.error('An error occurred, please try again later.');
+        });
+    };
+
     render () {
         return (
             <div className='main-content-container container-fluid px-4'>
@@ -69,6 +91,7 @@ class Show extends Component {
 
                     <div className='col-2 text-right mb-0'>
                         <Link to={ `/app/items/${ this.state.item.id }/edit${ location.hash }` } className='btn btn-primary'>Edit</Link>
+                        <span onClick={ this.duplicate } className='btn btn-primary ml-1'>Duplicate</span>
                     </div>
                 </div>
 

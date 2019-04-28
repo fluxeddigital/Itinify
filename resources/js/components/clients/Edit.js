@@ -542,13 +542,15 @@ class Edit extends Component {
                     if (address.street_number) {
                         prep.address.line1 = `${ address.street_number } ${ address.route }`;
                     } else {
-                        prep.address.line1 = address.route;
+                        prep.address.line1 = address.route || '';
                     };
-                    
-                    prep.address.city = address.postal_town || address.locality;
-                    prep.address.county = address.administrative_area_level_2;
-                    prep.address.postcode = address.postal_code;
-                    prep.address.country = address.country;
+
+                    prep.address.line2 = '';
+                    prep.address.line3 = '';
+                    prep.address.city = address.postal_town || address.locality || '';
+                    prep.address.county = address.administrative_area_level_2 || '';
+                    prep.address.postcode = address.postal_code || '';
+                    prep.address.country = address.country || '';
 
                     component.setState({
                         address: component.state.address,

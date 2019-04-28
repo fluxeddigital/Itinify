@@ -34,59 +34,63 @@
                 @endif
             </div>
 
-            <div class="form-group justify-content-center">
-                <label for="elements">Payment Method</label>
-                
-                <div id="elements" class="form-control"></div>
+            @if (! request()->input('free'))
+                <div class="form-group justify-content-center">
+                    <label for="elements">Payment Method</label>
+                    
+                    <div id="elements" class="form-control"></div>
 
-                <input id="stripe_token" type="hidden" name="stripe_token">
+                    <input id="stripe_token" type="hidden" name="stripe_token">
 
-                <strong>
-                    <div id="elementsErrors" class="alert alert-danger" role="alert"></div>
-                </strong>
-            </div>
-        
-            <script>
-                var stripe = Stripe('{{ env('STRIPE_KEY') }}');
+                    <strong>
+                        <div id="elementsErrors" class="alert alert-danger" role="alert"></div>
+                    </strong>
+                </div>
 
-                var elements = stripe.elements();
+                <script>
+                    var stripe = Stripe('{{ env('STRIPE_KEY') }}');
 
-                var card = elements.create('card');
+                    var elements = stripe.elements();
 
-                card.mount('#elements');
+                    var card = elements.create('card');
 
-                var errorElement = document.getElementById('elementsErrors');
+                    card.mount('#elements');
 
-                errorElement.style.display = 'none';
+                    var errorElement = document.getElementById('elementsErrors');
 
-                card.addEventListener('change', function(event) {
-                    if (event.error) {
-                        errorElement.style.display = 'block';
-                        errorElement.textContent = event.error.message;
-                    } else {
-                        errorElement.style.display = 'none';
-                        errorElement.textContent = '';
-                    }
-                });
+                    errorElement.style.display = 'none';
 
-                var form = document.getElementById('form');
-                
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-
-                    stripe.createToken(card).then(function(result) {
-                        if (result.error) {
-                            errorElement.textContent = result.error.message;
+                    card.addEventListener('change', function(event) {
+                        if (event.error) {
+                            errorElement.style.display = 'block';
+                            errorElement.textContent = event.error.message;
                         } else {
-                            document.getElementById('stripe_token').value = result.token.id;
-
-                            form.submit();
+                            errorElement.style.display = 'none';
+                            errorElement.textContent = '';
                         }
                     });
-                });
-            </script>
 
-            <p>By clicking the button below, a setup fee of £300.00 will be charged to your account and a monthly subscription set up.</p>
+                    var form = document.getElementById('form');
+                    
+                    form.addEventListener('submit', function(event) {
+                        event.preventDefault();
+
+                        stripe.createToken(card).then(function(result) {
+                            if (result.error) {
+                                errorElement.textContent = result.error.message;
+                            } else {
+                                document.getElementById('stripe_token').value = result.token.id;
+
+                                form.submit();
+                            }
+                        });
+                    });
+                </script>
+
+                <p>By clicking the button below, a setup fee of £300.00 will be charged to your account and a monthly subscription set up.</p>
+            @else
+                <input type="hidden" name="free" value='1'>
+            @endif
 
             <button type="submit" class="btn btn-pill btn-accent d-table mx-auto">Create Company</button>
         </form>

@@ -42,6 +42,7 @@ class Index extends Component {
 
             this.setState({
                 acceptedPackages: acceptedPackages,
+                loading: false,
                 openPackages: openPackages,
                 packages: res.data.data,
             });
@@ -53,7 +54,6 @@ class Index extends Component {
 
         axios.get('/api/packages/hotlist').then(res => {
             this.setState({
-                loading: false,
                 hotlist: res.data.data,
             });
         }).catch((err) => {

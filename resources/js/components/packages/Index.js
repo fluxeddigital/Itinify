@@ -27,7 +27,7 @@ class Index extends Component {
             let acceptedPackages = [];
 
             for (let item of res.data.data) {
-                if (item.status == 'accepted') {
+                if (item.status == 'Accepted') {
                     acceptedPackages.push(item);
                 };
             };
@@ -35,7 +35,7 @@ class Index extends Component {
             let openPackages = [];
 
             for (let item of res.data.data) {
-                if (item.status == 'open') {
+                if (item.status == 'Open') {
                     openPackages.push(item);
                 };
             };

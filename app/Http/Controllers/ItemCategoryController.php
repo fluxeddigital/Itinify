@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\ItemCategory as Category;
+
 use App\Http\Resources\ItemCategory as CategoryResource;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemCategoryController extends Controller
 {

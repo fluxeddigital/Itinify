@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Company;
-use App\Http\Resources\Company as CompanyResource;
 use App\User;
+
+use App\Http\Resources\Company as CompanyResource;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {

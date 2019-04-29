@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\User;
+
 use App\Http\Resources\User as UserResource;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {

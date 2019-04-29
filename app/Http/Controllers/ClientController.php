@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Client;
-use App\Http\Resources\Client as ClientResource;
 use App\Event;
+
+use App\Http\Resources\Client as ClientResource;
+
 use App\Notifications\SMS;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {

@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Laravel\Cashier\Billable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Cashier\Billable;
 
 class Company extends Model
 {

@@ -6,12 +6,14 @@ use App\Client;
 use App\Event;
 use App\Package;
 use App\PackageUser;
+
 use App\Http\Resources\Package as PackageResource;
+
 use \DrewM\MailChimp\MailChimp;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
 
 class PackageController extends Controller
 {

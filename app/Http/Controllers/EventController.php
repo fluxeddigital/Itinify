@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+
 use App\Http\Resources\Event as EventResource;
+
 use \DrewM\MailChimp\MailChimp;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {

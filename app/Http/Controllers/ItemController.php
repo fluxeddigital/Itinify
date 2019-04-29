@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Event;
 use App\Item;
 use App\ItemCategory as Category;
+
 use App\Http\Resources\Item as ItemResource;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {

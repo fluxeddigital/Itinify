@@ -31,20 +31,6 @@
         </a>
       </div>
       <div class="collapse navbar-collapse" id="navbar-menu">
-
-        <ul class="nav navbar-nav navbar-left" data-in="fadeInDown" data-out="fadeOutUp">
-          <li class="dropdown">
-            <a href="messages.html#" class="dropdown-toggle" data-toggle="dropdown">Home</a>
-            <ul class="dropdown-menu animated fadeOutUp">
-              <li><a href="index.html">Home 1</a></li>
-              <li><a href="home-2.html">Home 2</a></li>
-              <li><a href="home-3.html">Home 3</a></li>
-              <li><a href="home-4.html">Home 4</a></li>
-              <li><a href="home-5.html">Home 5</a></li>
-            </ul>
-          </li>
-        </ul>
-
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown dash-link">
             <a href="javascript:void()" class="dropdown-toggle">Hi, {{ $client->name }}</a>

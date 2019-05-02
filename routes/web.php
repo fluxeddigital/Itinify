@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
 Auth::routes(['verify' => true]);
 
 Route::view('/companies/create', 'companies.create')->name('companies.create')->middleware(['auth', 'verified', 'company.none']);

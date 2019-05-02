@@ -112,23 +112,6 @@ class EventController extends Controller
     }
 
     /**
-     * Send the specified resource's packages a details email.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function sendPackagesDetails($id)
-    {
-        $event = Event::findOrFail($id);
-
-        if ($event->company->id == Auth::user()->company->id) {
-            foreach ($event->packages as $package) {
-                // DANH send package details email to $package->client->email
-            };
-        }
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

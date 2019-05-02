@@ -20,8 +20,6 @@ Route::post('/clients/{id}/welcome', 'ClientController@sendWelcomeEmail')->name(
 
 Route::get('/companies/{id}/invoices', 'CompanyController@invoices')->name('companies.invoices');
 
-Route::post('/events/{id}/packages/details', 'EventController@sendPackagesDetails')->name('events.packages.details');
-
 Route::get('/packages/hotlist', 'PackageController@hotlist')->name('packages.hotlist');
 Route::patch('/packages/{id}/hotlist', 'PackageController@updateHotlistStatus')->name('packages.hotlist.status');
 
